@@ -6,21 +6,23 @@
     "silent": true
   },
   "redirects": [
-    { "source": "/", "destination": "/switchlang.html" }
+    { "source": "/", "destination": "/switchlang" }
   ],
-  "routes": [
-    { "src": "/cn", "dest": "/cn/index.html" },
-    { "src": "/cn/index", "dest": "/cn/index.html" },
-    { "src": "/cn/diagnostic", "dest": "/cn/diagnostic.html" },
-    { "src": "/cn/filter", "dest": "/cn/filter.html" },
-    { "src": "/cn/governance", "dest": "/cn/governance.html" },
-    { "src": "/cn/detail", "dest": "/cn/detail.html" },
+  "rewrites": [
+    { "source": "/switchlang", "destination": "/switchlang.html" },
     
-    { "src": "/en", "dest": "/en/index.html" },
-    { "src": "/en/index", "dest": "/en/index.html" },
-    { "src": "/en/diagnostic", "dest": "/en/diagnostic.html" },
-    { "src": "/en/filter", "dest": "/en/filter.html" },
-    { "src": "/en/governance", "dest": "/en/governance.html" },
-    { "src": "/en/detail", "dest": "/en/detail.html" }
+    { "source": "/cn", "destination": "/cn/index.html" },
+    { "source": "/cn/index", "destination": "/cn/index.html" },
+    { "source": "/cn/diagnostic", "destination": "/cn/diagnostic.html" },
+    { "source": "/cn/filter", "destination": "/cn/filter.html" },
+    { "source": "/cn/governance", "destination": "/cn/governance.html" },
+    { "source": "/cn/detail", "destination": "/cn/detail.html" },
+    
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/en/index", "destination": "/en/index.html" },
+    { "source": "/en/diagnostic", "destination": "/en/diagnostic.html" },
+    { "source": "/en/filter", "destination": "/en/filter.html" },
+    { "source": "/en/governance", "destination": "/en/governance.html" },
+    { "source": "/en/detail", "destination": "/en/detail.html" }
   ]
 } 
