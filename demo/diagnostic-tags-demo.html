@@ -1259,6 +1259,1015 @@
                 }, 100);
             }
             
+            // 针对新增用户接入异常标签显示特殊内容
+            else if (type === 'sudden-high' && tagData.title === '新增用户接入异常') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">台区用户变动监测</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">新增用户数量</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-yellow-500">7</span>
+                                    <span class="text-xs text-gray-500 ml-1">户</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-yellow-500">较正常月增长183%</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">新增负荷容量</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">38.7</span>
+                                    <span class="text-xs text-gray-500 ml-1">kW</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">台区总容量的21.5%</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">线损率变化</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">+4.8%</span>
+                                    <span class="text-xs text-gray-500 ml-1">绝对值</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">高于预警阈值(2.5%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">新增用户情况</h3>
+                                <span class="text-xs py-1 px-2 bg-yellow-100 text-yellow-800 rounded-full">异常用电特征</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">表号</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">用电类型</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">接入时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">负荷容量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21253489</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">工业用电</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-22</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">14.5kW</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21253492</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">工业用电</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-22</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">12.8kW</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21253495</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">工业用电</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-22</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">5.2kW</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21253501</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">商业用电</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-23</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">6.2kW</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="bg-gray-50 px-3 py-1.5 text-xs text-gray-500 text-center">
+                                    显示4条 (共7条记录)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">线损率与用户数变化趋势</h3>
+                            <div class="h-60">
+                                <canvas id="newUserChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区在<span class="text-yellow-500 font-medium">5月22日至23日</span>期间集中新增<span class="text-yellow-500 font-medium">7户</span>用户</li>
+                                <li>新增用户中工业用电比例高达<span class="text-red-500 font-medium">71.4%</span>，与台区现有用户结构不符</li>
+                                <li>新增容量<span class="text-red-500 font-medium">38.7kW</span>，占台区总容量的<span class="text-red-500 font-medium">21.5%</span>，已超过台区剩余容量</li>
+                                <li>线损率在新增用户接入后<span class="text-red-500 font-medium">急剧攀升</span>，从6.3%上升至11.1%</li>
+                                <li>新增接入用户中<span class="text-red-500 font-medium">未进行负荷测算和容量评估</span>，导致台区重载运行</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">异常识别</h3>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border">
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-500 bg-red-100">
+                                                用户接入规范性
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-red-500">
+                                                严重不规范
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 85%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                    </div>
+                                </div>
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-500 bg-red-100">
+                                                台区负荷水平
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-red-500">
+                                                超载运行
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 90%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                    </div>
+                                </div>
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-yellow-500 bg-yellow-100">
+                                                线损异常指数
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-yellow-500">
+                                                高度异常
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 75%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-yellow-500"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                            <p class="text-sm font-medium text-yellow-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-yellow-700 list-decimal pl-4">
+                                <li>对新增用户开展负荷测算和验收检查，确保接入规范性</li>
+                                <li>调整台区负荷分布，必要时分流部分用户至相邻台区</li>
+                                <li>开展台区增容改造评估，加装无功补偿装置</li>
+                                <li>完善新用户接入流程管理，规范负荷评估和容量验证</li>
+                                <li>重点监测工业用户负荷特性，避免低质量用电影响线损指标</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const newUserCtx = document.getElementById('newUserChartModal').getContext('2d');
+                    const newUserChartModal = new Chart(newUserCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['5-17', '5-18', '5-19', '5-20', '5-21', '5-22', '5-23', '5-24', '5-25', '5-26'],
+                            datasets: [
+                                {
+                                    label: '线损率(%)',
+                                    data: [6.3, 6.2, 6.4, 6.3, 6.5, 8.8, 11.1, 11.3, 11.2, 11.0],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '用户数量',
+                                    data: [145, 145, 145, 146, 146, 151, 153, 153, 153, 153],
+                                    borderColor: '#3b82f6',
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    min: 5,
+                                    max: 12,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '用户数量'
+                                    },
+                                    min: 140,
+                                    max: 160,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对低压设备故障标签显示特殊内容
+            else if (type === 'sudden-high' && tagData.title === '低压设备故障') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">故障情况分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">故障开始时间</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-gray-700">06-05</span>
+                                    <span class="text-xs text-gray-500 ml-1">22:47</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-orange-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-orange-500">夜间高峰时段</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">线损率异常上升</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">+9.6%</span>
+                                    <span class="text-xs text-gray-500 ml-1">绝对值</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">突发性异常</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">电压波动</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">±12.3%</span>
+                                    <span class="text-xs text-gray-500 ml-1">波动范围</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">超出标准限值</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">电压异常分析</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">断相/接触不良</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="voltageChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">异常事件记录</h3>
+                                <span class="text-xs py-1 px-2 bg-orange-100 text-orange-800 rounded-full">设备故障</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件类型</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">相位</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电压过低</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">06-05 22:47</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-5635</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">B相</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">B相缺相</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">06-05 22:55</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-204</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">B相</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电流不平衡</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">06-05 22:55</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-279</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">三相</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电压不平衡</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">06-05 22:56</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-283</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">三相</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">巡检排查情况</h3>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-bolt text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">熔断器故障</p>
+                                            <p class="text-xs text-gray-500">6月6日01:15分现场巡检发现B相熔断器烧毁</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-plug text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">接头连接故障</p>
+                                            <p class="text-xs text-gray-500">导线接头过热，绝缘层有烧蚀痕迹</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-tools text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">故障处理</p>
+                                            <p class="text-xs text-gray-500">更换熔断器并重新压接导线接头，故障排除时间：6月6日03:20</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区在<span class="text-red-500 font-medium">06月05日22:47</span>开始出现B相电压异常，随后发生断相</li>
+                                <li>事件发生后，台区线损率迅速上升<span class="text-red-500 font-medium">9.6%</span>，达到<span class="text-red-500 font-medium">15.9%</span></li>
+                                <li>主要故障原因为<span class="text-red-500 font-medium">B相熔断器烧毁</span>以及<span class="text-red-500 font-medium">导线接头过热</span></li>
+                                <li>故障持续时长<span class="text-yellow-500 font-medium">4小时33分钟</span>，影响台区<span class="text-yellow-500 font-medium">47户</span>用户</li>
+                                <li>缺相运行期间，A相和C相电流增大，出现<span class="text-red-500 font-medium">三相不平衡</span>情况</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-orange-50 p-3 rounded-md border border-orange-100">
+                            <p class="text-sm font-medium text-orange-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-orange-700 list-decimal pl-4">
+                                <li>加强台区关键点导线接头红外测温，排查过热隐患</li>
+                                <li>开展台区熔断器老化替换计划，优先更换投运超5年熔断器</li>
+                                <li>优化三相负荷分布，降低单相负荷集中度</li>
+                                <li>对线路关键节点进行标识，提高紧急抢修效率</li>
+                                <li>完善突发故障快速响应机制，减少故障持续时间</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const voltageCtx = document.getElementById('voltageChartModal').getContext('2d');
+                    const voltageChartModal = new Chart(voltageCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['22:00', '22:30', '23:00', '23:30', '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30'],
+                            datasets: [
+                                {
+                                    label: 'A相电压(V)',
+                                    data: [220, 218, 223, 225, 230, 232, 233, 231, 229, 226, 223, 221],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'B相电压(V)',
+                                    data: [219, 217, 202, 165, 32, 0, 0, 0, 0, 0, 0, 210],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'C相电压(V)',
+                                    data: [222, 220, 225, 228, 233, 237, 235, 230, 227, 225, 222, 220],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '故障发生点',
+                                    data: [null, null, 202, null, null, null, null, null, null, null, null, null],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: '#ef4444',
+                                    borderWidth: 0,
+                                    pointRadius: 6,
+                                    pointHoverRadius: 8,
+                                    pointStyle: 'triangle'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            if (context.datasetIndex === 3) {
+                                                return '故障发生点';
+                                            }
+                                            return `${context.dataset.label}: ${context.parsed.y} V`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '电压 (V)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 250
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对恶劣天气引发问题标签显示特殊内容
+            else if (type === 'sudden-high' && tagData.title === '恶劣天气引发问题') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">天气情况分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">天气状况</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-blue-600">暴雨</span>
+                                    <span class="text-xs text-gray-500 ml-1">雷暴</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-blue-600 rounded-full mr-1"></div>
+                                    <span class="text-xs text-blue-600">气象台Ⅲ级预警</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">降雨量</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">87.5</span>
+                                    <span class="text-xs text-gray-500 ml-1">mm/3h</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">超出警戒值(50mm)</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">线损率波动</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">+7.2%</span>
+                                    <span class="text-xs text-gray-500 ml-1">暴雨期间</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">短期波动异常</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">台区运行状态变化</h3>
+                                <span class="text-xs py-1 px-2 bg-blue-100 text-blue-800 rounded-full">降雨影响</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="weatherChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">异常事件记录</h3>
+                                <span class="text-xs py-1 px-2 bg-blue-100 text-blue-800 rounded-full">暴雨相关</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件类型</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">关联天气</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电流不平衡</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">07-12 18:42</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-279</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">降雨初期</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">接地故障</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">07-12 19:15</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-307</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">降雨高峰</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">短时掉电</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">07-12 19:27</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-7</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">雷击频发</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">功率因数异常</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">07-12 19:50</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-301</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">持续降雨</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">现场检查情况</h3>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-tint text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">配电箱浸水</p>
+                                            <p class="text-xs text-gray-500">多处低洼地带配电箱遭雨水浸泡，引起短路故障</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-bolt text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">设备接地泄漏</p>
+                                            <p class="text-xs text-gray-500">雨水浸泡导致部分设备接地不良，引发泄漏电流增大</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center">
+                                        <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-white flex-shrink-0">
+                                            <i class="fas fa-exclamation-triangle text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">防雷器损坏</p>
+                                            <p class="text-xs text-gray-500">多处配电设施防雷装置失效，发现1处雷击痕迹</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区在<span class="text-blue-600 font-medium">7月12日</span>遭遇<span class="text-blue-600 font-medium">暴雨雷暴天气</span>，3小时降雨量达<span class="text-red-500 font-medium">87.5mm</span></li>
+                                <li>降雨导致多处配电设施<span class="text-red-500 font-medium">浸水</span>，引起接地泄漏电流增大</li>
+                                <li>暴雨期间台区线损率<span class="text-red-500 font-medium">短时异常升高</span>，从6.3%上升至13.5%</li>
+                                <li>防雷设施发挥有限作用，仍有<span class="text-red-500 font-medium">1处遭雷击</span>导致设备损坏</li>
+                                <li>暴雨过后，线损恢复正常，但<span class="text-yellow-500 font-medium">波动幅度较大</span>，与设备潮湿有关</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">
+                            <p class="text-sm font-medium text-blue-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-blue-700 list-decimal pl-4">
+                                <li>提升低洼地带配电设施防水等级，增设防水墙和排水设施</li>
+                                <li>增强防雷系统建设，更新老化避雷器</li>
+                                <li>优化恶劣天气预警机制，提前做好应急准备</li>
+                                <li>针对设备接地系统开展专项检查，提升绝缘等级</li>
+                                <li>建立台区"一站一案"极端天气应对方案</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const weatherCtx = document.getElementById('weatherChartModal').getContext('2d');
+                    const weatherChartModal = new Chart(weatherCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00'],
+                            datasets: [
+                                {
+                                    label: '线损率(%)',
+                                    data: [6.3, 6.4, 8.2, 13.5, 12.7, 11.3, 9.5, 8.3, 7.4, 6.8, 6.5],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '降雨量(mm)',
+                                    data: [2, 8, 22, 38, 27, 19, 12, 5, 2, 0, 0],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.3)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                },
+                                {
+                                    label: '雷击次数',
+                                    data: [0, 0, 3, 7, 4, 2, 1, 0, 0, 0, 0],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: '#f59e0b',
+                                    borderWidth: 0,
+                                    pointRadius: 5,
+                                    pointHoverRadius: 7,
+                                    yAxisID: 'y2'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    suggestedMin: 5,
+                                    suggestedMax: 15
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '降雨量 (mm)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 40,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                y2: {
+                                    type: 'linear',
+                                    display: false,
+                                    position: 'right',
+                                    suggestedMin: 0,
+                                    suggestedMax: 10
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对短时漏电故障标签显示特殊内容
+            else if (type === 'sudden-high' && tagData.title === '短时漏电故障') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">漏电故障分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">故障持续时长</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-green-600">1.5</span>
+                                    <span class="text-xs text-gray-500 ml-1">小时</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-green-600 rounded-full mr-1"></div>
+                                    <span class="text-xs text-green-600">短暂性故障</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">漏电电流大小</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">2.8</span>
+                                    <span class="text-xs text-gray-500 ml-1">A</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">超过安全阈值(0.5A)</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">线损率波动</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-yellow-500">+5.2%</span>
+                                    <span class="text-xs text-gray-500 ml-1">故障期间</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-yellow-500">中度异常</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">漏电电流趋势</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">绝缘性故障</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="leakageChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">发生的事件</h3>
+                                <span class="text-xs py-1 px-2 bg-green-100 text-green-800 rounded-full">自愈性故障</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件类型</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">相位</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电流不平衡</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">08-03 14:22</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-279</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">三相</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">L2电流异常</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">08-03 14:23</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-309</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">B相</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">PE-N电压异常</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">08-03 14:25</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-303</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">N线</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电流恢复正常</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">08-03 15:53</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-280</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">三相</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">故障定位分析</h3>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex">
+                                        <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-map-marker-alt text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">故障位置</p>
+                                            <p class="text-xs text-gray-500">台区支线末端211号电缆分接箱</p>
+                                            <div class="mt-1 flex space-x-2">
+                                                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">B相</span>
+                                                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">分接箱</span>
+                                                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">接地系统</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 pb-3 border-b border-gray-100">
+                                    <div class="flex">
+                                        <div class="h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-exclamation-circle text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">故障特征</p>
+                                            <p class="text-xs text-gray-500">电缆终端头绝缘层老化，潮湿环境下引发暂时性接地故障</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex">
+                                        <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-check-circle text-xs"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-sm font-medium">自愈现象</p>
+                                            <p class="text-xs text-gray-500">随着绝缘层干燥，漏电电流逐渐减小至安全范围，故障自动消除</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区在<span class="text-yellow-500 font-medium">8月3日14:22</span>开始出现漏电故障，持续<span class="text-green-600 font-medium">1.5小时</span>后自愈</li>
+                                <li>漏电电流峰值达<span class="text-red-500 font-medium">2.8A</span>，属于较大漏电电流，主要路径经过<span class="text-red-500 font-medium">B相</span>和<span class="text-red-500 font-medium">接地线</span></li>
+                                <li>故障期间线损率上升<span class="text-yellow-500 font-medium">5.2%</span>，随漏电电流下降逐渐恢复正常</li>
+                                <li>根据波形分析，故障性质为<span class="text-yellow-500 font-medium">湿度导致的暂时性绝缘降低</span></li>
+                                <li>此类漏电故障具有<span class="text-green-600 font-medium">间歇性</span>特点，可能在潮湿条件下再次发生</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-green-50 p-3 rounded-md border border-green-100">
+                            <p class="text-sm font-medium text-green-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-green-700 list-decimal pl-4">
+                                <li>对211号分接箱进行绝缘测试，更换老化的电缆终端头</li>
+                                <li>加强接地系统检查，改善接地连接点的防潮措施</li>
+                                <li>安装漏电监测装置，对此类易发故障点进行重点监控</li>
+                                <li>对潮湿环境下的电气设备增加防潮措施，如增设保护罩</li>
+                                <li>制定预防性维护计划，定期对老化电缆终端进行更换</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const leakageCtx = document.getElementById('leakageChartModal').getContext('2d');
+                    const leakageChartModal = new Chart(leakageCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30'],
+                            datasets: [
+                                {
+                                    label: '漏电电流(A)',
+                                    data: [0.2, 0.3, 2.8, 2.5, 1.8, 1.3, 0.8, 0.5, 0.3, 0.2, 0.2],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '线损率(%)',
+                                    data: [6.3, 6.4, 11.5, 11.2, 10.3, 9.5, 8.2, 7.5, 6.8, 6.4, 6.3],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                },
+                                {
+                                    label: '安全阈值',
+                                    data: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+                                    borderColor: '#22c55e',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderDash: [2, 2],
+                                    pointRadius: 0,
+                                    tension: 0,
+                                    yAxisID: 'y'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '漏电电流 (A)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 3
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    suggestedMin: 5,
+                                    suggestedMax: 12,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
             // 显示弹窗
             modal.classList.remove('hidden');
         }
