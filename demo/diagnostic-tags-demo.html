@@ -482,452 +482,6 @@
                 }, 100);
             }
             
-            // 针对电压偏低标签显示特殊内容
-            else if (type === 'long-high' && tagData.title === '电压偏低') {
-                modalContent.innerHTML = `
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h3 class="text-sm font-medium text-gray-700 mb-3">电压偏低分析</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">本台区平均电压</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">208.4V</span>
-                                    <span class="text-xs text-gray-500 ml-1">(标准: 220V±7%)</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">最低电压记录</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">196.2V</span>
-                                    <span class="text-xs text-gray-500 ml-1">(低于下限10.8%)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3 h-60">
-                            <canvas id="voltageTrendChartModal"></canvas>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="text-sm font-medium text-gray-700 mb-2">电压偏低事件分布</h3>
-                            <div class="grid grid-cols-3 gap-2 text-center">
-                                <div class="bg-red-50 p-2 rounded">
-                                    <p class="text-xs text-gray-500">L1相低电压</p>
-                                    <p class="text-sm font-medium">42次</p>
-                                    <div class="mt-1 h-1 w-full bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="bg-red-500 h-1 rounded-full" style="width: 80%;"></div>
-                                    </div>
-                                </div>
-                                <div class="bg-red-50 p-2 rounded">
-                                    <p class="text-xs text-gray-500">L2相低电压</p>
-                                    <p class="text-sm font-medium">28次</p>
-                                    <div class="mt-1 h-1 w-full bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="bg-red-500 h-1 rounded-full" style="width: 60%;"></div>
-                                    </div>
-                                </div>
-                                <div class="bg-red-50 p-2 rounded">
-                                    <p class="text-xs text-gray-500">L3相低电压</p>
-                                    <p class="text-sm font-medium">35次</p>
-                                    <div class="mt-1 h-1 w-full bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="bg-red-500 h-1 rounded-full" style="width: 70%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-sm text-gray-600">
-                            <p class="font-medium mb-2">分析结论：</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>台区电压持续低于标准范围<span class="text-red-500 font-medium">3.2%~10.8%</span></li>
-                                <li>低电压事件频发，L1相尤为严重，共发生<span class="text-red-500 font-medium">42次</span></li>
-                                <li>线损率同比增加<span class="text-red-500 font-medium">4.2%</span>，电压偏低导致电流增大是主要原因</li>
-                                <li>根据事件记录Event-5633/5635/5637，低电压主要发生在用电高峰期</li>
-                            </ul>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="text-sm font-medium text-gray-700 mb-2">关键节点分析</h3>
-                            <div class="relative">
-                                <div class="absolute h-full w-1 bg-gray-200 left-2.5 top-0"></div>
-                                <div class="space-y-4 relative">
-                                    <div class="flex items-start">
-                                        <div class="h-5 w-5 rounded-full bg-red-500 flex-shrink-0 z-10"></div>
-                                        <div class="ml-4">
-                                            <p class="text-sm font-medium text-gray-800">2023年3月15日</p>
-                                            <p class="text-xs text-gray-600">首次出现批量低电压事件，共12起</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="h-5 w-5 rounded-full bg-primary flex-shrink-0 z-10"></div>
-                                        <div class="ml-4">
-                                            <p class="text-sm font-medium text-gray-800">2023年4月至5月</p>
-                                            <p class="text-xs text-gray-600">低电压事件频率增加，平均每天2-3起</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
-                                        <div class="ml-4">
-                                            <p class="text-sm font-medium text-gray-800">2023年6月8日</p>
-                                            <p class="text-xs text-gray-600">记录最低电压196.2V，低于标准下限10.8%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">
-                            <p class="text-sm font-medium text-blue-800 mb-1">治理建议</p>
-                            <ol class="text-xs text-blue-700 list-decimal pl-4">
-                                <li>检查台区供电线路是否过长或截面积不足</li>
-                                <li>检查配电变压器的分接头设置是否合理</li>
-                                <li>考虑在配电线路中增加无功补偿装置</li>
-                                <li>调整台区用户负荷分布，避免大负荷集中</li>
-                                <li>必要时考虑增容改造或新建配变</li>
-                            </ol>
-                        </div>
-                    </div>
-                `;
-                
-                // 初始化图表
-                setTimeout(() => {
-                    const voltageCtx = document.getElementById('voltageTrendChartModal').getContext('2d');
-                    const voltageTrendChartModal = new Chart(voltageCtx, {
-                        type: 'line',
-                        data: {
-                            labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                            datasets: [
-                                {
-                                    label: '平均电压',
-                                    data: [215, 214, 210, 208, 207, 204, null, null, null, null, null, null],
-                                    borderColor: '#ef4444',
-                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                                    borderWidth: 2,
-                                    fill: true,
-                                    tension: 0.3
-                                },
-                                {
-                                    label: '标准下限',
-                                    data: [204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6, 204.6],
-                                    borderColor: '#9ca3af',
-                                    borderWidth: 1,
-                                    borderDash: [5, 5],
-                                    pointRadius: 0,
-                                    fill: false
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    align: 'end',
-                                    labels: {
-                                        boxWidth: 10,
-                                        usePointStyle: true
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    min: 180,
-                                    max: 240,
-                                    title: {
-                                        display: true,
-                                        text: '电压 (V)'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }, 100);
-            }
-            
-            // 针对相位错误标签显示特殊内容
-            else if (type === 'long-high' && tagData.title === '相位错误') {
-                modalContent.innerHTML = `
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h3 class="text-sm font-medium text-gray-700 mb-3">相位识别分析</h3>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">档案记录相位</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">L2相</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">预测相位</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">L1相</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">相位识别置信度</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">92.7%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <p class="text-xs text-gray-500 mb-1">相位相关性分析</p>
-                            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
-                                <table class="min-w-full divide-y divide-gray-300 text-xs">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">相位</th>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">电压相关性</th>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">电压衰减率</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white">
-                                        <tr class="bg-green-50">
-                                            <td class="px-3 py-2 text-gray-900">L1相</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">0.923</td>
-                                            <td class="px-3 py-2 text-gray-900">2.8%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-2 text-gray-900">L2相</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">0.418</td>
-                                            <td class="px-3 py-2 text-gray-900">5.2%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-2 text-gray-900">L3相</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">0.387</td>
-                                            <td class="px-3 py-2 text-gray-900">6.1%</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="mt-3 h-50">
-                            <canvas id="phaseCorrelationChartModal"></canvas>
-                        </div>
-                        <div class="mt-4 text-sm text-gray-600">
-                            <p class="font-medium mb-2">分析结论：</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>电表与总表电压波形相关性分析表明，该表<span class="text-primary font-medium">实际连接在L1相</span></li>
-                                <li>档案记录的相位为<span class="text-yellow-500 font-medium">L2相</span>，与实际不符</li>
-                                <li>相位错误导致<span class="text-red-500 font-medium">相序校验异常</span>及<span class="text-red-500 font-medium">三相不平衡加剧</span></li>
-                                <li>修正相位后，可降低理论计算线损与实际线损的偏差</li>
-                            </ul>
-                        </div>
-                        <div class="mt-4 bg-indigo-50 p-3 rounded-md border border-indigo-100">
-                            <p class="text-sm font-medium text-indigo-800 mb-1">治理建议</p>
-                            <ol class="text-xs text-indigo-700 list-decimal pl-4">
-                                <li>更新系统台账，修正用户相位记录为L1相</li>
-                                <li>对该台区其他用户进行相位识别校验</li>
-                                <li>调整三相负荷分布，优化三相平衡度</li>
-                                <li>建立相位档案定期核对机制，避免类似错误</li>
-                            </ol>
-                        </div>
-                    </div>
-                `;
-                
-                // 初始化图表
-                setTimeout(() => {
-                    const phaseCtx = document.getElementById('phaseCorrelationChartModal').getContext('2d');
-                    const phaseCorrelationChartModal = new Chart(phaseCtx, {
-                        type: 'line',
-                        data: {
-                            labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
-                            datasets: [
-                                {
-                                    label: 'L1相关性',
-                                    data: [0.91, 0.93, 0.92, 0.94, 0.93, 0.92, 0.90],
-                                    borderColor: '#309C9F',
-                                    backgroundColor: 'transparent',
-                                    borderWidth: 2
-                                },
-                                {
-                                    label: 'L2相关性',
-                                    data: [0.42, 0.41, 0.43, 0.40, 0.42, 0.44, 0.41],
-                                    borderColor: '#eab308',
-                                    backgroundColor: 'transparent',
-                                    borderWidth: 2
-                                },
-                                {
-                                    label: 'L3相关性',
-                                    data: [0.38, 0.39, 0.37, 0.40, 0.38, 0.37, 0.39],
-                                    borderColor: '#9ca3af',
-                                    backgroundColor: 'transparent',
-                                    borderWidth: 2
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    align: 'end',
-                                    labels: {
-                                        boxWidth: 10,
-                                        usePointStyle: true
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    min: 0,
-                                    max: 1,
-                                    title: {
-                                        display: true,
-                                        text: '相关性系数'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }, 100);
-            }
-            
-            // 针对功率因数低标签显示特殊内容
-            else if (type === 'long-high' && tagData.title === '功率因数低') {
-                modalContent.innerHTML = `
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h3 class="text-sm font-medium text-gray-700 mb-3">功率因数分析</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">平均功率因数</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">0.78</span>
-                                    <span class="text-xs text-gray-500 ml-1">(标准≥0.9)</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">功率因数事件</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
-                                    <span class="text-sm font-medium">64次</span>
-                                    <span class="text-xs text-gray-500 ml-1">(近6个月)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3 h-60">
-                            <canvas id="powerFactorChartModal"></canvas>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="text-sm font-medium text-gray-700 mb-2">负载特性分析</h3>
-                            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
-                                <table class="min-w-full divide-y divide-gray-300 text-xs">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">用电类型</th>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">占比</th>
-                                            <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-900">典型功率因数</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white">
-                                        <tr class="bg-red-50">
-                                            <td class="px-3 py-2 text-gray-900">电机类负载</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">48%</td>
-                                            <td class="px-3 py-2 text-gray-900">0.75-0.80</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-2 text-gray-900">照明负载</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">27%</td>
-                                            <td class="px-3 py-2 text-gray-900">0.85-0.95</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-2 text-gray-900">空调类负载</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">19%</td>
-                                            <td class="px-3 py-2 text-gray-900">0.80-0.85</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-2 text-gray-900">其他负载</td>
-                                            <td class="px-3 py-2 text-gray-900 font-medium">6%</td>
-                                            <td class="px-3 py-2 text-gray-900">0.85-0.90</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-sm text-gray-600">
-                            <p class="font-medium mb-2">分析结论：</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>根据Event-301/302记录，功率因数持续低于标准值</li>
-                                <li>电机类负载占比<span class="text-red-500 font-medium">48%</span>，是功率因数低的主要原因</li>
-                                <li>低功率因数导致:
-                                    <ul class="list-disc pl-5 mt-1">
-                                        <li>有功功率利用率下降</li>
-                                        <li>线路电流增大</li>
-                                        <li>线路损耗增加</li>
-                                    </ul>
-                                </li>
-                                <li>低功率因数造成的额外线损约占总线损的<span class="text-red-500 font-medium">12.8%</span></li>
-                            </ul>
-                        </div>
-                        <div class="mt-4 bg-purple-50 p-3 rounded-md border border-purple-100">
-                            <p class="text-sm font-medium text-purple-800 mb-1">治理建议</p>
-                            <ol class="text-xs text-purple-700 list-decimal pl-4">
-                                <li>安装无功补偿装置，提高系统功率因数</li>
-                                <li>优化电机启动方式，减少启动无功电流</li>
-                                <li>指导用户采用节能型电气设备</li>
-                                <li>合理安排大型设备启停时序，避免无功功率叠加</li>
-                                <li>定期监测功率因数变化，及时调整补偿策略</li>
-                            </ol>
-                        </div>
-                    </div>
-                `;
-                
-                // 初始化图表
-                setTimeout(() => {
-                    const pfCtx = document.getElementById('powerFactorChartModal').getContext('2d');
-                    const powerFactorChartModal = new Chart(pfCtx, {
-                        type: 'line',
-                        data: {
-                            labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
-                            datasets: [
-                                {
-                                    label: '平均功率因数',
-                                    data: [0.82, 0.81, 0.79, 0.78, 0.77, 0.78],
-                                    borderColor: '#ef4444',
-                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                                    borderWidth: 2,
-                                    fill: true
-                                },
-                                {
-                                    label: '标准值',
-                                    data: [0.9, 0.9, 0.9, 0.9, 0.9, 0.9],
-                                    borderColor: '#9ca3af',
-                                    borderWidth: 1,
-                                    borderDash: [5, 5],
-                                    pointRadius: 0,
-                                    fill: false
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    align: 'end',
-                                    labels: {
-                                        boxWidth: 10,
-                                        usePointStyle: true
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    min: 0.7,
-                                    max: 1.0,
-                                    title: {
-                                        display: true,
-                                        text: '功率因数'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }, 100);
-            }
-            
             // 针对用电负荷突增标签显示特殊内容
             else if (type === 'sudden-high' && tagData.title === '用电负荷突增') {
                 modalContent.innerHTML = `
@@ -1053,6 +607,651 @@
                                         display: true,
                                         text: '线损率 (%)'
                                     }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对档案户变关系异常标签显示特殊内容
+            else if (type === 'long-high' && tagData.title === '档案户变关系异常') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">户变关系信息</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500">台区总表采集</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">1/1</span>
+                                    <span class="text-xs text-gray-500 ml-1">(100%)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">用户表采集</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-orange-500 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">145/165</span>
+                                    <span class="text-xs text-gray-500 ml-1">(87.9%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">档案户变一致性分析</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">异常</span>
+                            </div>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="border-r pr-2">
+                                        <p class="text-xs text-gray-500">系统档案记录</p>
+                                        <p class="text-sm font-medium mt-1">165个用户表</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">GIS识别结果</p>
+                                        <p class="text-sm font-medium mt-1">193个用户表</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">空间距离异常</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">28个表</span>
+                            </div>
+                            <div class="h-60 mt-3">
+                                <canvas id="distanceChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>系统档案记录<span class="text-primary font-medium">165</span>个用户表，但GIS空间识别到<span class="text-red-500 font-medium">193</span>个</li>
+                                <li>存在<span class="text-red-500 font-medium">28个</span>用户表距离台区变压器超过<span class="text-red-500 font-medium">300米</span></li>
+                                <li>通过电压相关性分析，发现<span class="text-red-500 font-medium">12个</span>表与本台区电压特征不符</li>
+                                <li>系统户变关系档案可能存在错误，导致实际供电与计量不一致</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">异常户表清单</h3>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">表号</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">距离</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">相位</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">疑似归属</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21025367</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">415m</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">C相</td>
+                                            <td class="px-3 py-1.5 text-xs text-blue-600">1853421台区</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21037842</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">368m</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">A相</td>
+                                            <td class="px-3 py-1.5 text-xs text-blue-600">1853428台区</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21041253</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">391m</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">B相</td>
+                                            <td class="px-3 py-1.5 text-xs text-blue-600">1853421台区</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21039685</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">325m</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">A相</td>
+                                            <td class="px-3 py-1.5 text-xs text-blue-600">1853428台区</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="bg-gray-50 px-3 py-1.5 text-xs text-gray-500 text-center">
+                                    显示前4条 (共28条异常记录)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">
+                            <p class="text-sm font-medium text-blue-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-blue-700 list-decimal pl-4">
+                                <li>开展现场实地测绘，核实用户表归属关系</li>
+                                <li>调整系统档案记录，修正户变关系数据</li>
+                                <li>对疑似归属错误的电表，进行专项抄表核实</li>
+                                <li>建立户变关系定期核查机制，确保档案数据准确性</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const distCtx = document.getElementById('distanceChartModal').getContext('2d');
+                    const distanceChartModal = new Chart(distCtx, {
+                        type: 'scatter',
+                        data: {
+                            datasets: [
+                                {
+                                    label: '正常户表',
+                                    data: [
+                                        {x: 95, y: 0.92}, {x: 120, y: 0.91}, {x: 78, y: 0.94},
+                                        {x: 105, y: 0.93}, {x: 135, y: 0.88}, {x: 165, y: 0.87},
+                                        {x: 205, y: 0.85}, {x: 185, y: 0.86}, {x: 225, y: 0.82},
+                                        {x: 175, y: 0.85}, {x: 215, y: 0.83}, {x: 145, y: 0.87},
+                                        {x: 235, y: 0.81}, {x: 255, y: 0.80}, {x: 195, y: 0.85},
+                                        {x: 265, y: 0.78}, {x: 245, y: 0.80}, {x: 275, y: 0.77},
+                                        {x: 215, y: 0.84}, {x: 285, y: 0.76}, {x: 115, y: 0.91}
+                                    ],
+                                    backgroundColor: '#3b82f6',
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                },
+                                {
+                                    label: '异常户表',
+                                    data: [
+                                        {x: 415, y: 0.45}, {x: 368, y: 0.52}, {x: 391, y: 0.49},
+                                        {x: 325, y: 0.55}, {x: 435, y: 0.42}, {x: 358, y: 0.53},
+                                        {x: 402, y: 0.47}, {x: 382, y: 0.51}, {x: 425, y: 0.44},
+                                        {x: 345, y: 0.54}, {x: 372, y: 0.52}, {x: 408, y: 0.46}
+                                    ],
+                                    backgroundColor: '#ef4444',
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `距离: ${context.parsed.x}m, 电压相关性: ${context.parsed.y}`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '距离台区变压器距离 (米)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 450
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '电压相关性系数'
+                                    },
+                                    suggestedMin: 0.4,
+                                    suggestedMax: 1
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对疑似低压窃电标签显示特殊内容
+            else if (type === 'long-high' && tagData.title === '疑似低压窃电') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">窃电风险指标</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">异常事件数量</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">17</span>
+                                    <span class="text-xs text-gray-500 ml-1">次/月</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">高于正常水平 (2.5次)</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">用电量异常下降</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">-68%</span>
+                                    <span class="text-xs text-gray-500 ml-1">环比变化</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">低于历史均值 (±15%)</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">负荷曲线异常</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">83%</span>
+                                    <span class="text-xs text-gray-500 ml-1">异常度</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">偏离正常模式</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">关键事件记录</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">高频异常</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件类型</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">发生时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">风险等级</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">强磁场干扰</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">04-15 23:42</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-297</td>
+                                            <td class="px-3 py-1.5"><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">高</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">表箱门打开</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">04-16 02:18</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-291</td>
+                                            <td class="px-3 py-1.5"><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">高</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">端子盖打开</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">04-16 02:21</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-289</td>
+                                            <td class="px-3 py-1.5"><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">高</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">电流反向</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">04-16 02:47</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-249</td>
+                                            <td class="px-3 py-1.5"><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">高</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">用电负荷异常分析</h3>
+                            <div class="h-60">
+                                <canvas id="stealingChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>用户电表在<span class="text-red-500 font-medium">4月15日23:42</span>至<span class="text-red-500 font-medium">4月16日凌晨</span>期间出现多个高风险事件</li>
+                                <li>事件包括强磁场干扰、表箱开启、端子盖打开和电流反向，符合典型窃电特征</li>
+                                <li>事件发生后，用电量下降<span class="text-red-500 font-medium">68%</span>，与用户历史用电规律严重偏离</li>
+                                <li>夜间负荷异常波动，与同类用户负荷曲线差异度达到<span class="text-red-500 font-medium">83%</span></li>
+                                <li>综合分析认为该用户存在人为窃电可能性，建议立即现场核查</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                            <p class="text-sm font-medium text-yellow-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-yellow-700 list-decimal pl-4">
+                                <li>立即派专业抄核人员进行现场检查，重点检查电表接线、表计密封</li>
+                                <li>对电能表进行准确性检测，排查是否存在人为干扰计量</li>
+                                <li>进行用电量追补测算，复盘分析窃电量</li>
+                                <li>联合稽查部门开展联合执法检查，固定证据</li>
+                                <li>加装智能防窃电装置，增加远程监控密度</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const stealCtx = document.getElementById('stealingChartModal').getContext('2d');
+                    const stealingChartModal = new Chart(stealCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                            datasets: [
+                                {
+                                    label: '当前日期',
+                                    data: [1.2, 1.1, 1.0, 0.3, 0.2, 0.3, 0.4, 0.3, 0.2, 0.3, 0.5, 0.6],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '历史同期均值',
+                                    data: [1.1, 1.0, 1.1, 1.2, 1.5, 1.8, 2.1, 2.0, 1.7, 1.6, 1.5, 1.3],
+                                    borderColor: '#3b82f6',
+                                    borderDash: [5, 5],
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '异常事件点',
+                                    data: [null, null, 0.3, null, null, null, null, null, null, null, null, null],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: '#ef4444',
+                                    borderWidth: 0,
+                                    pointRadius: 6,
+                                    pointHoverRadius: 8,
+                                    pointStyle: 'triangle'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            if (context.datasetIndex === 2) {
+                                                return '异常事件发生点';
+                                            }
+                                            return `${context.dataset.label}: ${context.parsed.y} kW`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '负荷 (kW)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 2.5
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对电能表超容量运行标签显示特殊内容
+            else if (type === 'long-high' && tagData.title === '电能表超容量运行') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">设备运行状态</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">电表额定容量</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-gray-700">80</span>
+                                    <span class="text-xs text-gray-500 ml-1">A</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                    <span class="text-xs text-gray-500">标准配置</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">最大负荷电流</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">97.5</span>
+                                    <span class="text-xs text-gray-500 ml-1">A</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">超出额定容量 (121.9%)</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">过载时长</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">17.3</span>
+                                    <span class="text-xs text-gray-500 ml-1">小时/周</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">高风险运行状态</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">负荷走势分析</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">持续上升</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="overloadChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">过流告警事件</h3>
+                                <span class="text-xs py-1 px-2 bg-orange-100 text-orange-800 rounded-full">频繁</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">相位</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">发生时间</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">电流值</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">C相</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-12 19:35</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-255</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">97.5A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">C相</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-11 19:42</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-255</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">96.8A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">A相</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-10 19:28</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-251</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">92.7A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">C相</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">05-09 19:38</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">Event-255</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">95.2A</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>该电表额定容量为<span class="text-primary font-medium">80A</span>，实际最大电流达<span class="text-red-500 font-medium">97.5A</span>，超出额定容量<span class="text-red-500 font-medium">21.9%</span></li>
+                                <li>过载运行时间累计达到每周<span class="text-red-500 font-medium">17.3小时</span>，主要发生在晚高峰</li>
+                                <li>C相电流值最高，电流过载事件主要集中在C相，提示三相负荷分布不均</li>
+                                <li>近一周内电表发生<span class="text-red-500 font-medium">13次</span>过流告警事件，频率呈上升趋势</li>
+                                <li>电表长期超负荷运行可能导致计量误差增大、设备损坏和安全风险</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">设备风险评估</h3>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border">
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-primary bg-primary-light">
+                                                计量误差风险
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-primary">
+                                                中等
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 65%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                                    </div>
+                                </div>
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-500 bg-red-100">
+                                                设备损坏风险
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-red-500">
+                                                高风险
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 85%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                    </div>
+                                </div>
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-500 bg-red-100">
+                                                安全隐患风险
+                                            </span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-semibold inline-block text-red-500">
+                                                高风险
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                        <div style="width: 85%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-green-50 p-3 rounded-md border border-green-100">
+                            <p class="text-sm font-medium text-green-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-green-700 list-decimal pl-4">
+                                <li>更换更大容量的电能表，建议选用100A或150A量程</li>
+                                <li>优化三相负荷分布，降低C相负荷比例</li>
+                                <li>对用户用电情况进行评估，必要时增容改造</li>
+                                <li>安装负荷监测装置，实时监控电表运行状态</li>
+                                <li>加强安全巡检，消除设备过热引发的安全隐患</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const overloadCtx = document.getElementById('overloadChartModal').getContext('2d');
+                    const overloadChartModal = new Chart(overloadCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['5-6', '5-7', '5-8', '5-9', '5-10', '5-11', '5-12', '5-13'],
+                            datasets: [
+                                {
+                                    label: 'A相最大电流',
+                                    data: [72.3, 75.8, 81.2, 85.7, 92.7, 90.2, 91.5, 90.8],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'B相最大电流',
+                                    data: [68.7, 70.2, 72.6, 74.1, 77.3, 78.9, 81.2, 82.5],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'C相最大电流',
+                                    data: [78.5, 82.3, 87.9, 95.2, 94.7, 96.8, 97.5, 95.9],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '额定容量',
+                                    data: [80, 80, 80, 80, 80, 80, 80, 80],
+                                    borderColor: '#9ca3af',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0,
+                                    fill: false
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '电流 (A)'
+                                    },
+                                    suggestedMin: 60,
+                                    suggestedMax: 100
                                 }
                             }
                         }
