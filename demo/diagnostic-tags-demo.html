@@ -482,6 +482,138 @@
                 }, 100);
             }
             
+            // 针对用电负荷突增标签显示特殊内容
+            else if (type === 'sudden-high' && tagData.title === '用电负荷突增') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">线损率季节性变化</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500">本季度平均线损率</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">11.95%</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">去年同期平均线损率</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">6.48%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 h-60">
+                            <canvas id="seasonalLossChartModal"></canvas>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区线损率在近期内出现突然上升，从<span class="text-primary font-medium">6.2%</span>突增至<span class="text-red-500 font-medium">11.95%</span></li>
+                                <li>分析近期负荷变化，发现<span class="text-red-500 font-medium">4月28日</span>起负荷增长了<span class="text-red-500 font-medium">32.6%</span></li>
+                                <li>负荷突增程度超过理论线损模型的适用范围，导致实际线损与理论线损偏差增大</li>
+                                <li>季节性因素分析显示，去年同期无类似突增现象，提示本次突增不属于季节性规律变化</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">关键节点分析</h3>
+                            <div class="relative">
+                                <div class="absolute h-full w-1 bg-gray-200 left-2.5 top-0"></div>
+                                <div class="space-y-4 relative">
+                                    <div class="flex items-start">
+                                        <div class="h-5 w-5 rounded-full bg-red-500 flex-shrink-0 z-10"></div>
+                                        <div class="ml-4">
+                                            <p class="text-sm font-medium text-gray-800">2023年4月28日</p>
+                                            <p class="text-xs text-gray-600">线损率突然从6.2%上升至11.8%，同时用电负荷大幅增加</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="h-5 w-5 rounded-full bg-primary flex-shrink-0 z-10"></div>
+                                        <div class="ml-4">
+                                            <p class="text-sm font-medium text-gray-800">2023年4月30日</p>
+                                            <p class="text-xs text-gray-600">现场排查发现季节性空调设备大量启用</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                        <div class="ml-4">
+                                            <p class="text-sm font-medium text-gray-800">2022年同期</p>
+                                            <p class="text-xs text-gray-600">线损率稳定在6.3%~6.5%之间，属于正常范围</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-orange-50 p-3 rounded-md border border-orange-100">
+                            <p class="text-sm font-medium text-orange-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-orange-700 list-decimal pl-4">
+                                <li>评估台区负荷增长趋势，必要时及时进行增容改造</li>
+                                <li>调整线损计算模型参数，适应负荷突增情况</li>
+                                <li>巡查台区设备运行状态，确保大负荷下安全运行</li>
+                                <li>分析用户用电构成，实行错峰用电指导</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const seasonalCtx = document.getElementById('seasonalLossChartModal').getContext('2d');
+                    const seasonalLossChartModal = new Chart(seasonalCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            datasets: [
+                                {
+                                    label: '今年',
+                                    data: [6.3, 6.2, 6.1, 11.9, null, null, null, null, null, null, null, null],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '去年',
+                                    data: [6.5, 6.4, 6.5, 6.5, 6.4, 6.3, 6.2, 6.4, 6.5, 6.7, 6.8, 6.6],
+                                    borderColor: '#9ca3af',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    min: 4,
+                                    max: 14,
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
             // 显示弹窗
             modal.classList.remove('hidden');
         }
