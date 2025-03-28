@@ -6,6 +6,7 @@
     <title>智能诊断标签卡片弹窗示例</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -299,9 +300,117 @@
             const tagData = diagnosticTags[type][tagIndex];
             const modal = document.getElementById('tagDetailModal');
             const modalTitle = document.getElementById('tagModalTitle');
+            const modalContent = document.getElementById('tagModalContent');
             
             // 设置标题
             modalTitle.textContent = tagData.title;
+            
+            // 设置弹窗内容
+            modalContent.innerHTML = '';
+            
+            // 针对三相不平衡度高标签显示特殊内容
+            if (type === 'long-high' && tagData.title === '三相不平衡度高') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">三相不平衡度分析</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500">三相不平衡度</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">17.3%</span>
+                                    <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">12.1%</span>
+                                    <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">功率因数</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">0.92</span>
+                                    <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                    <span class="text-sm font-medium">0.94</span>
+                                    <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 h-60">
+                            <canvas id="phaseBalanceChartModal"></canvas>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>本台区三相不平衡度为<span class="text-yellow-500 font-medium">17.3%</span>，高于系统警戒值15%</li>
+                                <li>A相和C相电流过高，B相电流明显偏低</li>
+                                <li>三相不平衡会导致零序电流增大，引起额外线损</li>
+                                <li>建议进行三相负荷均衡调整，优化配电侧运行效率</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                            <p class="text-sm font-medium text-yellow-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-yellow-700 list-decimal pl-4">
+                                <li>检查三相负荷分布情况，调整单相负荷接入相位</li>
+                                <li>排查B相接触不良或连接松动问题</li>
+                                <li>监控三相负荷动态变化，适时调整</li>
+                                <li>检查零线连接情况，确保接触良好</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const phaseCtx = document.getElementById('phaseBalanceChartModal').getContext('2d');
+                    const phaseBalanceChartModal = new Chart(phaseCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['A相', 'B相', 'C相'],
+                            datasets: [
+                                {
+                                    label: '本台区',
+                                    data: [145, 98, 162],
+                                    backgroundColor: '#309C9F',
+                                },
+                                {
+                                    label: '对比组',
+                                    data: [125, 118, 142],
+                                    backgroundColor: '#9ca3af',
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '电流 (A)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
             
             // 显示弹窗
             modal.classList.remove('hidden');
