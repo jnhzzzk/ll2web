@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能诊断标签卡片弹窗示例</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">智能诊断标签卡片弹窗示例</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">智能诊断标签</h2>
+            <div class="flex flex-col space-y-3" id="diagnosticTags">
+                <!-- 诊断标签会通过JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 返回按钮 -->
+        <div class="mt-6">
+            <a href="/cn/diagnostic.html" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-1"></i> 返回诊断分析页面
+            </a>
+        </div>
+    </div>
+    
+    <!-- 诊断标签详情弹窗 -->
+    <div id="tagDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-3xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+                <h2 id="tagModalTitle" class="text-lg font-medium text-gray-900">标签详情</h2>
+                <button id="closeTagModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="tagModalContent" class="p-5">
+                <!-- 弹窗内容将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 诊断标签数据
+        const diagnosticTags = {
+            // 长期高损标签
+            'long-high': [
+                {
+                    title: 'CT互感器倍率错误',
+                    probability: '92%',
+                    icon: 'exclamation-triangle',
+                    color: 'red'
+                },
+                {
+                    title: '档案户变关系异常',
+                    probability: '68%',
+                    icon: 'file-alt',
+                    color: 'orange'
+                },
+                {
+                    title: '疑似低压窃电',
+                    probability: '45%',
+                    icon: 'bolt',
+                    color: 'yellow'
+                },
+                {
+                    title: '采集设备故障',
+                    probability: '38%',
+                    icon: 'wifi',
+                    color: 'blue'
+                },
+                {
+                    title: '电能表超容量运行',
+                    probability: '30%',
+                    icon: 'tachometer-alt',
+                    color: 'green'
+                },
+                {
+                    title: '三相不平衡度高',
+                    probability: '25%',
+                    icon: 'balance-scale',
+                    color: 'purple'
+                }
+            ],
+            
+            // 突发高损标签
+            'sudden-high': [
+                {
+                    title: '用电负荷突增',
+                    probability: '87%',
+                    icon: 'bolt',
+                    color: 'red'
+                },
+                {
+                    title: '低压设备故障',
+                    probability: '65%',
+                    icon: 'exclamation-triangle',
+                    color: 'orange'
+                },
+                {
+                    title: '新增用户接入异常',
+                    probability: '52%',
+                    icon: 'user-plus',
+                    color: 'yellow'
+                },
+                {
+                    title: '恶劣天气引发问题',
+                    probability: '48%',
+                    icon: 'cloud-rain',
+                    color: 'blue'
+                },
+                {
+                    title: '短时漏电故障',
+                    probability: '35%',
+                    icon: 'tint',
+                    color: 'green'
+                }
+            ],
+            
+            // 长期负损标签
+            'long-negative': [
+                {
+                    title: '计量装置接线错误',
+                    probability: '94%',
+                    icon: 'plug',
+                    color: 'red'
+                },
+                {
+                    title: '电表正反向接错',
+                    probability: '78%',
+                    icon: 'exchange-alt',
+                    color: 'orange'
+                },
+                {
+                    title: '台户关系不一致',
+                    probability: '63%',
+                    icon: 'file-alt',
+                    color: 'yellow'
+                },
+                {
+                    title: '光伏发电档案错误',
+                    probability: '42%',
+                    icon: 'solar-panel',
+                    color: 'blue'
+                },
+                {
+                    title: '台区总表前接电',
+                    probability: '38%',
+                    icon: 'plug',
+                    color: 'green'
+                }
+            ],
+            
+            // 小负损标签
+            'small-negative': [
+                {
+                    title: '理论模型计算偏差',
+                    probability: '89%',
+                    icon: 'calculator',
+                    color: 'red'
+                },
+                {
+                    title: '采集数据偏差',
+                    probability: '72%',
+                    icon: 'database',
+                    color: 'orange'
+                },
+                {
+                    title: '互感器配置不合理',
+                    probability: '58%',
+                    icon: 'cogs',
+                    color: 'yellow'
+                },
+                {
+                    title: '电表时钟超差',
+                    probability: '45%',
+                    icon: 'clock',
+                    color: 'blue'
+                },
+                {
+                    title: '供电半径过长',
+                    probability: '35%',
+                    icon: 'ruler',
+                    color: 'green'
+                }
+            ],
+            
+            // 突发负损标签
+            'sudden-negative': [
+                {
+                    title: '电表计量故障',
+                    probability: '91%',
+                    icon: 'tachometer-alt',
+                    color: 'red'
+                },
+                {
+                    title: '功率因数补偿设备异常',
+                    probability: '79%',
+                    icon: 'bolt',
+                    color: 'orange'
+                },
+                {
+                    title: '台区总表某相异常',
+                    probability: '64%',
+                    icon: 'exclamation-triangle',
+                    color: 'yellow'
+                },
+                {
+                    title: '倍率变更未同步',
+                    probability: '58%',
+                    icon: 'sync',
+                    color: 'blue'
+                },
+                {
+                    title: '联合接线盒故障',
+                    probability: '35%',
+                    icon: 'box',
+                    color: 'green'
+                }
+            ]
+        };
+        
+        // 当前显示的异常类型
+        let currentType = 'long-high';
+        
+        // 显示标签
+        function renderTags(type) {
+            currentType = type;
+            const tagContainer = document.getElementById('diagnosticTags');
+            tagContainer.innerHTML = '';
+            
+            // 添加标题
+            const titleMap = {
+                'long-high': '长期高损诊断标签',
+                'sudden-high': '突发高损诊断标签',
+                'long-negative': '长期负损诊断标签',
+                'small-negative': '小负损诊断标签',
+                'sudden-negative': '突发负损诊断标签'
+            };
+            
+            const titleElement = document.createElement('h2');
+            titleElement.className = 'text-lg font-medium text-gray-900 mb-4';
+            titleElement.textContent = titleMap[type];
+            tagContainer.appendChild(titleElement);
+            
+            // 添加切换按钮
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'flex flex-wrap gap-2 mb-4';
+            
+            Object.keys(titleMap).forEach(key => {
+                const button = document.createElement('button');
+                button.className = `px-3 py-1 rounded text-sm ${key === type ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`;
+                button.textContent = titleMap[key];
+                button.addEventListener('click', () => renderTags(key));
+                buttonsContainer.appendChild(button);
+            });
+            
+            tagContainer.appendChild(buttonsContainer);
+            
+            // 添加标签
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'flex flex-col space-y-3';
+            
+            diagnosticTags[type].forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg cursor-pointer hover:shadow-md transition-shadow`;
+                tagElement.innerHTML = `
+                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
+                        <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
+                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
+                    </div>
+                `;
+                tagElement.addEventListener('click', () => showTagDetail(type, index));
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            tagContainer.appendChild(tagsContainer);
+        }
+        
+        // 显示标签详情弹窗
+        function showTagDetail(type, tagIndex) {
+            const tagData = diagnosticTags[type][tagIndex];
+            const modal = document.getElementById('tagDetailModal');
+            const modalTitle = document.getElementById('tagModalTitle');
+            
+            // 设置标题
+            modalTitle.textContent = tagData.title;
+            
+            // 显示弹窗
+            modal.classList.remove('hidden');
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 渲染标签
+            renderTags('long-high');
+            
+            // 标签弹窗关闭按钮
+            const closeTagModalBtn = document.getElementById('closeTagModal');
+            const tagModal = document.getElementById('tagDetailModal');
+            
+            closeTagModalBtn.addEventListener('click', function() {
+                tagModal.classList.add('hidden');
+            });
+            
+            // 点击弹窗外部关闭
+            tagModal.addEventListener('click', function(event) {
+                if (event.target === tagModal) {
+                    tagModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
