@@ -6,6 +6,21 @@
     "silent": true
   },
   "redirects": [
-    { "source": "/", "destination": "/cn/index.html" }
+    { "source": "/", "destination": "/switchlang.html" }
+  ],
+  "routes": [
+    { "src": "/cn", "dest": "/cn/index.html" },
+    { "src": "/cn/index", "dest": "/cn/index.html" },
+    { "src": "/cn/diagnostic", "dest": "/cn/diagnostic.html" },
+    { "src": "/cn/filter", "dest": "/cn/filter.html" },
+    { "src": "/cn/governance", "dest": "/cn/governance.html" },
+    { "src": "/cn/detail", "dest": "/cn/detail.html" },
+    
+    { "src": "/en", "dest": "/en/index.html" },
+    { "src": "/en/index", "dest": "/en/index.html" },
+    { "src": "/en/diagnostic", "dest": "/en/diagnostic.html" },
+    { "src": "/en/filter", "dest": "/en/filter.html" },
+    { "src": "/en/governance", "dest": "/en/governance.html" },
+    { "src": "/en/detail", "dest": "/en/detail.html" }
   ]
 } 
