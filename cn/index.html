@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center relative">
+                        <span id="main-menu-button" class="text-primary text-xl font-bold cursor-pointer flex items-center">
+                            线损诊断分析应用
+                            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                        <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                统计总览
+                            </a>
+                            <a href="filter.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                筛选配置
+                            </a>
+                            <a href="diagnostic.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                诊断分析
+                            </a>
+                            <a href="governance.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                治理建议
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <a href="../en/index.html" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark mr-3">English</a>
+                    <a href="../PRD-线损诊断分析应用.html" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 mr-3">查看PRD</a>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题 -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">统计总览看板</h1>
+                <div class="flex space-x-3">
+                    <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-sm leading-4 text-gray-700 focus:outline-none focus:ring-primary focus:border-primary">
+                            <option>最近7天</option>
+                            <option>最近30天</option>
+                            <option>本季度</option>
+                            <option>本年度</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                        导出报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 核心指标卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-bolt text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">台区总数</p>
+                            <p class="text-2xl font-bold">1,243</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-red-100 p-3 mr-4">
+                            <i class="fas fa-exclamation-triangle text-red-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">异常台区</p>
+                            <p class="text-2xl font-bold">87 <span class="text-sm text-red-500 font-normal">(7.0%)</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-percentage text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">平均理论线损率</p>
+                            <p class="text-2xl font-bold">5.32%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-exchange-alt text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">实际与理论线损差值</p>
+                            <p class="text-2xl font-bold">+1.27%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 线损分布和时间趋势分析 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- 绝对线损区间分布图 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900">绝对线损区间分布</h2>
+                    </div>
+                    <div class="p-5 h-80">
+                        <canvas id="lossDistributionChart"></canvas>
+                    </div>
+                </div>
+                <!-- 时间趋势分析 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">线损趋势分析</h2>
+                        <div class="flex space-x-2">
+                            <button class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm" id="day-btn">日</button>
+                            <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="week-btn">周</button>
+                            <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="month-btn">月</button>
+                        </div>
+                    </div>
+                    <div class="p-5 h-80">
+                        <canvas id="lossTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 相对线损分布 -->
+            <div class="bg-white rounded-lg shadow mb-6">
+                <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-lg font-medium text-gray-900">相对线损分布</h2>
+                </div>
+                <div class="p-5">
+                    <div id="scatterView" class="space-y-4">
+                        <div class="bg-gray-100 rounded-lg h-96 relative">
+                            <canvas id="relativeLossScatterChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 5 异常台区 -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-lg font-medium text-gray-900">Top 5 异常台区</h2>
+                    <a href="filter.html" class="text-primary hover:text-primary-dark text-sm flex items-center">
+                        查看全部 <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">台区名称</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">实际线损率</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">理论线损率</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">差值</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">河西变1324台区</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12.76%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.32%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500">+6.44%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        长期高损
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=longHigh" class="text-primary hover:text-primary-dark">诊断</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">城南532台区</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.21%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.66%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500">+5.55%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        突发高损
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=suddenHigh" class="text-primary hover:text-primary-dark">诊断</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">北郊198台区</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.21%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.45%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-4.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        长期负损
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=longNegative" class="text-primary hover:text-primary-dark">诊断</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">开发区672台区</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2.13%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5.37%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-3.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        突发负损
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=suddenNegative" class="text-primary hover:text-primary-dark">诊断</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">东湖785台区</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.58%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.85%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-1.27%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        小负损
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=smallNegative" class="text-primary hover:text-primary-dark">诊断</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 绝对线损区间分布图
+        const distributionCtx = document.getElementById('lossDistributionChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['0-2%', '2-5%', '5-8%', '8-10%', '10-15%', '>15%'],
+                datasets: [{
+                    label: '',
+                    data: [245, 412, 378, 124, 57, 27],
+                    backgroundColor: [
+                        'rgba(48, 156, 159, 0.4)',
+                        'rgba(48, 156, 159, 0.5)',
+                        'rgba(48, 156, 159, 0.6)',
+                        'rgba(48, 156, 159, 0.7)',
+                        'rgba(48, 156, 159, 0.8)',
+                        'rgba(48, 156, 159, 0.9)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                const value = context.raw;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                label += `${value} 个台区 (${percentage}%)`;
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '台区数量'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '线损率区间'
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                afterDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const meta = chart.getDatasetMeta(0);
+                    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                    
+                    ctx.font = '11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    
+                    meta.data.forEach((bar, index) => {
+                        const value = chart.data.datasets[0].data[index];
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        const position = bar.getCenterPoint();
+                        
+                        // 在柱状图上方显示数值
+                        ctx.fillStyle = '#000';
+                        ctx.fillText(`${value}`, position.x, position.y - 15);
+                        
+                        // 在数值下方显示百分比
+                        ctx.fillStyle = '#666';
+                        ctx.fillText(`${percentage}%`, position.x, position.y - 2);
+                    });
+                }
+            }]
+        });
+
+        // 线损趋势分析
+        const trendCtx = document.getElementById('lossTrendChart').getContext('2d');
+        let trendChart;
+
+        // 不同时间周期的数据
+        const trendData = {
+            day: {
+                labels: ['5/1', '5/2', '5/3', '5/4', '5/5', '5/6', '5/7'],
+                datasets: [
+                    {
+                        label: '实际线损率',
+                        legend:'实际线损率',
+                        data: [6.2, 6.3, 6.5, 7.1, 6.8, 6.6, 6.59],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: '理论线损率', 
+                        data: [5.3, 5.2, 5.4, 5.3, 5.35, 5.4, 5.32],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            week: {
+                labels: ['第1周', '第2周', '第3周', '第4周', '第5周', '第6周', '第7周', '第8周'],
+                datasets: [
+                    {
+                        label: '实际线损率',
+                        data: [6.4, 6.7, 6.2, 6.9, 7.2, 6.8, 6.5, 6.6],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: '理论线损率',
+                        data: [5.2, 5.3, 5.4, 5.2, 5.3, 5.4, 5.3, 5.3],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            month: {
+                labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
+                datasets: [
+                    {
+                        label: '实际线损率',
+                        data: [6.8, 7.1, 6.9, 6.5, 6.3, 6.6],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: '理论线损率',
+                        data: [5.4, 5.5, 5.3, 5.2, 5.3, 5.4],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            }
+        };
+
+        // 创建或更新图表的函数
+        function updateTrendChart(period) {
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: trendData[period],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y.toFixed(2);
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15
+                            }
+                        },
+                        datalabels: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: '线损率 (%)'
+                            },
+                            min: 4,
+                            max: 8
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '时间周期'
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    afterDraw: function(chart) {
+                        const ctx = chart.ctx;
+                        
+                        chart.data.datasets.forEach((dataset, i) => {
+                            const meta = chart.getDatasetMeta(i);
+                            if (!meta.hidden) {
+                                meta.data.forEach((element, index) => {
+                                    // 绘制数值标签
+                                    const value = dataset.data[index].toFixed(1) + '%';
+                                    const position = element.getCenterPoint();
+                                    
+                                    ctx.fillStyle = dataset.borderColor;
+                                    ctx.font = 'bold 11px Arial';
+                                    ctx.textAlign = 'center';
+                                    
+                                    // 根据数据集位置在点上方或下方
+                                    const yOffset = i === 0 ? -15 : 15; // 第一个数据集上方，第二个下方
+                                    ctx.fillText(value, position.x, position.y + yOffset);
+                                });
+                            }
+                        });
+                    }
+                }]
+            });
+        }
+
+        // 初始化为日视图
+        updateTrendChart('day');
+
+        // 为周期按钮添加事件监听器
+        document.getElementById('day-btn').addEventListener('click', function() {
+            document.getElementById('day-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('day');
+        });
+
+        document.getElementById('week-btn').addEventListener('click', function() {
+            document.getElementById('week-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('week');
+        });
+
+        document.getElementById('month-btn').addEventListener('click', function() {
+            document.getElementById('month-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('month');
+        });
+
+        // 相对线损分布散点图
+        const scatterCtx = document.getElementById('relativeLossScatterChart').getContext('2d');
+        const scatterChart = new Chart(scatterCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: '华东区',
+                        data: [{ x: 2.7, y: 12 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.9)',
+                        pointRadius: 15,
+                        pointHoverRadius: 18
+                    },
+                    {
+                        label: '华南区',
+                        data: [{ x: 1.8, y: 8 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.8)',
+                        pointRadius: 12,
+                        pointHoverRadius: 15
+                    },
+                    {
+                        label: '华北区',
+                        data: [{ x: 2.4, y: 15 }],
+                        backgroundColor: 'rgba(48, 156, 159, 1)',
+                        pointRadius: 18,
+                        pointHoverRadius: 20
+                    },
+                    {
+                        label: '东北区',
+                        data: [{ x: 1.5, y: 10 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.85)',
+                        pointRadius: 14,
+                        pointHoverRadius: 16
+                    },
+                    {
+                        label: '西北区',
+                        data: [{ x: 0.6, y: 6 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.65)',
+                        pointRadius: 10,
+                        pointHoverRadius: 12
+                    },
+                    {
+                        label: '西南区',
+                        data: [{ x: 0.3, y: 3 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.5)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    },
+                    {
+                        label: '华中区',
+                        data: [{ x: 0.5, y: 5 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.6)',
+                        pointRadius: 9,
+                        pointHoverRadius: 11
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label;
+                                const x = context.parsed.x.toFixed(1);
+                                const y = context.parsed.y;
+                                return `${label}: 相对线损差值 ${x}%, 异常台区数量 ${y}个`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '异常台区数量'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '相对线损差值 (%)'
+                        },
+                        min: -5,
+                        max: 5
+                    }
+                },
+                onClick: (e, elements) => {
+                    if (elements && elements.length > 0) {
+                        const index = elements[0].datasetIndex;
+                        const region = scatterChart.data.datasets[index].label;
+                        showRegionDetails(region);
+                    }
+                }
+            }
+        });
+
+        // 为散点图添加标签显示
+        Chart.register({
+            id: 'datalabels',
+            afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach((element, index) => {
+                            // 绘制标签
+                            ctx.fillStyle = '#000';
+                            const fontSize = 11;
+                            ctx.font = `${fontSize}px Arial`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            const position = element.getCenterPoint();
+                            ctx.fillText(dataset.label, position.x, position.y - 12);
+                        });
+                    }
+                });
+            }
+        });
+
+        // 区域下钻详情
+        function showRegionDetails(region) {
+            // 区域与链接路径的映射
+            const regionLinks = {
+                '华东区': 'filter.html?region=east',
+                '华南区': 'filter.html?region=south',
+                '华北区': 'filter.html?region=north',
+                '东北区': 'filter.html?region=northeast',
+                '西北区': 'filter.html?region=northwest',
+                '西南区': 'filter.html?region=southwest',
+                '华中区': 'filter.html?region=central'
+            };
+            
+            // 区域详情的弹窗
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+            modal.id = 'regionDetailModal';
+            
+            // 弹窗内容
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+                    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-gray-900">${region}详情</h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-500">相对线损差值</span>
+                                <span class="text-sm font-medium">${getRegionData(region).x.toFixed(1)}%</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-500">异常台区数量</span>
+                                <span class="text-sm font-medium">${getRegionData(region).y}个</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">总台区数</span>
+                                <span class="text-sm font-medium">${getRegionTotalAreas(region)}个</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex flex-col space-y-2">
+                            <a href="${regionLinks[region]}" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm text-center transition-colors duration-200">
+                                查看台区明细
+                            </a>
+                            <a href="diagnostic.html?region=${encodeURIComponent(region)}" class="border border-primary text-primary hover:bg-primary-light py-2 px-4 rounded-md text-sm text-center transition-colors duration-200">
+                                进行诊断分析
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // 关闭弹窗事件
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('regionDetailModal').remove();
+            });
+            
+            // 点击弹窗外部关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+        
+        // 获取区域数据
+        function getRegionData(region) {
+            const datasets = scatterChart.data.datasets;
+            for (let i = 0; i < datasets.length; i++) {
+                if (datasets[i].label === region) {
+                    return datasets[i].data[0];
+                }
+            }
+            return { x: 0, y: 0 };
+        }
+        
+        // 获取区域台区总数（模拟数据）
+        function getRegionTotalAreas(region) {
+            const totals = {
+                '华东区': 168,
+                '华南区': 145,
+                '华北区': 203,
+                '东北区': 179,
+                '西北区': 134,
+                '西南区': 112,
+                '华中区': 142
+            };
+            return totals[region] || 100;
+        }
+
+        // 下拉菜单行为
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('main-menu-button');
+            const menuDropdown = document.getElementById('main-menu-dropdown');
+            
+            // 点击菜单按钮时切换下拉菜单
+            menuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('hidden');
+            });
+            
+            // 点击外部时关闭下拉菜单
+            document.addEventListener('click', function(e) {
+                if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.add('hidden');
+                }
+            });
+            
+            // 防止点击下拉菜单内部时关闭
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html> 

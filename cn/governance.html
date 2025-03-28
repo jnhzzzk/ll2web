@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>治理建议 - 线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center relative">
+                        <span id="main-menu-button" class="text-primary text-xl font-bold cursor-pointer flex items-center">
+                            线损诊断分析应用
+                            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                        <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                统计总览
+                            </a>
+                            <a href="filter.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                筛选配置
+                            </a>
+                            <a href="diagnostic.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                诊断分析
+                            </a>
+                            <a href="governance.html" class="block px-4 py-2 text-sm text-gray-700 bg-primary-light text-primary">
+                                治理建议
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <a href="../en/governance.html" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark mr-3">English</a>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题和台区选择 -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">治理建议</h1>
+                <div class="flex items-center space-x-3">
+                    <div class="relative w-64">
+                        <select id="area-selector" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
+                            <option value="long-high" selected>河西变1324台区 (+6.44%, 长期高损)</option>
+                            <option value="sudden-high">城南532台区 (+5.55%, 突发高损)</option>
+                            <option value="long-neg">东湖785台区 (-4.69%, 长期负损)</option>
+                            <option value="small-neg">北郊198台区 (-0.84%, 小负损)</option>
+                            <option value="sudden-neg">开发区672台区 (-3.76%, 突发负损)</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                        <i class="fas fa-print mr-1"></i> 导出报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 治理信息概览 -->
+            <div class="bg-white rounded-lg shadow-sm mb-6">
+                <div class="border-b border-gray-200">
+                    <div class="px-5 py-4 flex items-center">
+                        <div class="flex-shrink-0 h-12 w-12 flex items-center justify-center bg-red-100 rounded-full">
+                            <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-lg font-medium text-gray-900">河西变1324台区 - 线损异常治理建议</h2>
+                            <p class="text-sm text-gray-500 mt-1">诊断结果: CT互感器倍率错误（匹配概率: 92%）</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                        <div class="col-span-1 bg-primary-light rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-1">线损差值</h3>
+                            <!-- 长期高损 -->
+                            <div id="loss-diff-long-high">
+                                <p class="text-2xl font-bold text-red-500">+6.44%</p>
+                                <p class="text-xs text-gray-500 mt-1">理论线损: 6.32% / 实际线损: 12.76%</p>
+                            </div>
+                            <!-- 突发高损 -->
+                            <div id="loss-diff-sudden-high" class="hidden">
+                                <p class="text-2xl font-bold text-orange-500">+5.55%</p>
+                                <p class="text-xs text-gray-500 mt-1">理论线损: 5.55% / 实际线损: 11.10%</p>
+                            </div>
+                            <!-- 长期负损 -->
+                            <div id="loss-diff-long-neg" class="hidden">
+                                <p class="text-2xl font-bold text-blue-500">-4.69%</p>
+                                <p class="text-xs text-gray-500 mt-1">理论线损: 6.51% / 实际线损: 1.82%</p>
+                            </div>
+                            <!-- 小负损 -->
+                            <div id="loss-diff-small-neg" class="hidden">
+                                <p class="text-2xl font-bold text-sky-500">-0.84%</p>
+                                <p class="text-xs text-gray-500 mt-1">理论线损: 6.32% / 实际线损: 5.48%</p>
+                            </div>
+                            <!-- 突发负损 -->
+                            <div id="loss-diff-sudden-neg" class="hidden">
+                                <p class="text-2xl font-bold text-indigo-500">-3.76%</p>
+                                <p class="text-xs text-gray-500 mt-1">理论线损: 5.76% / 实际线损: 2.00%</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 bg-primary-light rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-1">影响电量</h3>
+                            <!-- 长期高损 -->
+                            <div id="power-impact-long-high">
+                                <p class="text-2xl font-bold text-gray-900">8,576 kWh</p>
+                                <p class="text-xs text-gray-500 mt-1">每月约 ¥6,861 经济损失</p>
+                            </div>
+                            <!-- 突发高损 -->
+                            <div id="power-impact-sudden-high" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">5,240 kWh</p>
+                                <p class="text-xs text-gray-500 mt-1">每月约 ¥4,192 经济损失</p>
+                            </div>
+                            <!-- 长期负损 -->
+                            <div id="power-impact-long-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">4,980 kWh</p>
+                                <p class="text-xs text-gray-500 mt-1">每月约 ¥3,984 经济损失</p>
+                            </div>
+                            <!-- 小负损 -->
+                            <div id="power-impact-small-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">1,250 kWh</p>
+                                <p class="text-xs text-gray-500 mt-1">每月约 ¥1,000 经济损失</p>
+                            </div>
+                            <!-- 突发负损 -->
+                            <div id="power-impact-sudden-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">3,860 kWh</p>
+                                <p class="text-xs text-gray-500 mt-1">每月约 ¥3,088 经济损失</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 bg-primary-light rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-1">异常持续时间</h3>
+                            <!-- 长期高损 -->
+                            <div id="duration-long-high">
+                                <p class="text-2xl font-bold text-gray-900">28天</p>
+                                <p class="text-xs text-gray-500 mt-1">异常开始时间: 2023-04-06</p>
+                            </div>
+                            <!-- 突发高损 -->
+                            <div id="duration-sudden-high" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">5天</p>
+                                <p class="text-xs text-gray-500 mt-1">异常开始时间: 2023-05-07</p>
+                            </div>
+                            <!-- 长期负损 -->
+                            <div id="duration-long-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">32天</p>
+                                <p class="text-xs text-gray-500 mt-1">异常开始时间: 2023-04-02</p>
+                            </div>
+                            <!-- 小负损 -->
+                            <div id="duration-small-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">14天</p>
+                                <p class="text-xs text-gray-500 mt-1">异常开始时间: 2023-04-28</p>
+                            </div>
+                            <!-- 突发负损 -->
+                            <div id="duration-sudden-neg" class="hidden">
+                                <p class="text-2xl font-bold text-gray-900">4天</p>
+                                <p class="text-xs text-gray-500 mt-1">异常开始时间: 2023-05-08</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 bg-primary-light rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-1">异常类型</h3>
+                            <div id="anomaly-type-badge-container">
+                                <!-- 长期高损标志 -->
+                                <div id="badge-long-high" class="flex items-center">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        长期高损
+                                    </span>
+                                </div>
+                                
+                                <!-- 突发高损标志 -->
+                                <div id="badge-sudden-high" class="flex items-center hidden">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                        突发高损
+                                    </span>
+                                </div>
+                                
+                                <!-- 长期负损标志 -->
+                                <div id="badge-long-neg" class="flex items-center hidden">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        长期负损
+                                    </span>
+                                </div>
+                                
+                                <!-- 小负损标志 -->
+                                <div id="badge-small-neg" class="flex items-center hidden">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
+                                        小负损
+                                    </span>
+                                </div>
+                                
+                                <!-- 突发负损标志 -->
+                                <div id="badge-sudden-neg" class="flex items-center hidden">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        突发负损
+                                    </span>
+                                </div>
+                            </div>
+                            <p id="anomaly-description-long-high" class="text-xs text-gray-500 mt-1">连续30天内线损率高于理论值5%以上，且异常天数≥20天</p>
+                            <p id="anomaly-description-sudden-high" class="text-xs text-gray-500 mt-1 hidden">线损率突然升高5%以上，且持续3天以上</p>
+                            <p id="anomaly-description-long-neg" class="text-xs text-gray-500 mt-1 hidden">连续7天以上线损率小于0%</p>
+                            <p id="anomaly-description-small-neg" class="text-xs text-gray-500 mt-1 hidden">线损率在-1%~0%之间，持续7天以上</p>
+                            <p id="anomaly-description-sudden-neg" class="text-xs text-gray-500 mt-1 hidden">线损率突然降低至0%以下，且持续3天以上</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 左侧: 标准化治理流程 -->
+                <div class="col-span-1 lg:col-span-2">
+                    <!-- 标准化治理流程 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">标准化治理流程</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="relative">
+                                <!-- 时间线 -->
+                                <div class="absolute left-8 top-5 bottom-0 w-0.5 bg-gray-200"></div>
+                                
+                                <!-- 长期高损治理流程 -->
+                                <div id="process-long-high">
+                                    <!-- 流程项目1：诊断分析阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">诊断分析阶段</h3>
+                                            <p class="text-sm text-gray-500">基于智能诊断标签体系，已识别河西变1324台区异常类型为长期高损，主要原因为CT互感器倍率错误（匹配概率：92%）。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">详细分析：</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>诊断标签：CT互感器倍率错误</li>
+                                                    <li>异常指标：线损率持续偏高6.44%，已持续28天</li>
+                                                    <li>当前档案倍率：300/5，诊断建议倍率：250/5</li>
+                                                    <li>事件记录：无CT短路/旁路事件，但线损率稳定性高</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目2：现场核查阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">现场核查阶段</h3>
+                                            <p class="text-sm text-gray-500">需派遣专业人员前往现场，按标准化流程进行核查。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">核查清单：</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">CT互感器铭牌信息核对</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">系统倍率记录核对</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">互感器二次回路检查</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">计量装置接线检查</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 互感器测试仪，万用表，安全工器具</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：问题处置阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">问题处置阶段</h3>
+                                            <p class="text-sm text-gray-500">根据诊断标签和现场核查结果，采取相应处置措施。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">CT互感器倍率修正：</h4>
+                                                        <p>核实倍率后，将正确的CT互感器倍率（250/5）更新至以下系统：</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>计量装置管理系统</li>
+                                                            <li>采集系统的互感器参数配置</li>
+                                                            <li>线损管理系统台区档案</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">系统配置验证：</h4>
+                                                        <p>完成系统参数修改后，进行数据比对确认，检查各系统参数一致性。</p>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
+                                                        <p class="text-primary">系统参数修正后预计线损率为 6.51%，与理论线损偏差为 +0.19%，在合理范围内。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目4：效果评估阶段 -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">效果评估阶段</h3>
+                                            <p class="text-sm text-gray-500">参数修正后，需对台区线损进行持续监测，确认问题是否解决。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 突发高损治理流程 -->
+                                <div id="process-sudden-high" class="hidden">
+                                    <!-- 流程项目1：快速响应阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">快速响应阶段</h3>
+                                            <p class="text-sm text-gray-500">城南532台区线损监测系统触发突发高损告警，线损率在短期内突增5.55%。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">应急措施：</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>24小时内完成初步诊断分析</li>
+                                                    <li>诊断标签：用电负荷突增（匹配概率：87%）</li>
+                                                    <li>异常指标：线损率突增5.55%，已持续5天</li>
+                                                    <li>生成应急处置建议</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目2：原因排查阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">原因排查阶段</h3>
+                                            <p class="text-sm text-gray-500">优先检查与诊断标签对应的可能因素。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">排查清单：</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">设备故障状态检查</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">新增负荷情况调查</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">天气影响评估</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">漏电点排查</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 红外测温仪，负荷记录仪，漏电检测仪</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：应急处置阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">应急处置阶段</h3>
+                                            <p class="text-sm text-gray-500">根据排查结果，采取相应的应急处置措施。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">负荷突增处置：</h4>
+                                                        <p>经排查发现台区内新增大型商业用户投入运营，导致负荷突增。建议采取以下措施：</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>评估是否需要增容或调整供电方案</li>
+                                                            <li>检查新增用户计量装置是否正常</li>
+                                                            <li>更新系统台区档案信息</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
+                                                        <p class="text-primary">处置完成后预计线损率将恢复至6.10%，与理论线损偏差为+0.55%，在合理范围内。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目4：恢复监测阶段 -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">恢复监测阶段</h3>
+                                            <p class="text-sm text-gray-500">处置完成后48小时内持续监测，确认线损率恢复正常水平。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">后续措施：</h4>
+                                                    <p>制定预防性维护计划，防止类似问题再次发生：</p>
+                                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                        <li>建立台区负荷变化预警机制</li>
+                                                        <li>完善新增用户接入流程</li>
+                                                        <li>定期检查台区设备运行状态</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 长期负损治理流程 -->
+                                <div id="process-long-neg" class="hidden">
+                                    <!-- 流程项目1：系统性分析阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">系统性分析阶段</h3>
+                                            <p class="text-sm text-gray-500">东湖785台区出现长期负损现象，线损率持续为负值达32天。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">详细分析：</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>诊断标签：计量装置接线错误（匹配概率：89%）</li>
+                                                    <li>异常指标：线损率持续为负值-4.69%，已持续32天</li>
+                                                    <li>收集台区全面数据，包括计量装置参数、接线方式</li>
+                                                    <li>运行负损专项诊断算法，分析负损存在的系统性问题</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目2：重点检查阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">重点检查阶段</h3>
+                                            <p class="text-sm text-gray-500">按诊断标签概率排序，重点检查可能导致负损的关键因素。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">检查清单：</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">电能表接线正确性</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">互感器极性及接线正确性</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">系统台户关系完整性</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">光伏发电用户配置正确性</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 万用表，相序表，接线图纸，计量装置检测仪</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：系统纠正阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">系统纠正阶段</h3>
+                                            <p class="text-sm text-gray-500">根据检查结果，采取相应的纠正措施。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">计量装置接线修正：</h4>
+                                                        <p>经检查发现电能表接线错误，电流互感器二次回路接线反向。建议采取以下措施：</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>修正计量装置接线问题</li>
+                                                            <li>更新系统档案信息</li>
+                                                            <li>调整不合理的计量点配置</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
+                                                        <p class="text-primary">接线修正后预计线损率将恢复至6.20%，与理论线损偏差为-0.31%，在合理范围内。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目4：长效监测阶段 -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">长效监测阶段</h3>
+                                            <p class="text-sm text-gray-500">建立台区负损专项监测机制，确保问题不再发生。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">后续措施：</h4>
+                                                    <p>建立长效监测机制，防止类似问题再次发生：</p>
+                                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                        <li>每月进行数据一致性核查</li>
+                                                        <li>定期检查计量装置运行状态</li>
+                                                        <li>形成长期负损治理经验库</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 小负损治理流程 -->
+                                <div id="process-small-neg" class="hidden">
+                                    <!-- 流程项目1：模型评估阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">模型评估阶段</h3>
+                                            <p class="text-sm text-gray-500">北郊198台区出现小负损现象，线损率在-1%~0%之间，持续14天。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">详细分析：</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>诊断标签：理论模型计算偏差（匹配概率：91%）</li>
+                                                    <li>异常指标：线损率为-0.84%，已持续14天</li>
+                                                    <li>评估理论线损计算模型适用性</li>
+                                                    <li>检查模型参数与实际台区参数的匹配度</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目2：精细化核查阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">精细化核查阶段</h3>
+                                            <p class="text-sm text-gray-500">对台区进行精细化核查，找出导致小负损的具体原因。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">核查清单：</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">互感器配置合理性</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">电表时钟同步状态</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">供电半径对线损计算的影响</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">数据采集质量</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 时钟同步检测仪，数据采集质量分析工具，线损模型参数表</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：优化调整阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">优化调整阶段</h3>
+                                            <p class="text-sm text-gray-500">根据核查结果，对系统进行优化调整。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">模型参数优化：</h4>
+                                                        <p>经检查发现理论线损计算模型参数与实际台区参数不匹配，建议采取以下措施：</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>优化理论线损计算模型参数</li>
+                                                            <li>调整互感器配置，提高计量精度</li>
+                                                            <li>实施电表时钟同步</li>
+                                                            <li>改善数据采集质量</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
+                                                        <p class="text-primary">参数优化后预计线损率将恢复至5.80%，与理论线损偏差为-0.52%，在合理范围内。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目4：模型验证阶段 -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">模型验证阶段</h3>
+                                            <p class="text-sm text-gray-500">应用优化后的模型重新计算理论线损，验证线损率是否回归合理范围。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">验证方法：</h4>
+                                                    <p>通过以下方式验证优化效果：</p>
+                                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                        <li>应用优化后的模型重新计算理论线损</li>
+                                                        <li>验证线损率是否回归合理范围</li>
+                                                        <li>形成小负损台区治理经验</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 突发负损治理流程 -->
+                                <div id="process-sudden-neg" class="hidden">
+                                    <!-- 流程项目1：紧急诊断阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">紧急诊断阶段</h3>
+                                            <p class="text-sm text-gray-500">开发区672台区线损监测系统发出突发负损告警，线损率突然降至-3.76%。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">应急措施：</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>监测系统发出突发负损告警后12小时内响应</li>
+                                                    <li>诊断标签：电表计量故障（匹配概率：88%）</li>
+                                                    <li>异常指标：线损率突降至-3.76%，已持续4天</li>
+                                                    <li>进行远程诊断，安排现场检查计划</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目2：快速检查阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">快速检查阶段</h3>
+                                            <p class="text-sm text-gray-500">重点检查可能导致突发负损的关键因素。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">检查清单：</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">电表计量状态</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">互感器故障状态</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">倍率变更同步状态</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">功率因数补偿设备状态</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 电能表校验仪，互感器测试仪，功率因数测量仪</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：快速纠正阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">快速纠正阶段</h3>
+                                            <p class="text-sm text-gray-500">根据检查结果，采取相应的快速纠正措施。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">电表故障处置：</h4>
+                                                        <p>经检查发现台区总表电能表计量芯片故障，导致计量数据异常。建议采取以下措施：</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>更换故障计量设备</li>
+                                                            <li>校验新安装电能表计量准确性</li>
+                                                            <li>更新系统档案信息</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
+                                                        <p class="text-primary">设备更换后预计线损率将恢复至5.50%，与理论线损偏差为-0.26%，在合理范围内。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目4：后续跟踪阶段 -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">后续跟踪阶段</h3>
+                                            <p class="text-sm text-gray-500">处置后48小时内持续监测，确认问题是否彻底解决。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">后续措施：</h4>
+                                                    <p>制定预防措施，避免类似问题再次发生：</p>
+                                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                        <li>分析突发负损根本原因</li>
+                                                        <li>制定计量设备定期检查计划</li>
+                                                        <li>建立预警机制，避免再次发生</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 长期高损效果评估 -->
+                            <div id="effect-evaluation-long-high" class="mt-3 border-t border-gray-100 pt-3">
+                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">线损率目标范围</span>
+                                        <span class="text-primary font-medium">理论值±3% (3.32% ~ 9.32%)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">监测天数要求</span>
+                                        <span class="text-primary font-medium">连续7天</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">验收标准</span>
+                                        <span class="text-primary font-medium">线损率稳定在合理范围内</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-md">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        若修正后线损仍异常，需根据《智能诊断标签与标准化治理流程》文档回到诊断分析阶段，重新评估其他可能原因。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- 突发高损效果评估 -->
+                            <div id="effect-evaluation-sudden-high" class="mt-3 border-t border-gray-100 pt-3 hidden">
+                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">线损率目标范围</span>
+                                        <span class="text-primary font-medium">理论值±3% (2.55% ~ 8.55%)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">监测时间要求</span>
+                                        <span class="text-primary font-medium">处置完成后48小时内</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">验收标准</span>
+                                        <span class="text-primary font-medium">线损率恢复到突变前水平</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-md">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        处置后需制定预防性维护计划，防止类似问题再次发生。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- 长期负损效果评估 -->
+                            <div id="effect-evaluation-long-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
+                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">线损率目标范围</span>
+                                        <span class="text-primary font-medium">理论值-3%以上 (>3.32%)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">监测天数要求</span>
+                                        <span class="text-primary font-medium">连续14天</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">验收标准</span>
+                                        <span class="text-primary font-medium">线损率为正值且稳定</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-md">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        治理后需建立台区负损专项监测机制，每月进行数据一致性核查。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- 小负损效果评估 -->
+                            <div id="effect-evaluation-small-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
+                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">线损率目标范围</span>
+                                        <span class="text-primary font-medium">理论值-2%以上 (>4.32%)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">监测天数要求</span>
+                                        <span class="text-primary font-medium">连续14天</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">验收标准</span>
+                                        <span class="text-primary font-medium">线损率稳定在合理或轻微小负损范围</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-md">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        对于理论模型偏差类问题，可考虑调整模型参数以更符合实际情况。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- 突发负损效果评估 -->
+                            <div id="effect-evaluation-sudden-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
+                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">线损率目标范围</span>
+                                        <span class="text-primary font-medium">理论值-3%以上 (>2.76%)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">监测时间要求</span>
+                                        <span class="text-primary font-medium">处置完成后48小时内</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-600">验收标准</span>
+                                        <span class="text-primary font-medium">线损率恢复到突变前水平</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-md">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        处置后需分析突发负损根本原因，制定预防措施避免再次发生。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 案例库匹配、工单生成及跟踪 -->
+                <div class="col-span-1">
+                    <!-- 工单生成 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">工单生成</h2>
+                        </div>
+                        <div class="p-5">
+                            <!-- 添加入口按钮 -->
+                            <div class="flex justify-between mb-5">
+                                <button id="case-library-btn" class="bg-blue-50 hover:bg-blue-100 text-blue-600 py-2 px-4 rounded-md text-sm transition-colors duration-200 flex items-center">
+                                    <i class="fas fa-book-open mr-1"></i> 案例库匹配
+                                </button>
+                                <button id="governance-tracking-btn" class="bg-green-50 hover:bg-green-100 text-green-600 py-2 px-4 rounded-md text-sm transition-colors duration-200 flex items-center">
+                                    <i class="fas fa-tasks mr-1"></i> 治理跟踪
+                                </button>
+                            </div>
+                            
+                            <form>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单类型</label>
+                                        <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                            <option selected>计量参数核查工单</option>
+                                            <option>计量装置异常工单</option>
+                                            <option>台区档案核查工单</option>
+                                            <option>线损异常治理工单</option>
+                                            <option>低压窃电排查工单</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">异常类型</label>
+                                        <select id="anomaly-type-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                            <option value="long-high" selected>长期高损</option>
+                                            <option value="sudden-high">突发高损</option>
+                                            <option value="long-neg">长期负损</option>
+                                            <option value="small-neg">小负损</option>
+                                            <option value="sudden-neg">突发负损</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">诊断标签</label>
+                                        <select id="diagnosis-tag-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                            <!-- 长期高损标签 -->
+                                            <option value="ct-error" class="long-high-tag" selected>CT互感器倍率错误 (92%)</option>
+                                            <option value="archive-error" class="long-high-tag">档案户变关系异常 (68%)</option>
+                                            <option value="theft" class="long-high-tag">疑似低压窃电 (45%)</option>
+                                            <option value="collection-failure" class="long-high-tag">采集设备故障 (38%)</option>
+                                            <option value="overload" class="long-high-tag">电能表超容量运行 (22%)</option>
+                                            <option value="unbalance" class="long-high-tag">三相不平衡度高 (15%)</option>
+                                            
+                                            <!-- 突发高损标签 -->
+                                            <option value="load-surge" class="sudden-high-tag hidden">用电负荷突增 (87%)</option>
+                                            <option value="equipment-failure" class="sudden-high-tag hidden">低压设备故障 (75%)</option>
+                                            <option value="new-user-issue" class="sudden-high-tag hidden">新增用户接入异常 (63%)</option>
+                                            <option value="weather-issue" class="sudden-high-tag hidden">恶劣天气引发问题 (52%)</option>
+                                            <option value="leakage" class="sudden-high-tag hidden">短时漏电故障 (45%)</option>
+                                            
+                                            <!-- 长期负损标签 -->
+                                            <option value="wiring-error" class="long-neg-tag hidden">计量装置接线错误 (89%)</option>
+                                            <option value="direction-error" class="long-neg-tag hidden">电表正反向接错 (78%)</option>
+                                            <option value="user-mismatch" class="long-neg-tag hidden">台户关系不一致 (65%)</option>
+                                            <option value="pv-error" class="long-neg-tag hidden">光伏发电档案错误 (58%)</option>
+                                            <option value="pre-meter" class="long-neg-tag hidden">台区总表前接电 (47%)</option>
+                                            
+                                            <!-- 小负损标签 -->
+                                            <option value="model-bias" class="small-neg-tag hidden">理论模型计算偏差 (91%)</option>
+                                            <option value="data-bias" class="small-neg-tag hidden">采集数据偏差 (82%)</option>
+                                            <option value="ct-configuration" class="small-neg-tag hidden">互感器配置不合理 (73%)</option>
+                                            <option value="clock-error" class="small-neg-tag hidden">电表时钟超差 (65%)</option>
+                                            <option value="long-radius" class="small-neg-tag hidden">供电半径过长 (57%)</option>
+                                            
+                                            <!-- 突发负损标签 -->
+                                            <option value="meter-failure" class="sudden-neg-tag hidden">电表计量故障 (88%)</option>
+                                            <option value="power-factor" class="sudden-neg-tag hidden">功率因数补偿设备异常 (77%)</option>
+                                            <option value="phase-issue" class="sudden-neg-tag hidden">台区总表某相异常 (68%)</option>
+                                            <option value="ratio-change" class="sudden-neg-tag hidden">倍率变更未同步 (56%)</option>
+                                            <option value="terminal-box" class="sudden-neg-tag hidden">联合接线盒故障 (45%)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单优先级</label>
+                                        <div class="flex space-x-4">
+                                            <div class="flex items-center">
+                                                <input id="priority-high" name="priority" type="radio" checked class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="priority-high" class="ml-2 block text-sm text-gray-700">紧急</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="priority-medium" name="priority" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="priority-medium" class="ml-2 block text-sm text-gray-700">一般</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="priority-low" name="priority" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="priority-low" class="ml-2 block text-sm text-gray-700">低优先级</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">处理人</label>
+                                        <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                            <option selected>李强（河西供电所）</option>
+                                            <option>张明（计量班）</option>
+                                            <option>王刚（检修班）</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">计划完成时间</label>
+                                        <input type="date" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="2023-05-15">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单说明</label>
+                                        <textarea rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="请输入工单说明">河西变1324台区线损异常，诊断为CT互感器倍率错误（匹配概率92%）。请按照《智能诊断标签与标准化治理流程》的长期高损流程进行核查和处置：
+1. 核实现场CT实际倍率，确认是否为250/5
+2. 修正系统参数并同步到相关系统
+3. 治理后监测线损率变化7天</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">相关附件</label>
+                                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                            <div class="space-y-1 text-center">
+                                                <i class="fas fa-cloud-upload-alt text-gray-400 text-2xl"></i>
+                                                <div class="flex text-sm text-gray-600">
+                                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary-dark focus-within:outline-none">
+                                                        <span>上传文件</span>
+                                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                                    </label>
+                                                    <p class="pl-1">或拖放文件</p>
+                                                </div>
+                                                <p class="text-xs text-gray-500">支持 PNG, JPG, PDF 文件</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-5 flex justify-end">
+                                    <button type="button" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200 mr-2">
+                                        保存草稿
+                                    </button>
+                                    <button type="button" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                                        生成并派发工单
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- 底部操作区域 -->
+            <div class="flex justify-between mt-6">
+                <a href="diagnostic.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回诊断
+                </a>
+                <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    生成并派发工单 <i class="fas fa-paper-plane ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 案例库匹配弹窗 -->
+    <div id="case-library-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- 弹窗内容 -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-medium text-gray-900">案例库匹配</h2>
+                            <button id="close-case-library-modal" class="text-gray-400 hover:text-gray-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
+                                        <i class="fas fa-book-open text-blue-600"></i>
+                                    </span>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-base font-medium text-gray-900">东区768台区CT倍率错误案例</h3>
+                                    <p class="text-sm text-gray-500 mt-1">2023年2月，东区768台区出现线损异常（偏高6.2%），诊断发现CT倍率设置错误（实际应为200/5，错误设置为300/5）。通过修正系统参数，台区线损率从12.3%降至6.1%，与理论线损基本吻合。</p>
+                                    <div class="mt-3">
+                                        <details class="text-sm">
+                                            <summary class="text-primary cursor-pointer">查看详细治理过程</summary>
+                                            <div class="mt-2 pl-2 border-l-2 border-primary-light">
+                                                <p class="text-gray-600">2023-02-15: 发现台区线损异常</p>
+                                                <p class="text-gray-600">2023-02-16: 现场检测互感器参数</p>
+                                                <p class="text-gray-600">2023-02-17: 修正系统配置参数</p>
+                                                <p class="text-gray-600">2023-02-24: 跟踪确认线损恢复正常</p>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
+                                        <i class="fas fa-book-open text-blue-600"></i>
+                                    </span>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-base font-medium text-gray-900">南区432台区CT互感器倍率错误案例</h3>
+                                    <p class="text-sm text-gray-500 mt-1">2023年4月，南区432台区线损率偏高7.3%，诊断为CT互感器倍率错误。现场核实后，将倍率由400/5修正为300/5，线损率降至正常水平。</p>
+                                    <div class="mt-3">
+                                        <details class="text-sm">
+                                            <summary class="text-primary cursor-pointer">查看详细治理过程</summary>
+                                            <div class="mt-2 pl-2 border-l-2 border-primary-light">
+                                                <p class="text-gray-600">2023-04-08: 发现台区线损异常</p>
+                                                <p class="text-gray-600">2023-04-09: 现场检测互感器参数</p>
+                                                <p class="text-gray-600">2023-04-10: 修正系统配置参数</p>
+                                                <p class="text-gray-600">2023-04-17: 确认线损恢复正常</p>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 flex justify-end">
+                            <button class="text-primary hover:text-primary-dark text-sm flex items-center">
+                                <i class="fas fa-search mr-1"></i> 查看更多类似案例
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 治理跟踪弹窗 -->
+    <div id="governance-tracking-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- 弹窗内容 -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-medium text-gray-900">治理跟踪</h2>
+                            <button id="close-governance-tracking-modal" class="text-gray-400 hover:text-gray-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm font-medium text-gray-700">治理进度</div>
+                            <div class="text-sm text-primary">0%</div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="flex flex-col space-y-4">
+                            <!-- 待处理状态 -->
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-primary flex-shrink-0 mt-0.5"></div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium">工单派发</div>
+                                    <div class="text-xs text-gray-500">待处理</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 等待中状态 -->
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-500">现场核查</div>
+                                    <div class="text-xs text-gray-500">等待中</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 等待中状态 -->
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-500">系统更新</div>
+                                    <div class="text-xs text-gray-500">等待中</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 等待中状态 -->
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-500">验证确认</div>
+                                    <div class="text-xs text-gray-500">等待中</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="text-sm font-medium text-gray-700 mb-2">操作记录</div>
+                            <div class="text-xs text-gray-600">
+                                <p>2023-05-12 14:30 - 系统生成治理工单（编号: TG202305120023）</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 flex justify-end">
+                            <button type="button" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                                查看完整治理记录
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化选择器
+            const areaSelector = document.getElementById('area-selector');
+            const anomalyTypeSelect = document.getElementById('anomaly-type-select');
+            const diagnosisTagSelect = document.getElementById('diagnosis-tag-select');
+            
+            // 治理流程相关元素
+            const processLongHigh = document.getElementById('process-long-high');
+            const processSuddenHigh = document.getElementById('process-sudden-high');
+            const processLongNeg = document.getElementById('process-long-neg');
+            const processSmallNeg = document.getElementById('process-small-neg');
+            const processSuddenNeg = document.getElementById('process-sudden-neg');
+            
+            // 效果评估相关元素
+            const effectEvalLongHigh = document.getElementById('effect-evaluation-long-high');
+            const effectEvalSuddenHigh = document.getElementById('effect-evaluation-sudden-high');
+            const effectEvalLongNeg = document.getElementById('effect-evaluation-long-neg');
+            const effectEvalSmallNeg = document.getElementById('effect-evaluation-small-neg');
+            const effectEvalSuddenNeg = document.getElementById('effect-evaluation-sudden-neg');
+            
+            // 更新异常类型卡片
+            function updateAnomalyTypeCard(anomalyType) {
+                // 获取所有异常类型标签和描述
+                const badges = [
+                    document.getElementById('badge-long-high'),
+                    document.getElementById('badge-sudden-high'),
+                    document.getElementById('badge-long-neg'),
+                    document.getElementById('badge-small-neg'),
+                    document.getElementById('badge-sudden-neg')
+                ];
+                
+                const descriptions = [
+                    document.getElementById('anomaly-description-long-high'),
+                    document.getElementById('anomaly-description-sudden-high'),
+                    document.getElementById('anomaly-description-long-neg'),
+                    document.getElementById('anomaly-description-small-neg'),
+                    document.getElementById('anomaly-description-sudden-neg')
+                ];
+                
+                // 隐藏所有标签和描述
+                badges.forEach(badge => {
+                    if (badge) badge.classList.add('hidden');
+                });
+                
+                descriptions.forEach(desc => {
+                    if (desc) desc.classList.add('hidden');
+                });
+                
+                // 显示对应的标签和描述
+                const badgeId = 'badge-' + anomalyType;
+                const descriptionId = 'anomaly-description-' + anomalyType;
+                
+                const badge = document.getElementById(badgeId);
+                const description = document.getElementById(descriptionId);
+                
+                if (badge) badge.classList.remove('hidden');
+                if (description) description.classList.remove('hidden');
+            }
+            
+            // 更新概览卡片
+            function updateOverviewCards(anomalyType) {
+                // 线损差值卡片
+                const lossDiffCards = [
+                    document.getElementById('loss-diff-long-high'),
+                    document.getElementById('loss-diff-sudden-high'),
+                    document.getElementById('loss-diff-long-neg'),
+                    document.getElementById('loss-diff-small-neg'),
+                    document.getElementById('loss-diff-sudden-neg')
+                ];
+                
+                // 影响电量卡片
+                const powerImpactCards = [
+                    document.getElementById('power-impact-long-high'),
+                    document.getElementById('power-impact-sudden-high'),
+                    document.getElementById('power-impact-long-neg'),
+                    document.getElementById('power-impact-small-neg'),
+                    document.getElementById('power-impact-sudden-neg')
+                ];
+                
+                // 异常持续时间卡片
+                const durationCards = [
+                    document.getElementById('duration-long-high'),
+                    document.getElementById('duration-sudden-high'),
+                    document.getElementById('duration-long-neg'),
+                    document.getElementById('duration-small-neg'),
+                    document.getElementById('duration-sudden-neg')
+                ];
+                
+                // 隐藏所有卡片
+                lossDiffCards.forEach(card => {
+                    if (card) card.classList.add('hidden');
+                });
+                
+                powerImpactCards.forEach(card => {
+                    if (card) card.classList.add('hidden');
+                });
+                
+                durationCards.forEach(card => {
+                    if (card) card.classList.add('hidden');
+                });
+                
+                // 显示对应的卡片
+                const lossDiffId = 'loss-diff-' + anomalyType;
+                const powerImpactId = 'power-impact-' + anomalyType;
+                const durationId = 'duration-' + anomalyType;
+                
+                const lossDiff = document.getElementById(lossDiffId);
+                const powerImpact = document.getElementById(powerImpactId);
+                const duration = document.getElementById(durationId);
+                
+                if (lossDiff) lossDiff.classList.remove('hidden');
+                if (powerImpact) powerImpact.classList.remove('hidden');
+                if (duration) duration.classList.remove('hidden');
+                
+                // 更新标题
+                updatePageTitle(anomalyType);
+            }
+            
+            // 更新页面标题
+            function updatePageTitle(anomalyType) {
+                const titleMapping = {
+                    'long-high': '河西变1324台区 - 线损异常治理建议',
+                    'sudden-high': '城南532台区 - 线损异常治理建议',
+                    'long-neg': '东湖785台区 - 线损异常治理建议',
+                    'small-neg': '北郊198台区 - 线损异常治理建议',
+                    'sudden-neg': '开发区672台区 - 线损异常治理建议'
+                };
+                
+                const diagnosisMapping = {
+                    'long-high': 'CT互感器倍率错误（匹配概率: 92%）',
+                    'sudden-high': '用电负荷突增（匹配概率: 87%）',
+                    'long-neg': '计量装置接线错误（匹配概率: 89%）',
+                    'small-neg': '理论模型计算偏差（匹配概率: 91%）',
+                    'sudden-neg': '电表计量故障（匹配概率: 88%）'
+                };
+                
+                const titleElement = document.querySelector('.px-5.py-4.flex.items-center h2');
+                const diagnosisElement = document.querySelector('.px-5.py-4.flex.items-center p');
+                
+                if (titleElement && titleMapping[anomalyType]) {
+                    titleElement.textContent = titleMapping[anomalyType];
+                }
+                
+                if (diagnosisElement && diagnosisMapping[anomalyType]) {
+                    diagnosisElement.textContent = '诊断结果: ' + diagnosisMapping[anomalyType];
+                }
+            }
+            
+            // 台区选择器变更事件
+            if (areaSelector) {
+                areaSelector.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    
+                    // 更新异常类型选择
+                    if (anomalyTypeSelect) {
+                        anomalyTypeSelect.value = selectedValue;
+                        updateDiagnosisTags(selectedValue);
+                    }
+                    
+                    // 更新治理流程显示
+                    updateGovernanceProcessDisplay(selectedValue);
+                    
+                    // 更新效果评估显示
+                    updateEffectEvaluationDisplay(selectedValue);
+                    
+                    // 更新异常类型卡片
+                    updateAnomalyTypeCard(selectedValue);
+                    
+                    // 更新概览卡片
+                    updateOverviewCards(selectedValue);
+                });
+            }
+            
+            // 异常类型选择器变更事件
+            if (anomalyTypeSelect) {
+                anomalyTypeSelect.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    updateDiagnosisTags(selectedValue);
+                });
+            }
+            
+            // 更新异常类型选择
+            function updateDiagnosisTags(anomalyType) {
+                if (!diagnosisTagSelect) return;
+                
+                // 隐藏所有选项
+                const allOptions = diagnosisTagSelect.querySelectorAll('option');
+                allOptions.forEach(opt => {
+                    opt.classList.add('hidden');
+                });
+                
+                // 显示对应类型的选项
+                const targetClass = anomalyType + '-tag';
+                const targetOptions = diagnosisTagSelect.querySelectorAll('.' + targetClass);
+                targetOptions.forEach(opt => {
+                    opt.classList.remove('hidden');
+                });
+                
+                // 选择第一个可见选项
+                if (targetOptions.length > 0) {
+                    targetOptions[0].selected = true;
+                }
+            }
+            
+            // 更新治理流程显示
+            function updateGovernanceProcessDisplay(anomalyType) {
+                // 隐藏所有治理流程
+                if (processLongHigh) processLongHigh.classList.add('hidden');
+                if (processSuddenHigh) processSuddenHigh.classList.add('hidden');
+                if (processLongNeg) processLongNeg.classList.add('hidden');
+                if (processSmallNeg) processSmallNeg.classList.add('hidden');
+                if (processSuddenNeg) processSuddenNeg.classList.add('hidden');
+                
+                // 显示对应的治理流程
+                switch (anomalyType) {
+                    case 'long-high':
+                        if (processLongHigh) processLongHigh.classList.remove('hidden');
+                        break;
+                    case 'sudden-high':
+                        if (processSuddenHigh) processSuddenHigh.classList.remove('hidden');
+                        break;
+                    case 'long-neg':
+                        if (processLongNeg) processLongNeg.classList.remove('hidden');
+                        break;
+                    case 'small-neg':
+                        if (processSmallNeg) processSmallNeg.classList.remove('hidden');
+                        break;
+                    case 'sudden-neg':
+                        if (processSuddenNeg) processSuddenNeg.classList.remove('hidden');
+                        break;
+                }
+            }
+            
+            // 更新效果评估显示
+            function updateEffectEvaluationDisplay(anomalyType) {
+                // 隐藏所有效果评估
+                if (effectEvalLongHigh) effectEvalLongHigh.classList.add('hidden');
+                if (effectEvalSuddenHigh) effectEvalSuddenHigh.classList.add('hidden');
+                if (effectEvalLongNeg) effectEvalLongNeg.classList.add('hidden');
+                if (effectEvalSmallNeg) effectEvalSmallNeg.classList.add('hidden');
+                if (effectEvalSuddenNeg) effectEvalSuddenNeg.classList.add('hidden');
+                
+                // 显示对应的效果评估
+                switch (anomalyType) {
+                    case 'long-high':
+                        if (effectEvalLongHigh) effectEvalLongHigh.classList.remove('hidden');
+                        break;
+                    case 'sudden-high':
+                        if (effectEvalSuddenHigh) effectEvalSuddenHigh.classList.remove('hidden');
+                        break;
+                    case 'long-neg':
+                        if (effectEvalLongNeg) effectEvalLongNeg.classList.remove('hidden');
+                        break;
+                    case 'small-neg':
+                        if (effectEvalSmallNeg) effectEvalSmallNeg.classList.remove('hidden');
+                        break;
+                    case 'sudden-neg':
+                        if (effectEvalSuddenNeg) effectEvalSuddenNeg.classList.remove('hidden');
+                        break;
+                }
+            }
+            
+            // 初始化页面
+            if (areaSelector) {
+                const initialValue = areaSelector.value;
+                updateDiagnosisTags(initialValue);
+                updateGovernanceProcessDisplay(initialValue);
+                updateEffectEvaluationDisplay(initialValue);
+                updateAnomalyTypeCard(initialValue);
+                updateOverviewCards(initialValue);
+            }
+        });
+        
+        // 下拉菜单行为
+        const menuButton = document.getElementById('main-menu-button');
+        const menuDropdown = document.getElementById('main-menu-dropdown');
+        
+        // 点击菜单按钮时切换下拉菜单
+        menuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menuDropdown.classList.toggle('hidden');
+        });
+        
+        // 点击外部时关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                menuDropdown.classList.add('hidden');
+            }
+        });
+        
+        // 防止点击下拉菜单内部时关闭
+        menuDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // 案例库匹配弹窗
+        const caseLibraryBtn = document.getElementById('case-library-btn');
+        const caseLibraryModal = document.getElementById('case-library-modal');
+        const closeCaseLibraryModal = document.getElementById('close-case-library-modal');
+        
+        caseLibraryBtn.addEventListener('click', function() {
+            caseLibraryModal.classList.remove('hidden');
+        });
+        
+        closeCaseLibraryModal.addEventListener('click', function() {
+            caseLibraryModal.classList.add('hidden');
+        });
+        
+        // 点击弹窗外部关闭
+        caseLibraryModal.addEventListener('click', function(e) {
+            if (e.target === caseLibraryModal) {
+                caseLibraryModal.classList.add('hidden');
+            }
+        });
+        
+        // 治理跟踪弹窗
+        const governanceTrackingBtn = document.getElementById('governance-tracking-btn');
+        const governanceTrackingModal = document.getElementById('governance-tracking-modal');
+        const closeGovernanceTrackingModal = document.getElementById('close-governance-tracking-modal');
+        
+        governanceTrackingBtn.addEventListener('click', function() {
+            governanceTrackingModal.classList.remove('hidden');
+        });
+        
+        closeGovernanceTrackingModal.addEventListener('click', function() {
+            governanceTrackingModal.classList.add('hidden');
+        });
+        
+        // 点击弹窗外部关闭
+        governanceTrackingModal.addEventListener('click', function(e) {
+            if (e.target === governanceTrackingModal) {
+                governanceTrackingModal.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

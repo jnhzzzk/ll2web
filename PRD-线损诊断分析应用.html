@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线损诊断分析应用 - 产品需求文档</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #309C9F;
+        }
+        .back-button {
+            display: inline-block;
+            background-color: #309C9F;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .back-button:hover {
+            background-color: #256e70;
+        }
+        h1 {
+            color: #309C9F;
+            margin-top: 0;
+            font-size: 28px;
+        }
+        h2, h3, h4 {
+            color: #309C9F;
+            margin-top: 1.5em;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        .feature {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .feature-id {
+            background-color: #e6f1f1;
+            color: #309C9F;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+        .interactions {
+            background-color: #ffffff;
+            border-left: 3px solid #309C9F;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .diagram {
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        pre {
+            white-space: pre-wrap;
+        }
+        #toc {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        #toc ul {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+        #toc ul li {
+            margin-bottom: 5px;
+        }
+        #toc a {
+            text-decoration: none;
+            color: #444;
+        }
+        #toc a:hover {
+            color: #309C9F;
+        }
+        code {
+            font-family: Consolas, monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>线损诊断分析应用 - 产品需求文档</h1>
+            <a href="cn/index.html" class="back-button">返回首页</a>
+        </div>
+        
+        <div id="toc">
+            <h2>目录</h2>
+            <ul>
+                <li><a href="#overview">1. 项目概述</a></li>
+                <li><a href="#usecase">2. 用例图</a></li>
+                <li><a href="#sequence">3. 序列图</a>
+                    <ul>
+                        <li><a href="#sequence-diagnostic">3.1 线损异常诊断流程序列图</a></li>
+                        <li><a href="#sequence-data">3.2 数据采集与分析序列图</a></li>
+                    </ul>
+                </li>
+                <li><a href="#class">4. 类图</a></li>
+                <li><a href="#features">5. 功能详情</a>
+                    <ul>
+                        <li><a href="#feature1">5.1 统计总览</a></li>
+                        <li><a href="#feature2">5.2 台区筛选</a></li>
+                        <li><a href="#feature3">5.3 诊断分析</a>
+                            <ul>
+                                <li><a href="#feature3-1">5.3.1 功能描述</a></li>
+                                <li><a href="#feature3-2">5.3.2 智能诊断标签体系</a></li>
+                                <li><a href="#feature3-3">5.3.3 用户界面</a></li>
+                                <li><a href="#feature3-4">5.3.4 交互说明</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#feature4">5.4 治理建议</a>
+                            <ul>
+                                <li><a href="#feature4-1">5.4.1 功能描述</a></li>
+                                <li><a href="#feature4-2">5.4.2 标准化治理流程</a></li>
+                                <li><a href="#feature4-3">5.4.3 诊断标签与治理措施对应表</a></li>
+                                <li><a href="#feature4-4">5.4.4 用户界面</a></li>
+                                <li><a href="#feature4-5">5.4.5 交互说明</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#feature5">5.5 辅助功能</a></li>
+                    </ul>
+                </li>
+                <li><a href="#diagnostic-algorithm">6. 诊断标签概率算法</a>
+                    <ul>
+                        <li><a href="#diagnostic-algorithm-1">6.1 算法概述</a></li>
+                        <li><a href="#diagnostic-algorithm-2">6.2 基础因子计算</a></li>
+                        <li><a href="#diagnostic-algorithm-3">6.3 诊断标签概率计算</a></li>
+                        <li><a href="#diagnostic-algorithm-4">6.4 自动诊断算法流程</a></li>
+                        <li><a href="#diagnostic-algorithm-5">6.5 性能与优化</a></li>
+                        <li><a href="#diagnostic-algorithm-6">6.6 诊断算法元数据依赖</a></li>
+                    </ul>
+                </li>
+                <li><a href="#loss-calculation">7. 线损计算方法</a>
+                    <ul>
+                        <li><a href="#loss-calculation-1">7.1 理论线损计算</a></li>
+                        <li><a href="#loss-calculation-2">7.2 实际线损计算</a></li>
+                        <li><a href="#loss-calculation-3">7.3 计算质量与检验</a></li>
+                    </ul>
+                </li>
+                <li><a href="#non-functional">8. 非功能性需求</a>
+                    <ul>
+                        <li><a href="#non-functional-1">8.1 性能需求</a></li>
+                        <li><a href="#non-functional-2">8.2 安全需求</a></li>
+                        <li><a href="#non-functional-3">8.3 可用性需求</a></li>
+                        <li><a href="#non-functional-4">8.4 兼容性需求</a></li>
+                        <li><a href="#non-functional-5">8.5 可扩展性需求</a></li>
+                        <li><a href="#non-functional-6">8.6 数据质量要求</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <section id="overview">
+            <h2>1. 项目概述</h2>
+            <p>线损诊断分析应用是一款部署在大数据平台之上的数据分析应用。本应用通过利用大数据平台的数据同步、数据开发、任务调度、指标中心、标签画像等能力，实现对台区线损的智能分析、异常诊断和治理建议，帮助电力运维人员快速获取线损异常情况，并提供标准化治理方案，有效降低线损率，提高电网运行效率。</p>
+            
+            <h3>1.1 产品目标</h3>
+            <ul>
+                <li>基于大数据平台构建线损异常识别的标准，实现五种线损异常类型的精准自动检测</li>
+                <li>构建智能诊断标签体系，准确识别线损异常原因</li>
+                <li>实现标准化治理流程，提供针对性治理方案</li>
+                <li>提供台区线损数据的全面可视化展示</li>
+                <li>形成线损分析和治理的知识库，提升线损管理水平</li>
+            </ul>
+            
+            <h3>1.2 基础平台介绍</h3>
+            <p>线损诊断分析应用构建于大数据平台之上，该平台提供以下核心能力：</p>
+            <ul>
+                <li><strong>数据同步：</strong>定期从业务系统同步各类基础数据</li>
+                <li><strong>数据开发：</strong>执行实际线损和理论线损计算任务</li>
+                <li><strong>任务调度：</strong>定期调度线损计算和异常台区识别任务</li>
+                <li><strong>指标中心：</strong>构建和管理线损相关指标，提供标准化的指标数据服务</li>
+                <li><strong>标签画像：</strong>为台区构建多维度标签画像，支持异常识别和诊断分析</li>
+            </ul>
+            
+            <h3>1.3 线损异常类型</h3>
+            <table>
+                <tr>
+                    <th>异常类型</th>
+                    <th>定义</th>
+                    <th>识别标准</th>
+                    <th>处理优先级</th>
+                </tr>
+                <tr>
+                    <td>合格</td>
+                    <td>在较长统计期内绝对线损和相对线损均处于指标要求的合格区间内</td>
+                    <td>近30天内，不被其他线损异常类型规则识别到</td>
+                    <td>0（合格不计入异常）</td>
+                </tr>
+                <tr>
+                    <td>长期高损</td>
+                    <td>在较长统计期内【绝对（同期）线损率】高于【理论线损率】持续超过指标要求的异常台区</td>
+                    <td>近30天内【相对线损率】5%以上的异常天数≥20天</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>突发高损</td>
+                    <td>线损率一直保持平稳，突然发生较大升幅且持续时间在3天以上的台区</td>
+                    <td>近7天【相对线损率】突然升高至5%以上，且持续3天以上</td>
+                    <td>5（最高优先级）</td>
+                </tr>
+                <tr>
+                    <td>长期负损</td>
+                    <td>用电信息采集系统连续7天以上台区线损率小于0%的异常台区</td>
+                    <td>近30天内【相对线损率】0%以下的异常天数≥20天</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>小负损</td>
+                    <td>统计期内台区线损率在-1%~0%之间的台区</td>
+                    <td>近30天内，【相对线损率】线损率在-1%~0%之间，持续7天以上</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>突发负损</td>
+                    <td>用户用电信息采集系统3天以上台区线损率突然降低并小于0%的异常台区</td>
+                    <td>近7天【相对线损率】突然降低至0%以下，且持续3天以上</td>
+                    <td>3</td>
+                </tr>
+            </table>
+            
+            <h3>1.3 用户角色</h3>
+            <table>
+                <tr>
+                    <th>角色</th>
+                    <th>职责描述</th>
+                    <th>关注点</th>
+                </tr>
+                <tr>
+                    <td>运维工程师</td>
+                    <td>负责日常线损监测、异常处理和治理实施</td>
+                    <td>异常检测、诊断分析、治理建议</td>
+                </tr>
+                <tr>
+                    <td>台区管理人员</td>
+                    <td>负责台区整体运行状况监控和资源调配</td>
+                    <td>统计总览、异常台区筛选、绩效数据</td>
+                </tr>
+                <tr>
+                    <td>决策管理层</td>
+                    <td>制定线损管理策略，评估治理效果</td>
+                    <td>统计报表、趋势分析、经济效益评估</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="usecase">
+            <h2>2. 用例图</h2>
+            <div class="diagram">
+                <pre class="mermaid">
+graph LR
+    subgraph 线损诊断分析应用
+        统计[统计总览]
+        筛选[异常台区筛选]
+        诊断[台区诊断分析]
+        处理[治理工单处理]
+        
+        统计 --> 筛选
+        筛选 --> 诊断
+        诊断 --> 处理
+    end
+    
+    用户((用户)) --> 统计
+    用户 --> 筛选
+    用户 --> 诊断
+    用户 --> 处理
+    
+    subgraph 大数据平台
+        数据同步[数据同步]
+        数据开发[数据开发/计算]
+        任务调度[任务调度]
+        指标中心[指标中心]
+    end
+    
+    数据同步 --> 数据开发
+    数据开发 --> 指标中心
+    任务调度 --> 数据开发
+    
+    指标中心 --> 统计
+    指标中心 --> 筛选
+    指标中心 --> 诊断
+                </pre>
+            </div>
+        </section>
+
+        <section id="sequence">
+            <h2>3. 序列图</h2>
+            
+            <h3>3.1 线损异常诊断流程序列图</h3>
+            <div class="diagram">
+                <pre class="mermaid">
+sequenceDiagram
+    actor 台区管理人员
+    participant 筛选配置模块
+    participant 异常检测模块
+    participant 诊断分析模块
+    participant 治理建议模块
+    participant 工单系统
+    
+    台区管理人员->>筛选配置模块: 配置筛选条件
+    筛选配置模块->>异常检测模块: 应用筛选条件
+    异常检测模块-->>筛选配置模块: 返回异常台区列表
+    
+    异常检测模块->>诊断分析模块: 触发异常台区诊断
+    诊断分析模块->>诊断分析模块: 执行标准化诊断算法
+    诊断分析模块-->>异常检测模块: 返回诊断结果
+    
+    诊断分析模块->>治理建议模块: 生成治理建议
+    治理建议模块->>治理建议模块: 基于诊断结果生成标准化治理建议
+    治理建议模块->>工单系统: 生成治理工单
+    工单系统-->>治理建议模块: 返回工单信息
+    
+    治理建议模块-->>台区管理人员: 返回治理建议和工单
+    台区管理人员->>工单系统: 派发工单
+    工单系统-->>台区管理人员: 确认工单派发
+                </pre>
+            </div>
+            
+            <h3>3.2 数据采集与分析序列图</h3>
+            <div class="diagram">
+                <pre class="mermaid">
+sequenceDiagram
+    participant 大数据平台_数据同步
+    participant 大数据平台_数据开发
+    participant 大数据平台_任务调度
+    participant 大数据平台_指标中心
+    participant 线损诊断应用
+    
+    大数据平台_数据同步->>大数据平台_数据开发: 定期同步基础数据
+    大数据平台_数据开发->>大数据平台_数据开发: 执行实际线损计算任务
+    大数据平台_数据开发->>大数据平台_数据开发: 执行理论线损计算任务
+    
+    大数据平台_任务调度->>大数据平台_数据开发: 定期调度线损计算任务
+    大数据平台_数据开发->>大数据平台_指标中心: 更新线损相关指标
+    
+    大数据平台_任务调度->>大数据平台_数据开发: 定期调度异常线损台区识别任务
+    大数据平台_数据开发->>大数据平台_数据开发: 基于指标执行异常台区筛选
+    
+    线损诊断应用->>大数据平台_指标中心: 查询线损指标数据
+    大数据平台_指标中心-->>线损诊断应用: 返回线损指标数据
+    
+    线损诊断应用->>大数据平台_数据开发: 查询异常台区列表
+    大数据平台_数据开发-->>线损诊断应用: 返回异常台区列表
+    
+    线损诊断应用->>线损诊断应用: 执行诊断分析算法
+    线损诊断应用->>线损诊断应用: 生成治理建议和工单
+                </pre>
+            </div>
+        </section>
+
+        <section id="class">
+            <h2>4. 类图</h2>
+            <div class="diagram">
+                <pre class="mermaid">
+classDiagram
+    class District {
+        +String districtId
+        +String name
+        +String location
+        +String type
+        +Double capacity
+        +Integer userCount
+        +Double actualLossRate
+        +Double theoreticalLossRate
+        +String anomalyType
+        +Date lastDiagnosisTime
+        +getBasicInfo()
+        +getAnomalyHistory()
+        +getDiagnosticResult()
+    }
+    
+    class StatisticsModule {
+        +getSummaryData()
+        +getLossDistribution()
+        +getLossTrend()
+        +getTopAnomalyDistricts()
+        +exportReport()
+    }
+    
+    class FilterModule {
+        +Map filterConditions
+        +Boolean isAutoScan
+        +Date lastScanTime
+        +applyFilter()
+        +saveFilterConfig()
+        +getAnomalyDistricts()
+        +getScanInfo()
+    }
+    
+    class DiagnosticModule {
+        +String[] diagnosticTags
+        +Map tagMatchProbability
+        +runDiagnosticAlgorithm()
+        +generateTags()
+        +analyzeTrend()
+        +compareIndicators()
+        +identifyAbnormalUsers()
+    }
+    
+    class GovernanceModule {
+        +String[] governanceProcess
+        +Map expertSuggestions
+        +generateStandardProcess()
+        +findSimilarCases()
+        +calculateEconomicBenefit()
+        +createWorkOrder()
+        +trackEffectiveness()
+    }
+    
+    class LossCalculation {
+        +String calculationMethod
+        +Map parameters
+        +Double actualLossRate
+        +Double theoreticalLossRate
+        +Double relativeLossRate
+        +calculateActualLoss()
+        +calculateTheoreticalLoss()
+        +validateCalculation()
+    }
+    
+    class WorkOrder {
+        +String orderId
+        +String districtId
+        +String type
+        +String status
+        +String priority
+        +Date createTime
+        +Date deadline
+        +String[] actionItems
+        +createOrder()
+        +dispatchOrder()
+        +updateStatus()
+        +evaluateResult()
+    }
+    
+    class DiagnosticRecord {
+        +String recordId
+        +String districtId
+        +Date diagnosisTime
+        +String anomalyType
+        +String[] diagnosticTags
+        +String[] suggestedActions
+        +createRecord()
+        +updateRecord()
+        +linkToWorkOrder()
+    }
+    
+    StatisticsModule -- District
+    FilterModule -- District
+    DiagnosticModule -- District
+    GovernanceModule -- District
+    District -- LossCalculation
+    DiagnosticModule -- DiagnosticRecord
+    GovernanceModule -- WorkOrder
+    DiagnosticRecord -- WorkOrder
+                </pre>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>5. 功能详情</h2>
+            
+            <div id="feature1" class="feature">
+                <div class="feature-header">
+                    <h3>5.1 统计总览</h3>
+                    <span class="feature-id">F-001</span>
+                </div>
+                <p>统计总览功能为用户提供台区线损情况的全局视图，通过可视化图表和关键指标展示系统整体运行状况。</p>
+                
+                <h4>5.1.1 功能描述</h4>
+                <ul>
+                    <li>核心指标卡片：展示台区总数、异常台区数量、平均理论线损率和实际与理论线损差值等关键指标</li>
+                    <li>绝对线损区间分布图：以图表形式展示不同线损率区间的台区数量分布</li>
+                    <li>线损趋势分析：展示线损率随时间变化的趋势，支持日、周、月不同时间粒度的查看</li>
+                    <li>相对线损分布：通过散点图展示理论线损与实际线损的分布关系</li>
+                    <li>Top 5异常台区：展示线损异常最严重的五个台区，包括其基本信息和异常状态</li>
+                </ul>
+                
+                <h4>5.1.2 用户界面</h4>
+                <p>统计总览页面布局采用响应式设计，主要包含以下界面元素：</p>
+                <ul>
+                    <li>顶部筛选条件：时间范围选择（最近7天、30天、本季度、本年度）</li>
+                    <li>核心指标卡片区：采用四等分布局，每个卡片包含图标、指标名称和数值</li>
+                    <li>线损分布和趋势图表区：采用两列布局，左侧为线损区间分布柱状图，右侧为线损趋势折线图</li>
+                    <li>相对线损散点图区：单列布局，展示散点分布图</li>
+                    <li>异常台区列表区：表格形式展示Top 5异常台区</li>
+                </ul>
+                
+                <h4>5.1.3 交互说明</h4>
+                <div class="interactions">
+                    <ul>
+                        <li>时间范围选择：用户可通过下拉菜单选择不同的时间范围，系统会自动更新所有图表和数据</li>
+                        <li>导出报告：点击导出按钮可将当前统计总览数据导出为PDF或Excel格式报告</li>
+                        <li>趋势图时间粒度切换：用户可点击"日"、"周"、"月"按钮切换时间粒度</li>
+                        <li>异常台区查看：点击"Top 5异常台区"中的"诊断"链接，可跳转至对应台区的诊断分析页面</li>
+                        <li>散点图交互：鼠标悬停在散点上可查看该台区的详细信息</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="feature2" class="feature">
+                <div class="feature-header">
+                    <h3>5.2 台区筛选</h3>
+                    <span class="feature-id">F-002</span>
+                </div>
+                <p>台区筛选功能用于查看大数据平台定期扫描计算出的异常台区，并提供多维度的筛选条件，支持异常台区报表和二次筛选功能。</p>
+                
+                <h4>5.2.1 功能描述</h4>
+                <ul>
+                    <li>异常台区展示：展示大数据平台定期识别的异常台区列表，包括异常类型、线损指标等信息</li>
+                    <li>二次筛选：提供多维度筛选条件配置，包括区域、线损率范围、台区类型、异常类型等</li>
+                    <li>筛选配置保存：支持保存常用的筛选条件组合，方便下次快速使用</li>
+                    <li>异常类型统计：展示不同异常类型的台区数量统计</li>
+                    <li>扫描时间信息：展示异常台区最近一次扫描计算的时间</li>
+                    <li>批量导出：支持将筛选结果批量导出为Excel或CSV格式</li>
+                </ul>
+                
+                <h4>5.2.2 用户界面</h4>
+                <p>台区筛选页面采用标签页设计，主要包含以下界面元素：</p>
+                <ul>
+                    <li>最近扫描信息：显示大数据平台最近一次异常台区扫描的时间和结果概览</li>
+                    <li>异常类型统计卡片：以卡片形式展示各类异常台区的数量</li>
+                    <li>二次筛选条件区：提供所属区域、线损率范围、台区类型、异常类型等筛选条件</li>
+                    <li>异常台区列表：以表格形式展示系统识别出的异常台区列表</li>
+                    <li>功能按钮区：包含保存配置、生成诊断报告等功能按钮</li>
+                </ul>
+                
+                <h4>5.2.3 交互说明</h4>
+                <div class="interactions">
+                    <ul>
+                        <li>数据更新提示：当大数据平台完成新一轮异常台区扫描时，系统自动提示用户有新数据</li>
+                        <li>二次筛选：调整筛选条件后，系统在已识别的异常台区中进行二次筛选</li>
+                        <li>保存配置：点击"保存配置"按钮可将当前筛选条件保存为命名配置</li>
+                        <li>生成诊断报告：选择特定台区后，点击"生成诊断报告"可生成该台区的诊断报告</li>
+                        <li>表格排序：点击表格列头可按该列进行排序</li>
+                        <li>诊断分析：点击表格中的"诊断分析"链接可跳转至对应台区的诊断分析页面</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="feature3" class="feature">
+                <div class="feature-header">
+                    <h3>5.3 诊断分析</h3>
+                    <span class="feature-id">F-003</span>
+                </div>
+                <p>诊断分析功能是系统的核心，通过标准化诊断算法对异常台区进行自动分析，识别异常原因并生成诊断标签。</p>
+                
+                <h4>5.3.1 功能描述</h4>
+                <ul>
+                    <li>台区基本信息展示：展示所选台区的基本信息和线损异常概况</li>
+                    <li>标准化诊断算法：根据异常类型自动执行对应的诊断算法</li>
+                    <li>智能诊断标签：通过算法分析，生成可能的异常原因并附带匹配概率</li>
+                    <li>线损波动溯源图：展示线损率随时间的变化，并标记关键节点</li>
+                    <li>多维度对比分析：从用电量、负荷曲线、功率因数等多个维度分析异常原因</li>
+                    <li>历史诊断记录：展示该台区历史上的诊断记录和处理情况</li>
+                    <li>指标异常分析：展示与线损相关的各项指标异常情况</li>
+                    <li>用户用电异常分析：识别台区内异常用电行为的用户</li>
+                </ul>
+                
+                <h4>5.3.2 用户界面</h4>
+                <p>诊断分析页面采用模块化设计，主要包含以下界面元素：</p>
+                <ul>
+                    <li>台区选择器：下拉菜单选择需要诊断的台区</li>
+                    <li>台区基本信息卡片：展示台区基本信息和线损异常概况</li>
+                    <li>诊断算法执行状态：显示当前诊断算法的执行状态和进度</li>
+                    <li>诊断分类看板：以卡片形式展示智能诊断标签及匹配概率</li>
+                    <li>线损波动溯源图：折线图展示线损率变化趋势</li>
+                    <li>多维度分析图表：多种图表展示不同维度的分析结果</li>
+                    <li>指标异常分析表格：表格形式展示各指标异常情况</li>
+                    <li>用户用电异常列表：列表形式展示异常用电用户</li>
+                </ul>
+                
+                <h4>5.3.3 交互说明</h4>
+                <div class="interactions">
+                    <ul>
+                        <li>台区切换：通过下拉菜单选择不同的台区，系统自动执行诊断算法</li>
+                        <li>诊断标签查看：点击智能诊断标签可展开查看该异常类型的详细说明</li>
+                        <li>时间范围调整：可通过图表控件调整线损波动溯源图的时间范围</li>
+                        <li>维度切换：点击标签可在不同维度的分析结果之间切换</li>
+                        <li>生成治理建议：点击"生成治理建议"按钮，系统基于诊断结果生成治理建议并跳转至治理建议页面</li>
+                        <li>异常用户详情：点击异常用户可查看其详细用电数据</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="feature4" class="feature">
+                <div class="feature-header">
+                    <h3>5.4 治理建议</h3>
+                    <span class="feature-id">F-004</span>
+                </div>
+                <p>治理建议功能基于诊断分析结果，自动生成标准化的治理流程和工单，帮助用户高效解决线损异常问题。针对不同类型的线损异常，系统提供相应的标准化治理流程，确保治理措施的有效性和一致性。</p>
+                
+                <h4>5.4.1 功能描述</h4>
+                <ul>
+                    <li>治理信息概览：展示线损异常相关的核心信息，如差值、影响电量、持续时间等</li>
+                    <li>标准化治理流程：基于异常类型，提供分步骤的标准化治理流程</li>
+                    <li>专家操作建议：根据诊断结果和历史案例，提供具体的操作建议</li>
+                    <li>相似案例参考：展示历史上相似的案例及其解决方案</li>
+                    <li>经济效益分析：分析线损异常造成的经济损失和治理后的预期收益</li>
+                    <li>工单自动生成：根据诊断结果和治理建议自动生成治理工单</li>
+                    <li>工单派发：支持将工单派发给相关运维人员</li>
+                    <li>治理效果追踪：记录治理措施实施情况和效果评估</li>
+                </ul>
+                
+                <h4>5.4.2 标准化治理流程</h4>
+                <p>系统基于线损异常类型自动生成标准化治理流程：</p>
+                
+                <h5>5.4.2.1 长期高损治理流程</h5>
+                <ol>
+                    <li><strong>诊断分析阶段</strong>
+                        <ul>
+                            <li>收集台区基础信息和历史运行数据</li>
+                            <li>运行智能诊断算法，生成诊断标签及概率排序</li>
+                            <li>综合分析确定主要异常原因</li>
+                        </ul>
+                    </li>
+                    <li><strong>现场核查阶段</strong>
+                        <ul>
+                            <li>根据诊断标签指引，针对性开展现场核查</li>
+                            <li>检查CT互感器接线及倍率设置</li>
+                            <li>系统台户关系与现场核对</li>
+                            <li>用户用电设施检查</li>
+                            <li>采集设备运行状态检查</li>
+                            <li>三相负载分布检查</li>
+                        </ul>
+                    </li>
+                    <li><strong>问题处置阶段</strong>
+                        <ul>
+                            <li>档案因素：更正系统档案，确保台户关系一致</li>
+                            <li>计量因素：更换或校准计量装置，修正接线错误</li>
+                            <li>采集因素：修复或更换故障采集设备，补全缺失数据</li>
+                            <li>窃电因素：联合稽查部门处理窃电行为</li>
+                            <li>技术因素：优化三相负载分布，更换老化设备</li>
+                        </ul>
+                    </li>
+                    <li><strong>效果评估阶段</strong>
+                        <ul>
+                            <li>治理后7天内持续监测线损率变化</li>
+                            <li>线损率降至合理范围（理论值±3%）视为治理有效</li>
+                            <li>生成治理报告，记录问题及处置措施</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h5>5.4.2.2 突发高损治理流程</h5>
+                <ol>
+                    <li><strong>快速响应阶段</strong>
+                        <ul>
+                            <li>线损监测系统触发突发高损告警</li>
+                            <li>24小时内完成初步诊断分析</li>
+                            <li>生成应急处置建议</li>
+                        </ul>
+                    </li>
+                    <li><strong>原因排查阶段</strong>
+                        <ul>
+                            <li>优先检查与诊断标签对应的可能因素</li>
+                            <li>设备故障状态</li>
+                            <li>新增负荷情况</li>
+                            <li>天气影响评估</li>
+                            <li>漏电点排查</li>
+                        </ul>
+                    </li>
+                    <li><strong>应急处置阶段</strong>
+                        <ul>
+                            <li>设备故障：紧急修复或更换故障设备</li>
+                            <li>负荷突增：评估是否需要增容或调整供电方案</li>
+                            <li>漏电故障：及时消除漏电点，防止安全事故</li>
+                            <li>档案异常：快速更新系统档案信息</li>
+                        </ul>
+                    </li>
+                    <li><strong>恢复监测阶段</strong>
+                        <ul>
+                            <li>处置完成后48小时内持续监测</li>
+                            <li>确认线损率恢复正常水平</li>
+                            <li>制定预防性维护计划，防止类似问题再次发生</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h5>5.4.2.3 长期负损治理流程</h5>
+                <ol>
+                    <li><strong>系统性分析阶段</strong>
+                        <ul>
+                            <li>收集台区全面数据，包括计量装置参数、接线方式</li>
+                            <li>运行负损专项诊断算法，识别可能原因</li>
+                            <li>分析负损存在的系统性问题</li>
+                        </ul>
+                    </li>
+                    <li><strong>重点检查阶段</strong>
+                        <ul>
+                            <li>按诊断标签概率排序，重点检查：</li>
+                            <li>电能表接线正确性</li>
+                            <li>互感器极性及接线正确性</li>
+                            <li>系统台户关系完整性</li>
+                            <li>光伏发电用户配置正确性</li>
+                            <li>台区总表前是否存在用电设备</li>
+                        </ul>
+                    </li>
+                    <li><strong>系统纠正阶段</strong>
+                        <ul>
+                            <li>修正计量装置接线问题</li>
+                            <li>更新系统档案信息</li>
+                            <li>调整不合理的计量点配置</li>
+                            <li>规范光伏发电用户并网计量方式</li>
+                        </ul>
+                    </li>
+                    <li><strong>长效监测阶段</strong>
+                        <ul>
+                            <li>建立台区负损专项监测机制</li>
+                            <li>每月进行数据一致性核查</li>
+                            <li>形成长期负损治理经验库</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h5>5.4.2.4 小负损治理流程</h5>
+                <ol>
+                    <li><strong>模型评估阶段</strong>
+                        <ul>
+                            <li>评估理论线损计算模型适用性</li>
+                            <li>检查模型参数与实际台区参数的匹配度</li>
+                            <li>分析小负损的系统性原因</li>
+                        </ul>
+                    </li>
+                    <li><strong>精细化核查阶段</strong>
+                        <ul>
+                            <li>检查互感器配置合理性</li>
+                            <li>验证电表时钟同步状态</li>
+                            <li>评估供电半径对线损计算的影响</li>
+                            <li>检查数据采集质量</li>
+                        </ul>
+                    </li>
+                    <li><strong>优化调整阶段</strong>
+                        <ul>
+                            <li>优化理论线损计算模型参数</li>
+                            <li>调整互感器配置，提高计量精度</li>
+                            <li>实施电表时钟同步</li>
+                            <li>改善数据采集质量</li>
+                        </ul>
+                    </li>
+                    <li><strong>模型验证阶段</strong>
+                        <ul>
+                            <li>应用优化后的模型重新计算理论线损</li>
+                            <li>验证线损率是否回归合理范围</li>
+                            <li>形成小负损台区治理经验</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h5>5.4.2.5 突发负损治理流程</h5>
+                <ol>
+                    <li><strong>紧急诊断阶段</strong>
+                        <ul>
+                            <li>监测系统发出突发负损告警后12小时内响应</li>
+                            <li>进行远程诊断，确定可能原因</li>
+                            <li>安排现场检查计划</li>
+                        </ul>
+                    </li>
+                    <li><strong>快速检查阶段</strong>
+                        <ul>
+                            <li>重点检查电表计量状态</li>
+                            <li>检查互感器是否存在故障</li>
+                            <li>核实是否有倍率变更未同步</li>
+                            <li>检查功率因数补偿设备运行状态</li>
+                        </ul>
+                    </li>
+                    <li><strong>快速纠正阶段</strong>
+                        <ul>
+                            <li>更换故障计量设备</li>
+                            <li>修复接线错误</li>
+                            <li>更新系统档案信息</li>
+                            <li>调整功率因数补偿设备参数</li>
+                        </ul>
+                    </li>
+                    <li><strong>后续跟踪阶段</strong>
+                        <ul>
+                            <li>处置后48小时内持续监测</li>
+                            <li>确认问题是否彻底解决</li>
+                            <li>分析突发负损根本原因</li>
+                            <li>制定预防措施，避免再次发生</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h4>5.4.3 诊断标签与治理措施对应表</h4>
+                <table>
+                    <tr>
+                        <th>异常类型</th>
+                        <th>诊断标签</th>
+                        <th>治理措施</th>
+                        <th>预期效果</th>
+                    </tr>
+                    <tr>
+                        <td>长期高损</td>
+                        <td>CT互感器倍率错误</td>
+                        <td>校准CT互感器倍率，修正系统参数</td>
+                        <td>线损率降低至正常水平</td>
+                    </tr>
+                    <tr>
+                        <td>长期高损</td>
+                        <td>档案户变关系异常</td>
+                        <td>核实并更正台户关系档案</td>
+                        <td>线损计算基础数据正确</td>
+                    </tr>
+                    <tr>
+                        <td>长期高损</td>
+                        <td>疑似低压窃电</td>
+                        <td>组织专项稽查，处理窃电行为</td>
+                        <td>消除非法用电，线损回归正常</td>
+                    </tr>
+                    <tr>
+                        <td>突发高损</td>
+                        <td>用电负荷突增</td>
+                        <td>分析负荷变化原因，必要时增容改造</td>
+                        <td>线损率符合负荷变化规律</td>
+                    </tr>
+                    <tr>
+                        <td>突发高损</td>
+                        <td>低压设备故障</td>
+                        <td>更换或修复故障设备</td>
+                        <td>消除额外损耗，线损恢复正常</td>
+                    </tr>
+                    <tr>
+                        <td>长期负损</td>
+                        <td>计量装置接线错误</td>
+                        <td>检查并修正接线方式</td>
+                        <td>计量准确，线损率回归正值</td>
+                    </tr>
+                    <tr>
+                        <td>长期负损</td>
+                        <td>电表正反向接错</td>
+                        <td>校正电表接线，确保计量方向正确</td>
+                        <td>计量准确，线损率为正值</td>
+                    </tr>
+                    <tr>
+                        <td>小负损</td>
+                        <td>理论模型计算偏差</td>
+                        <td>优化理论线损计算模型参数</td>
+                        <td>理论值与实际值匹配度提高</td>
+                    </tr>
+                    <tr>
+                        <td>小负损</td>
+                        <td>采集数据偏差</td>
+                        <td>改善数据采集质量，确保数据同步</td>
+                        <td>计算基础数据准确</td>
+                    </tr>
+                    <tr>
+                        <td>突发负损</td>
+                        <td>电表计量故障</td>
+                        <td>更换故障电表，恢复正常计量</td>
+                        <td>计量准确，线损率回归正常</td>
+                    </tr>
+                    <tr>
+                        <td>突发负损</td>
+                        <td>倍率变更未同步</td>
+                        <td>及时更新系统档案，保持一致性</td>
+                        <td>系统参数正确，计算准确</td>
+                    </tr>
+                </table>
+                
+                <h4>5.4.4 用户界面</h4>
+                <p>治理建议页面采用流程化设计，主要包含以下界面元素：</p>
+                <ul>
+                    <li>台区选择器：下拉菜单选择需要治理的台区</li>
+                    <li>治理信息概览卡片：展示线损异常关键信息</li>
+                    <li>标准化治理流程图：时间线形式展示治理流程步骤</li>
+                    <li>专家建议卡片：展示针对当前异常的专家建议</li>
+                    <li>相似案例列表：列表形式展示相似案例</li>
+                    <li>经济效益分析图表：图表形式展示经济效益分析</li>
+                    <li>工单生成表单：包含工单相关信息的表单</li>
+                </ul>
+                
+                <h4>5.4.5 交互说明</h4>
+                <div class="interactions">
+                    <ul>
+                        <li>台区切换：通过下拉菜单选择不同的台区，系统会自动加载对应台区的治理建议</li>
+                        <li>流程步骤展开：点击流程步骤可展开查看该步骤的详细说明和操作指南</li>
+                        <li>相似案例查看：点击相似案例可查看案例详情</li>
+                        <li>工单生成：填写工单表单，点击提交生成治理工单</li>
+                        <li>导出报告：点击"导出报告"按钮可将治理建议导出为PDF格式</li>
+                        <li>治理效果追踪：点击"记录结果"按钮可记录治理实施情况和效果</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="feature5" class="feature">
+                <div class="feature-header">
+                    <h3>5.5 辅助功能</h3>
+                    <span class="feature-id">F-005</span>
+                </div>
+                <p>辅助功能提供系统使用说明、计算工具、系统状态监控等支持性功能，提升用户使用体验。</p>
+                
+                <h4>5.5.1 功能描述</h4>
+                <ul>
+                    <li>系统功能说明：提供各模块功能的详细说明</li>
+                    <li>数据采集说明：说明系统数据的采集频率、来源和质量标准</li>
+                    <li>常见问题解答：解答用户常见疑问</li>
+                    <li>计算工具：提供线损率计算、CT倍率计算等常用计算工具</li>
+                    <li>系统状态监控：展示系统运行状态、数据采集状态等</li>
+                    <li>帮助支持：提供用户手册、接口文档、在线帮助等资源链接</li>
+                </ul>
+                
+                <h4>5.5.2 用户界面</h4>
+                <p>辅助功能页面采用分区设计，主要包含以下界面元素：</p>
+                <ul>
+                    <li>左侧内容区：展示系统说明、数据采集说明、常见问题等内容</li>
+                    <li>右侧工具区：包含计算工具、系统状态、帮助支持等功能模块</li>
+                </ul>
+                
+                <h4>5.5.3 交互说明</h4>
+                <div class="interactions">
+                    <ul>
+                        <li>计算工具使用：输入相关参数，点击计算按钮获取计算结果</li>
+                        <li>系统状态查看：查看系统运行状态和数据采集状态</li>
+                        <li>帮助资源访问：点击相关链接访问用户手册、接口文档等资源</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="diagnostic-algorithm">
+            <h2>6. 诊断标签概率算法</h2>
+            
+            <h3>6.1 诊断标签概率计算原理</h3>
+            <p>诊断标签概率计算是线损诊断分析的核心算法，通过对多种数据指标的加权计算，得出每个诊断标签与当前异常情况的匹配概率。该算法基于历史数据分析和专家经验，能够有效识别线损异常的根本原因。</p>
+            
+            <h4>6.1.1 基本计算框架</h4>
+            <p>诊断标签概率采用多因子加权计算方法：</p>
+            <pre><code>P(诊断标签) = Σ(权重i × 因子i)</code></pre>
+            <p>其中，权重根据各因子对诊断结果的影响程度确定，因子值通过对原始数据的标准化处理获得。</p>
+            
+            <h4>6.1.2 专家规则修正</h4>
+            <p>在基础概率计算的基础上，系统应用专家规则进行修正：</p>
+            <pre><code>P_修正(诊断标签) = P(诊断标签) × 修正系数</code></pre>
+            <p>修正系数根据专家经验和历史数据统计得出，一般取值范围为0.8~1.2。</p>
+            
+            <h3>6.2 基础因子计算方法</h3>
+            
+            <h4>6.2.1 事件代码因子</h4>
+            <p>基于电表事件记录计算的因子，用于识别设备异常：</p>
+            <pre><code>f(Event) = 事件发生次数 / 观测周期天数</code></pre>
+            <p>对于成对的发生/恢复事件：</p>
+            <pre><code>f(Event-X, Event-Y) = min(1, 发生次数 / 最大允许次数) × (1 - 恢复次数 / 发生次数)</code></pre>
+            
+            <h4>6.2.2 线损稳定性因子</h4>
+            <p>用于评估线损率的波动情况：</p>
+            <pre><code>f(线损稳定性) = 1 - (线损率标准差 / 线损率平均值)</code></pre>
+            <p>标准差越小，稳定性越高，因子值越接近1。</p>
+            
+            <h4>6.2.3 台户一致性因子</h4>
+            <p>用于评估台区档案与实际用户的一致程度：</p>
+            <pre><code>f(台户一致性) = 1 - (系统记录用户数 - 实际采集用户数) / 系统记录用户数</code></pre>
+            
+            <h4>6.2.4 负荷相关因子</h4>
+            <p>用于评估负荷变化对线损的影响：</p>
+            <pre><code>f(负荷率) = 实际负荷率 / 额定负荷率
+f(负荷增幅) = min(1, (当前负荷 - 基准负荷) / 基准负荷 / 阈值增幅)</code></pre>
+            
+            <h4>6.2.5 时间相关性因子</h4>
+            <p>用于评估异常事件与可疑事件的时间关联：</p>
+            <pre><code>f(时间相关性) = exp(-|异常发生时间 - 可疑事件时间| / 时间衰减系数)</code></pre>
+            
+            <h4>6.2.6 三相不平衡度因子</h4>
+            <p>用于评估三相负载不平衡程度：</p>
+            <pre><code>f(不平衡度) = min(1, 实际不平衡度 / 阈值不平衡度)</code></pre>
+            
+            <h3>6.3 异常类型与诊断标签关系</h3>
+            
+            <h4>6.3.1 长期高损诊断标签计算</h4>
+            <table>
+                <tr>
+                    <th>诊断标签</th>
+                    <th>计算公式</th>
+                    <th>关键数据来源</th>
+                </tr>
+                <tr>
+                    <td>CT互感器倍率错误</td>
+                    <td>P = 0.8×f(E-269, E-270) + 0.2×f(线损稳定性)</td>
+                    <td>电表事件记录、线损率历史数据</td>
+                </tr>
+                <tr>
+                    <td>档案户变关系异常</td>
+                    <td>P = 0.6×f(台户一致性) + 0.4×f(用户变更记录)</td>
+                    <td>台区基础信息、用户变更历史</td>
+                </tr>
+                <tr>
+                    <td>疑似低压窃电</td>
+                    <td>P = 0.5×f(夜间用电模式) + 0.3×f(节假日用电异常) + 0.2×f(负荷突变)</td>
+                    <td>用电负荷曲线、日期信息</td>
+                </tr>
+                <tr>
+                    <td>采集设备故障</td>
+                    <td>P = 0.7×f(通信中断率) + 0.3×f(数据缺失率)</td>
+                    <td>通信质量记录、数据完整性记录</td>
+                </tr>
+                <tr>
+                    <td>三相不平衡度高</td>
+                    <td>P = f(不平衡度) × f(持续时间)</td>
+                    <td>三相电流数据、异常持续时间</td>
+                </tr>
+            </table>
+            
+            <h4>6.3.2 突发高损诊断标签计算</h4>
+            <table>
+                <tr>
+                    <th>诊断标签</th>
+                    <th>计算公式</th>
+                    <th>关键数据来源</th>
+                </tr>
+                <tr>
+                    <td>用电负荷突增</td>
+                    <td>P = 0.7×f(负荷增幅) + 0.3×f(突变时间点)</td>
+                    <td>负荷曲线数据、变化点检测</td>
+                </tr>
+                <tr>
+                    <td>低压设备故障</td>
+                    <td>P = 0.6×f(设备温度) + 0.4×f(故障报警数)</td>
+                    <td>设备监测数据、告警记录</td>
+                </tr>
+                <tr>
+                    <td>恶劣天气引发问题</td>
+                    <td>P = 0.8×f(天气相关性) + 0.2×f(设备状态)</td>
+                    <td>气象数据、设备状态监测</td>
+                </tr>
+            </table>
+            
+            <h4>6.3.3 长期负损诊断标签计算</h4>
+            <table>
+                <tr>
+                    <th>诊断标签</th>
+                    <th>计算公式</th>
+                    <th>关键数据来源</th>
+                </tr>
+                <tr>
+                    <td>计量装置接线错误</td>
+                    <td>P = 0.7×f(接线检查) + 0.3×f(线损稳定性)</td>
+                    <td>现场检查记录、线损率历史数据</td>
+                </tr>
+                <tr>
+                    <td>电表正反向接错</td>
+                    <td>P = 0.8×f(E-257, E-258, E-259, E-260) + 0.2×f(光伏容量)</td>
+                    <td>电表事件记录、光伏装机信息</td>
+                </tr>
+                <tr>
+                    <td>台户关系不一致</td>
+                    <td>P = 0.6×f(户表比对) + 0.4×f(异常记录)</td>
+                    <td>台区户表关系数据、异常记录</td>
+                </tr>
+            </table>
+            
+            <h3>6.4 自动诊断算法流程</h3>
+            
+            <h4>6.4.1 线损异常自动识别</h4>
+            <pre><code>function 识别线损异常(台区编号, 起始日期, 结束日期):
+    历史数据 = 获取历史线损数据(台区编号, 起始日期, 结束日期)
+    理论线损 = 计算理论线损率(台区编号, 历史数据)
+    实际线损 = 获取实际线损率(台区编号, 历史数据)
+    差值序列 = 实际线损 - 理论线损
+    
+    if 连续天数(差值序列 > 5%) >= 20:
+        return "长期高损"
+    else if 存在突变点(差值序列, 阈值=5%) 且 持续天数 >= 3:
+        return "突发高损"
+    else if 连续天数(实际线损 < 0%) >= 7:
+        return "长期负损"
+    else if -1% < 平均值(实际线损) < 0% 且 连续天数 >= 7:
+        return "小负损"
+    else if 存在突变点(实际线损, 阈值=-3%) 且 持续天数(实际线损 < 0%) >= 3:
+        return "突发负损"
+    else:
+        return "正常"</code></pre>
+            
+            <h4>6.4.2 诊断标签概率计算框架</h4>
+            <pre><code>function 计算诊断标签概率(台区编号, 异常类型):
+    # 获取相关数据
+    基础数据 = 获取台区基础信息(台区编号)
+    事件数据 = 获取台区事件记录(台区编号)
+    计量数据 = 获取计量装置数据(台区编号)
+    负荷数据 = 获取负荷曲线数据(台区编号)
+    
+    # 计算基础因子
+    因子集合 = {}
+    if 异常类型 == "长期高损":
+        因子集合["线损稳定性"] = 计算线损稳定性因子(计量数据)
+        因子集合["E-269_270"] = 计算事件因子(事件数据, "E-269", "E-270")
+        因子集合["台户一致性"] = 计算台户一致性因子(基础数据)
+        # ... 其他长期高损相关因子
+        
+    # 类似地计算其他异常类型的因子
+    
+    # 计算各诊断标签概率
+    诊断结果 = {}
+    if 异常类型 == "长期高损":
+        诊断结果["CT互感器倍率错误"] = 0.8 * 因子集合["E-269_270"] + 0.2 * 因子集合["线损稳定性"]
+        诊断结果["档案户变关系异常"] = 0.6 * 因子集合["台户一致性"] + 0.4 * 因子集合["用户变更记录"]
+        # ... 其他长期高损诊断标签
+    
+    # 类似地计算其他异常类型的诊断标签概率
+    
+    # 应用专家规则修正
+    应用专家规则修正(诊断结果, 基础数据)
+    
+    # 按概率降序排列
+    return 按概率排序(诊断结果)</code></pre>
+            
+            <h3>6.5 性能与优化</h3>
+            
+            <h4>6.5.1 计算性能要求</h4>
+            <ul>
+                <li>单台区诊断分析响应时间 ≤ 5秒</li>
+                <li>批量诊断处理能力 ≥ 100台区/分钟</li>
+                <li>诊断标签匹配精度 ≥ 85%（Top-3匹配率）</li>
+            </ul>
+            
+            <h4>6.5.2 算法优化方向</h4>
+            <ul>
+                <li>数据预处理优化：实现关键指标的预计算和缓存</li>
+                <li>算法并行化：支持多台区并行诊断</li>
+                <li>机器学习增强：引入机器学习模型优化权重系数</li>
+                <li>持续学习机制：根据治理结果反馈，不断优化诊断算法</li>
+            </ul>
+            
+            <h3>6.6 诊断算法元数据依赖</h3>
+            <p>诊断标签概率算法依赖以下关键元数据：</p>
+            <table>
+                <tr>
+                    <th>数据类别</th>
+                    <th>关键字段</th>
+                    <th>应用场景</th>
+                </tr>
+                <tr>
+                    <td>基础台区信息</td>
+                    <td>AreaId, MeterQty, GMMeterQty</td>
+                    <td>台户关系核对，基础配置验证</td>
+                </tr>
+                <tr>
+                    <td>用电量数据</td>
+                    <td>Supplied, Consumed, LossUsage, LossRate</td>
+                    <td>线损计算和异常识别</td>
+                </tr>
+                <tr>
+                    <td>电表事件信息</td>
+                    <td>Event-257~312, Event-5633~5638 等</td>
+                    <td>设备状态异常检测，接线错误识别</td>
+                </tr>
+                <tr>
+                    <td>负荷特性数据</td>
+                    <td>PowerMax, PowerMin, PowerAvg, PowerVar</td>
+                    <td>负荷变化分析，突发异常识别</td>
+                </tr>
+                <tr>
+                    <td>电压电流数据</td>
+                    <td>MinVolMax, MaxVolMax, MinVolVar 等</td>
+                    <td>供电质量评估，设备状态监测</td>
+                </tr>
+                <tr>
+                    <td>相位识别数据</td>
+                    <td>L1VolRal, L2VolRal, L3VolRal</td>
+                    <td>三相不平衡分析，相位异常检测</td>
+                </tr>
+            </table>
+            <p>系统中关键事件代码及其在诊断中的应用：</p>
+            <table>
+                <tr>
+                    <th>事件代码</th>
+                    <th>事件描述</th>
+                    <th>应用于诊断标签</th>
+                </tr>
+                <tr>
+                    <td>E-257, E-258</td>
+                    <td>L1电流反向发生/恢复</td>
+                    <td>电表正反向接错, 计量装置接线错误</td>
+                </tr>
+                <tr>
+                    <td>E-269, E-270</td>
+                    <td>CT短路/旁路发生/恢复</td>
+                    <td>CT互感器倍率错误</td>
+                </tr>
+                <tr>
+                    <td>E-279, E-280</td>
+                    <td>电流不平衡发生/恢复</td>
+                    <td>三相不平衡度高</td>
+                </tr>
+                <tr>
+                    <td>E-299, E-300</td>
+                    <td>相序反向发生/恢复</td>
+                    <td>电表正反向接错, 台区总表某相异常</td>
+                </tr>
+                <tr>
+                    <td>E-1538</td>
+                    <td>时钟同步超阈值</td>
+                    <td>电表时钟超差</td>
+                </tr>
+                <tr>
+                    <td>E-12803</td>
+                    <td>时钟漂移超阈值</td>
+                    <td>电表时钟超差</td>
+                </tr>
+            </table>
+        </section>
+        
+        <section id="loss-calculation">
+            <h2>7. 线损计算方法</h2>
+            
+            <h3>7.1 实际线损计算</h3>
+            <p>实际线损是通过台区计量装置采集的数据计算得出的实际能量损失值，是线损诊断的基础数据。</p>
+            
+            <h4>7.1.1 计算公式</h4>
+            <p>实际线损的计算采用电量差额法：</p>
+            <ul>
+                <li><strong>绝对线损</strong>：台区总供电量 - 台区总用电量</li>
+                <li><strong>绝对线损率</strong>：(绝对线损 / 台区总供电量) × 100%</li>
+                <li><strong>相对线损率</strong>：绝对线损率 - 理论线损率</li>
+            </ul>
+            
+            <h4>7.1.2 数据采集要求</h4>
+            <p>实际线损计算需要采集以下数据：</p>
+            <ul>
+                <li>台区总表电量数据（每日、每时段）</li>
+                <li>台区所有用户电表电量数据（每日、每时段）</li>
+                <li>台区变压器及相关设备参数</li>
+                <li>用户用电设备及负荷情况</li>
+            </ul>
+            
+            <h3>7.2 理论线损计算方法</h3>
+            <p>理论线损是电力系统中评估配电网络效率的重要指标，是配电网络正常运行时应产生的能量损耗。通过计算理论线损并与实际线损对比，可以发现配电系统中的异常情况。大数据平台基于电能表采集和台区档案元数据，支持以下几种理论线损计算方法。</p>
+            
+            <h4>7.2.1 技术线损法</h4>
+            <p>技术线损法是基于电力系统物理特性和电气参数来计算线损的方法，也被称为参数法。</p>
+            
+            <h5>计算原理</h5>
+            <p>技术线损法基于电力系统的电气参数（如电阻、电感、电容）和运行数据（如电流、电压、功率因数）来计算线路中的能量损失。</p>
+            
+            <h5>计算公式</h5>
+            <ul>
+                <li><strong>有功线损</strong>：P损 = 3 × I² × R × t</li>
+                <li><strong>无功线损</strong>：Q损 = 3 × I² × X × t</li>
+                <li><strong>理论线损</strong>：理论线损 = ∑(各设备有功线损) + ∑(其他损耗)</li>
+                <li><strong>理论线损率</strong>：理论线损率 = (理论线损 / 供电电量) × 100%</li>
+            </ul>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>台区变压器额定容量</li>
+                <li>线路长度及类型</li>
+                <li>导线截面积及材质</li>
+                <li>变压器参数（铁损、铜损）</li>
+                <li>负荷数据（最大负荷、平均负荷、负荷率）</li>
+                <li>功率因数</li>
+                <li>三相不平衡度</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：计算结果准确，理论基础扎实；可分析各个环节的损耗组成；适用于详细的技术分析和改进措施制定。</p>
+            <p><strong>缺点</strong>：需要大量详细的电气参数和运行数据；计算复杂，实施难度大；对数据质量要求高，参数误差会累积影响结果。</p>
+            
+            <h4>7.2.2 理论线损计算规则法（压降法）</h4>
+            <p>首先基于台区各个用户电计量与总表的分时电压降，利用每户的电压损失计算出瞬时功率损耗，然后对瞬时功率损耗进行面积积分，得到台区全天的导线损耗，同时增加"三相不平衡"、"负荷波动"等运行影响系数修正台区导线损耗。</p>
+            
+            <h5>计算原理</h5>
+            <p>此方法基于台区用户电能表读数与总表读数的差值分析，考虑电压降落和线路损耗的关系，结合运行影响因素进行修正。</p>
+            
+            <h5>计算公式</h5>
+            <ol>
+                <li>计算分时电压降: ΔU = U总表 - U用户表</li>
+                <li>计算各用户电压损失对应的功率损耗: ΔP = f(ΔU, I)</li>
+                <li>对功率损耗进行时间积分，得到全天导线损耗</li>
+                <li>应用修正系数: 理论线损 = ∑(导线损耗) × (1 + K三相不平衡 + K负荷波动)</li>
+                <li>理论线损率 = [理论线损 / (台区供电量)] × 100%</li>
+            </ol>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>台区总表电量读数</li>
+                <li>各用户电表读数</li>
+                <li>分时段电压值</li>
+                <li>线路电流</li>
+                <li>三相不平衡度数据</li>
+                <li>负荷波动数据</li>
+                <li>台区供电量</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：考虑实际运行条件下的电压降落；计入三相不平衡和负荷波动影响；比纯参数法更贴近实际运行状态。</p>
+            <p><strong>缺点</strong>：需要全台区的电表数据；计算过程较为复杂；修正系数的确定需要专业经验。</p>
+            
+            <h4>7.2.3 回归法</h4>
+            <p>回归法是一种基于历史数据的统计分析方法，通过建立线损与影响因素之间的数学关系来预测线损。</p>
+            
+            <h5>计算原理</h5>
+            <p>利用历史数据建立线损率与各影响因素（如负荷率、功率因数、温度等）之间的回归模型，然后利用该模型预测线损。</p>
+            
+            <h5>计算公式</h5>
+            <p>多元线性回归模型：线损率 = β₀ + β₁×负荷率 + β₂×功率因数 + β₃×环境温度 + ... + ε</p>
+            <p>理论线损 = 线损率 × 台区供电量</p>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>历史线损率数据</li>
+                <li>负荷率数据</li>
+                <li>功率因数数据</li>
+                <li>环境温度数据</li>
+                <li>其他可能影响线损的因素数据</li>
+                <li>可再生能源接入情况（光伏、风电等）</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：不需要详细的线路参数；可以反映多种因素的综合影响；适应性强，可根据实际数据调整模型。</p>
+            <p><strong>缺点</strong>：依赖历史数据质量和数量；当系统结构发生变化时，模型需要重新校准；对异常条件的预测能力有限。</p>
+            
+            <h4>7.2.4 赋值法</h4>
+            <p>赋值法是基于台区特征和行业经验，为不同类型的台区赋予标准线损率值的方法。这种方法最终采用"(可变的导线损耗+固定的电表损耗)/台区供电量"计算出台区的理论线损率。</p>
+            
+            <h5>计算原理</h5>
+            <p>根据台区的类型、容量、用户性质等特征，参照行业标准或历史经验，直接赋予特定的理论线损率。</p>
+            
+            <h5>计算公式</h5>
+            <p>理论线损 = 可变导线损耗 + 固定电表损耗</p>
+            <p>理论线损率 = [(可变导线损耗 + 固定电表损耗) / 台区供电量] × 100%</p>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>台区类型（城市、农村、工业、商业、居民等）</li>
+                <li>台区变压器容量</li>
+                <li>用户类型构成</li>
+                <li>供电电量</li>
+                <li>可再生能源接入情况</li>
+                <li>电表数量及类型</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：实施简单，计算方便；不需要复杂的数据采集和处理；适用于缺乏详细参数的场景。</p>
+            <p><strong>缺点</strong>：精度较低，仅能提供粗略估计；无法反映具体台区的实际特性；难以适应台区结构变化。</p>
+            
+            <h4>7.2.5 负荷特性系数法</h4>
+            <p>负荷特性系数法考虑负荷曲线的特性，引入负荷特性系数来修正线损计算结果，更准确地反映不同负荷特性对线损的影响。</p>
+            
+            <h5>计算原理</h5>
+            <p>该方法考虑负荷曲线的特性，引入负荷特性系数来修正线损计算结果，更准确地反映不同负荷特性对线损的影响。</p>
+            
+            <h5>计算公式</h5>
+            <p>有功线损计算：P损 = k × Pmax² × R × t</p>
+            <p>理论线损 = P损 + 其他固定损耗</p>
+            <p>理论线损率 = (理论线损 / 供电电量) × 100%</p>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>负荷曲线数据</li>
+                <li>最大负荷功率</li>
+                <li>等效电阻</li>
+                <li>负荷特性系数（通常通过历史数据分析获得）</li>
+                <li>供电电量</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：考虑了负荷变化特性对线损的影响；相比纯技术线损法计算量减少；精度优于赋值法。</p>
+            <p><strong>缺点</strong>：需要准确的负荷特性系数；对不同类型台区需要分别建立模型；负荷特性发生变化时需要更新系数。</p>
+            
+            <h4>7.2.6 综合预测法</h4>
+            <p>综合预测法结合多种方法的优点，通过加权或智能算法融合多种计算结果，获得更准确的理论线损值。</p>
+            
+            <h5>计算原理</h5>
+            <p>同时使用多种线损计算方法，然后通过权重分配或机器学习算法综合各方法结果，得到最终预测值。</p>
+            
+            <h5>计算公式</h5>
+            <p>加权平均计算：理论线损 = w₁×技术线损 + w₂×回归线损 + w₃×特性系数线损 + w₄×赋值线损</p>
+            <p>理论线损率 = (理论线损 / 供电电量) × 100%</p>
+            
+            <h5>所需元数据</h5>
+            <ul>
+                <li>各计算方法所需的所有元数据</li>
+                <li>历史计算结果与实际线损的对比数据</li>
+                <li>各方法在不同条件下的适用性分析</li>
+                <li>供电电量</li>
+            </ul>
+            
+            <h5>优缺点</h5>
+            <p><strong>优点</strong>：结合多种方法的优势，提高整体精度；适应性强，可根据具体情况调整各方法权重；更为稳健，不易受单一因素影响。</p>
+            <p><strong>缺点</strong>：计算复杂度高，实施难度大；需要更多数据支持；权重确定需要专业分析。</p>
+            
+            <h3>7.3 计算方法选择</h3>
+            <p>理论线损计算方法的选择应根据实际情况、可获取的数据和精度要求来确定：</p>
+            <ol>
+                <li><strong>数据完整且精确</strong>：首选技术线损法，可获得最准确的结果。</li>
+                <li><strong>数据有限但有历史记录</strong>：采用回归法，利用历史数据建模预测。</li>
+                <li><strong>历史数据充足且负荷特性稳定</strong>：可使用负荷特性系数法。</li>
+                <li><strong>数据极为有限</strong>：可使用赋值法作为初步估计。</li>
+                <li><strong>对精度要求高且资源充足</strong>：可采用综合预测法，整合多种方法优势。</li>
+            </ol>
+            
+            <p>在实际应用中，考虑到台区环境的复杂性和可再生能源接入的影响，建议结合多种方法进行交叉验证，并根据实际线损反馈持续优化计算模型，以提高理论线损计算的准确性和实用性。同时，需要特别关注三相不平衡、负荷波动等运行因素对线损的影响，通过适当的修正系数来提高计算精度。</p>
+        </section>
+    </div>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal'
+            },
+            sequenceDiagram: {
+                useMaxWidth: true,
+                bottomMarginAdj: 1
+            },
+            classDiagram: {
+                useMaxWidth: true
+            }
+        });
+
+        // 为各部分添加ID以支持目录导航
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为序列图相关部分添加ID
+            const sequenceSections = document.querySelectorAll('h3');
+            sequenceSections.forEach(function(section) {
+                if (section.textContent.includes('线损异常诊断流程序列图')) {
+                    section.id = 'sequence-diagnostic';
+                } else if (section.textContent.includes('数据采集与分析序列图')) {
+                    section.id = 'sequence-data';
+                }
+            });
+
+            // 为诊断分析子部分添加ID
+            const diagnosticFeatures = document.querySelectorAll('h4');
+            diagnosticFeatures.forEach(function(feature) {
+                if (feature.textContent.includes('5.3.1')) {
+                    feature.id = 'feature3-1';
+                } else if (feature.textContent.includes('5.3.2')) {
+                    feature.id = 'feature3-2';
+                } else if (feature.textContent.includes('5.3.3')) {
+                    feature.id = 'feature3-3';
+                } else if (feature.textContent.includes('5.3.4')) {
+                    feature.id = 'feature3-4';
+                } else if (feature.textContent.includes('5.4.1')) {
+                    feature.id = 'feature4-1';
+                } else if (feature.textContent.includes('5.4.2')) {
+                    feature.id = 'feature4-2';
+                } else if (feature.textContent.includes('5.4.3')) {
+                    feature.id = 'feature4-3';
+                } else if (feature.textContent.includes('5.4.4')) {
+                    feature.id = 'feature4-4';
+                } else if (feature.textContent.includes('5.4.5')) {
+                    feature.id = 'feature4-5';
+                }
+            });
+
+            // 为诊断算法部分添加ID
+            const algorithmSections = document.querySelectorAll('h3');
+            algorithmSections.forEach(function(section, index) {
+                if (section.textContent.includes('6.1')) {
+                    section.id = 'diagnostic-algorithm-1';
+                } else if (section.textContent.includes('6.2')) {
+                    section.id = 'diagnostic-algorithm-2';
+                } else if (section.textContent.includes('6.3')) {
+                    section.id = 'diagnostic-algorithm-3';
+                } else if (section.textContent.includes('6.4')) {
+                    section.id = 'diagnostic-algorithm-4';
+                } else if (section.textContent.includes('6.5')) {
+                    section.id = 'diagnostic-algorithm-5';
+                } else if (section.textContent.includes('6.6')) {
+                    section.id = 'diagnostic-algorithm-6';
+                }
+            });
+
+            // 为线损计算方法部分添加ID
+            const lossSections = document.querySelectorAll('h3');
+            lossSections.forEach(function(section) {
+                if (section.textContent.includes('7.1')) {
+                    section.id = 'loss-calculation-1';
+                } else if (section.textContent.includes('7.2')) {
+                    section.id = 'loss-calculation-2';
+                } else if (section.textContent.includes('7.3')) {
+                    section.id = 'loss-calculation-3';
+                }
+            });
+
+            // 为非功能性需求部分添加ID
+            const nonFunctionalSections = document.querySelectorAll('h3');
+            nonFunctionalSections.forEach(function(section) {
+                if (section.textContent.includes('8.1')) {
+                    section.id = 'non-functional-1';
+                } else if (section.textContent.includes('8.2')) {
+                    section.id = 'non-functional-2';
+                } else if (section.textContent.includes('8.3')) {
+                    section.id = 'non-functional-3';
+                } else if (section.textContent.includes('8.4')) {
+                    section.id = 'non-functional-4';
+                } else if (section.textContent.includes('8.5')) {
+                    section.id = 'non-functional-5';
+                } else if (section.textContent.includes('8.6')) {
+                    section.id = 'non-functional-6';
+                }
+            });
+
+            // 为主要章节添加ID
+            const mainSections = document.querySelectorAll('h2');
+            mainSections.forEach(function(section) {
+                if (section.textContent.includes('非功能性需求')) {
+                    section.id = 'non-functional';
+                } else if (section.textContent.includes('诊断标签概率算法')) {
+                    section.id = 'diagnostic-algorithm';
+                } else if (section.textContent.includes('线损计算方法')) {
+                    section.id = 'loss-calculation';
+                } else if (section.textContent.includes('功能详情')) {
+                    section.id = 'features';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

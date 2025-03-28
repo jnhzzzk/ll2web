@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台区筛选 - 线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-primary text-xl font-bold">线损诊断分析应用</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            统计总览
+                        </a>
+                        <a href="filter.html" class="border-primary text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            台区筛选
+                        </a>
+                        <a href="diagnostic.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            诊断分析
+                        </a>
+                        <a href="governance.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            治理建议
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题 -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">台区筛选</h1>
+                <div>
+                    <button id="saveConfig" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm leading-4 mr-2 transition-colors duration-200">
+                        <i class="fas fa-save mr-1"></i> 保存配置
+                    </button>
+                    <button id="generateReport" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                        生成诊断报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 添加标签页切换 -->
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="-mb-px flex">
+                    <button id="tab-reports" class="bg-white inline-flex py-4 px-6 border-b-2 border-primary text-sm font-medium text-primary focus:outline-none">
+                        异常台区报表
+                    </button>
+                    <button id="tab-filter" class="bg-white inline-flex py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none">
+                        台区筛选
+                    </button>
+                    <button id="tab-standards" class="bg-white inline-flex py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none">
+                        识别标准
+                    </button>
+                </nav>
+            </div>
+
+            <!-- 异常台区报表内容 -->
+            <div id="content-reports">
+                <div class="bg-white rounded-lg shadow-sm mb-6">
+                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">线损异常台区报表</h2>
+                    </div>
+                    <div class="p-5">
+                        <!-- 快速筛选选项 -->
+                        <div class="flex flex-wrap gap-3 mb-4">
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">所属区域</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部区域</option>
+                                    <option>东区</option>
+                                    <option>西区</option>
+                                    <option>南区</option>
+                                    <option>北区</option>
+                                    <option>开发区</option>
+                                </select>
+                            </div>
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">异常类型</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部异常</option>
+                                    <option>长期高损</option>
+                                    <option>突发高损</option>
+                                    <option>长期负损</option>
+                                    <option>小负损</option>
+                                    <option>突发负损</option>
+                                </select>
+                            </div>
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">台区类型</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部类型</option>
+                                    <option>居民</option>
+                                    <option>商业</option>
+                                    <option>工业</option>
+                                    <option>混合</option>
+                                </select>
+                            </div>
+                            <!-- 日期范围选择 -->
+                            <div class="flex-grow">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">日期范围</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="date" class="w-full py-1.5 px-3 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <span class="text-gray-500">至</span>
+                                    <input type="date" class="w-full py-1.5 px-3 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <button class="bg-primary hover:bg-primary-dark text-white p-2 rounded-md ml-2">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 异常台区报表表格 -->
+                        <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            台区名称
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            所属区域
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            实际线损率
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            理论线损率
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            线损差值
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            总表电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            用电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            损失电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            偏差损失电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            发生日期
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            异常状态
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            台区类型
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            可再生能源
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- 长期高损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            河西变1324台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            河西区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            12.76%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6.32%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500 font-medium">
+                                            +6.44%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,823
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,208
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            615
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500">
+                                            +310
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                长期高损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            居民
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=longHigh" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 突发高损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            城南532台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            南区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            10.21%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4.66%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500 font-medium">
+                                            +5.55%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            3,612
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            3,243
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            369
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500">
+                                            +200
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-07
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                突发高损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            商业
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            光伏
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=suddenHigh" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 长期负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            北郊198台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            北区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            3.21%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            7.45%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -4.24%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2,850
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2,758
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            92
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -120
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-07
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                长期负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            居民
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=longNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 小负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            东湖785台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            东区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            3.58%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4.85%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -1.27%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            5,105
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,922
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            183
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -65
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                小负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            混合
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            风电
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=smallNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 突发负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            开发区672台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            开发区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            2.13%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            5.37%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -3.24%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6,780
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6,636
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            144
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -220
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                突发负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            工业
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=suddenNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页 -->
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="text-sm text-gray-700">
+                                共 <span class="font-medium">87</span> 个异常台区
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">上一页</button>
+                                <button class="bg-primary px-3 py-1 rounded text-sm text-white">1</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">2</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">3</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">下一页</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 台区筛选内容 -->
+            <div id="content-filter" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 筛选条件区域 -->
+                    <div class="col-span-1 lg:col-span-2">
+                        <!-- 筛选条件卡片 -->
+                        <div class="bg-white rounded-lg shadow-sm mb-6">
+                            <div class="px-5 py-4 border-b border-gray-200">
+                                <h2 class="text-lg font-medium text-gray-900">基本筛选条件</h2>
+                            </div>
+                            <div class="p-5 space-y-4">
+                                <!-- 时间范围选择 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">时间范围</label>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div class="flex items-center">
+                                                <input id="time-7days" name="time-range" type="radio" checked class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="time-7days" class="ml-2 block text-sm text-gray-700">最近7天</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center">
+                                                <input id="time-30days" name="time-range" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="time-30days" class="ml-2 block text-sm text-gray-700">最近30天</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center">
+                                                <input id="time-90days" name="time-range" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="time-90days" class="ml-2 block text-sm text-gray-700">最近90天</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center">
+                                                <input id="time-custom" name="time-range" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
+                                                <label for="time-custom" class="ml-2 block text-sm text-gray-700">自定义</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 绝对线损筛选 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">绝对线损率筛选</label>
+                                    <div class="flex flex-col space-y-3">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-32">
+                                                <select id="lossType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                    <option>大于等于</option>
+                                                    <option>小于等于</option>
+                                                    <option>等于</option>
+                                                    <option>介于</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex rounded-md shadow-sm">
+                                                    <input type="number" name="line-loss-min" id="line-loss-min" class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary focus:border-primary sm:text-sm border-gray-300" placeholder="最小值">
+                                                    <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">%</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1 hidden" id="loss-max-container">
+                                                <div class="flex rounded-md shadow-sm">
+                                                    <input type="number" name="line-loss-max" id="line-loss-max" class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary focus:border-primary sm:text-sm border-gray-300" placeholder="最大值">
+                                                    <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 相对线损筛选 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">相对线损差值筛选</label>
+                                    <div class="flex flex-col space-y-3">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-full">
+                                                <select id="relativeLossType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                    <option>实际-理论 > 0</option>
+                                                    <option>实际-理论 ≥ 2%</option>
+                                                    <option>实际-理论 ≤ -2%</option>
+                                                    <option>|实际-理论| ≥ 2%</option>
+                                                    <option>自定义差值</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 高级筛选条件 -->
+                        <div class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200">
+                                <h2 class="text-lg font-medium text-gray-900">高级筛选条件</h2>
+                            </div>
+                            <div class="p-5 space-y-4">
+                                <!-- 台区属性筛选 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">台区属性</label>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">台区容量</label>
+                                            <select id="capacity" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>≤ 315kVA</option>
+                                                <option>315kVA - 500kVA</option>
+                                                <option>500kVA - 800kVA</option>
+                                                <option>≥ 800kVA</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">负荷类型</label>
+                                            <select id="loadType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>居民</option>
+                                                <option>商业</option>
+                                                <option>工业</option>
+                                                <option>混合</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">所属区域</label>
+                                            <select id="area" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部区域</option>
+                                                <option>东区</option>
+                                                <option>西区</option>
+                                                <option>南区</option>
+                                                <option>北区</option>
+                                                <option>开发区</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">通讯方式</label>
+                                            <select id="station" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>PLC</option>
+                                                <option>GPRS</option>
+                                                <option>4G</option>
+                                                <option>5G</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">可再生能源</label>
+                                            <select id="renewable-energy" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>光伏</option>
+                                                <option>风电</option>
+                                                <option>无</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 数据质量过滤 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">数据质量过滤</label>
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="exclude-data-error" name="exclude-data-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-data-error" class="ml-2 block text-sm text-gray-700">排除台区数据条数少于25条</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-archive-error" name="exclude-archive-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-archive-error" class="ml-2 block text-sm text-gray-700">排除台区供电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-archive-error" name="exclude-archive-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-archive-error" class="ml-2 block text-sm text-gray-700">排除台区用电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-archive-error" name="exclude-archive-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-archive-error" class="ml-2 block text-sm text-gray-700">排除台区近3日（包括诊断日当天）的供电两和用电量均为0</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-collect-fail" name="exclude-collect-fail" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-collect-fail" class="ml-2 block text-sm text-gray-700">排除采集成功率 ≤ 5% 的台区</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 更多筛选条件 -->
+                                <div>
+                                    <button id="addMoreConditions" class="text-primary hover:text-primary-dark text-sm flex items-center mt-2">
+                                        <i class="fas fa-plus-circle mr-1"></i> 添加更多筛选条件
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 预览结果区域 -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-lg shadow-sm sticky top-20">
+                            <div class="px-5 py-4 border-b border-gray-200">
+                                <h2 class="text-lg font-medium text-gray-900">筛选结果预览</h2>
+                            </div>
+                            <div class="p-5">
+                                <button id="previewButton" class="w-full bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md transition-colors duration-200 mb-4">
+                                    预览筛选结果
+                                </button>
+                                
+                                <div id="previewContent" class="hidden">
+                                    <div class="mb-6">
+                                        <div class="bg-primary-light rounded-lg p-4 text-center">
+                                            <p class="text-sm text-gray-600 mb-1">符合条件的台区数量</p>
+                                            <p class="text-3xl font-bold text-primary">87</p>
+                                            <p class="text-sm text-gray-500 mt-1">占总台区的 7.0%</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h3 class="text-sm font-medium text-gray-700 mb-2">Top 5 异常台区</h3>
+                                        <div class="space-y-3">
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">河西变1324台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+6.44%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:12.76% / 理论:6.32%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">城南532台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+5.55%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:10.21% / 理论:4.66%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">北郊198台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-4.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.21% / 理论:7.45%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">开发区672台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-3.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:2.13% / 理论:5.37%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">东湖785台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-1.27%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.58% / 理论:4.85%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 识别标准内容 -->
+            <div id="content-standards" class="hidden">
+                <!-- 异常类型识别标准表格 -->
+                <div class="bg-white rounded-lg shadow-sm mb-6">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900">线损异常类型识别标准</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">异常类型</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">定义</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">识别标准</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">识别优先级</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            长期高损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        在较长统计期内【绝对（同期）线损率】高于【理论线损率】持续超过指标要求的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内【相对线损率】5%以上的异常天数≥20天
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        1
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                            突发高损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        线损率一直保持平稳，突然发生较大升幅且持续时间在3天以上的台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近7天【相对线损率】突然升高至5%以上，且持续3天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        5
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            长期负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        用电信息采集系统连续7天以上台区线损率小于0%的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内【相对线损率】0%以下的异常天数≥20天
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        4
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
+                                            小负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        统计期内台区线损率在-1%~0%之间的台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内，【相对线损率】线损率在-1%~0%之间，持续7天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        2
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                            突发负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        用户用电信息采集系统3天以上台区线损率突然降低并小于0%的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近7天【相对线损率】突然降低至0%以下，且持续3天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        3
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-200">
+                        <p class="text-sm text-gray-600"><i class="fas fa-info-circle text-primary mr-1"></i> 识别优先级数字越大，处理越优先。例如，突发高损(5)的处理应优先于长期负损(4)。</p>
+                    </div>
+                </div>
+                
+                <!-- 异常标识说明 -->
+                <div class="bg-white rounded-lg shadow-sm mb-6">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900">异常标识说明</h2>
+                    </div>
+                    <div class="p-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-2">
+                                    长期高损
+                                </span>
+                                <span class="text-sm text-gray-600">实际线损持续高于理论线损</span>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 mr-2">
+                                    突发高损
+                                </span>
+                                <span class="text-sm text-gray-600">线损率突然大幅升高</span>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                                    长期负损
+                                </span>
+                                <span class="text-sm text-gray-600">线损持续为负值</span>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800 mr-2">
+                                    小负损
+                                </span>
+                                <span class="text-sm text-gray-600">线损率轻微为负（-1%~0%）</span>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mr-2">
+                                    突发负损
+                                </span>
+                                <span class="text-sm text-gray-600">线损率突然降低至负值</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签页切换功能
+            const tabReports = document.getElementById('tab-reports');
+            const tabFilter = document.getElementById('tab-filter');
+            const tabStandards = document.getElementById('tab-standards');
+            
+            const contentReports = document.getElementById('content-reports');
+            const contentFilter = document.getElementById('content-filter');
+            const contentStandards = document.getElementById('content-standards');
+
+            // 初始化标签页，默认显示报表页
+            tabReports.addEventListener('click', function() {
+                // 激活报表标签
+                tabReports.classList.add('border-primary', 'text-primary');
+                tabReports.classList.remove('border-transparent', 'text-gray-500');
+                // 取消其他标签激活状态
+                tabFilter.classList.remove('border-primary', 'text-primary');
+                tabFilter.classList.add('border-transparent', 'text-gray-500');
+                tabStandards.classList.remove('border-primary', 'text-primary');
+                tabStandards.classList.add('border-transparent', 'text-gray-500');
+                // 显示报表内容，隐藏其他内容
+                contentReports.classList.remove('hidden');
+                contentFilter.classList.add('hidden');
+                contentStandards.classList.add('hidden');
+            });
+
+            tabFilter.addEventListener('click', function() {
+                // 激活筛选标签
+                tabFilter.classList.add('border-primary', 'text-primary');
+                tabFilter.classList.remove('border-transparent', 'text-gray-500');
+                // 取消其他标签激活状态
+                tabReports.classList.remove('border-primary', 'text-primary');
+                tabReports.classList.add('border-transparent', 'text-gray-500');
+                tabStandards.classList.remove('border-primary', 'text-primary');
+                tabStandards.classList.add('border-transparent', 'text-gray-500');
+                // 显示筛选内容，隐藏其他内容
+                contentFilter.classList.remove('hidden');
+                contentReports.classList.add('hidden');
+                contentStandards.classList.add('hidden');
+            });
+            
+            tabStandards.addEventListener('click', function() {
+                // 激活标准标签
+                tabStandards.classList.add('border-primary', 'text-primary');
+                tabStandards.classList.remove('border-transparent', 'text-gray-500');
+                // 取消其他标签激活状态
+                tabReports.classList.remove('border-primary', 'text-primary');
+                tabReports.classList.add('border-transparent', 'text-gray-500');
+                tabFilter.classList.remove('border-primary', 'text-primary');
+                tabFilter.classList.add('border-transparent', 'text-gray-500');
+                // 显示标准内容，隐藏其他内容
+                contentStandards.classList.remove('hidden');
+                contentReports.classList.add('hidden');
+                contentFilter.classList.add('hidden');
+            });
+
+            // 绝对线损筛选条件的交互
+            const lossTypeSelect = document.getElementById('lossType');
+            const lossMaxContainer = document.getElementById('loss-max-container');
+            
+            lossTypeSelect.addEventListener('change', function() {
+                if (this.value === '介于') {
+                    lossMaxContainer.classList.remove('hidden');
+                } else {
+                    lossMaxContainer.classList.add('hidden');
+                }
+            });
+
+            // 保存配置按钮点击事件
+            document.getElementById('saveConfig').addEventListener('click', function() {
+                // 收集所有筛选条件
+                const config = {
+                    timeRange: document.querySelector('input[name="time-range"]:checked').id,
+                    lossType: lossTypeSelect.value,
+                    minLoss: document.getElementById('line-loss-min').value,
+                    maxLoss: document.getElementById('line-loss-max').value,
+                    relativeLossType: document.getElementById('relativeLossType').value,
+                    capacity: document.getElementById('capacity').value,
+                    loadType: document.getElementById('loadType').value,
+                    area: document.getElementById('area').value,
+                    station: document.getElementById('station').value,
+                    renewableEnergy: document.getElementById('renewable-energy').value,
+                    excludeDataError: document.getElementById('exclude-data-error').checked,
+                    excludeArchiveError: document.getElementById('exclude-archive-error').checked,
+                    excludeCollectFail: document.getElementById('exclude-collect-fail').checked
+                };
+
+                // 保存配置（这里可以添加实际的保存逻辑）
+                alert('配置已保存');
+            });
+
+            // 生成报告按钮点击事件
+            document.getElementById('generateReport').addEventListener('click', function() {
+                window.location.href = 'diagnostic.html';
+            });
+
+            // 添加更多筛选条件按钮点击事件
+            document.getElementById('addMoreConditions').addEventListener('click', function() {
+                alert('添加更多筛选条件功能待实现');
+            });
+
+            // 报表切换功能
+            const reportButtons = document.querySelectorAll('#content-reports .flex.space-x-2 button');
+            reportButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的激活状态
+                    reportButtons.forEach(b => {
+                        b.classList.remove('bg-primary', 'text-white');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    // 添加当前按钮的激活状态
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary', 'text-white');
+                });
+            });
+
+            // 预览按钮点击事件
+            const previewButton = document.getElementById('previewButton');
+            const previewContent = document.getElementById('previewContent');
+            
+            if (previewButton && previewContent) {
+                previewButton.addEventListener('click', function() {
+                    const isHidden = previewContent.classList.contains('hidden');
+                    previewContent.classList.toggle('hidden');
+                    this.textContent = isHidden ? '隐藏预览结果' : '预览筛选结果';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

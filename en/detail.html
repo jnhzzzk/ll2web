@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>辅助信息 - 线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-primary text-xl font-bold">线损诊断分析应用</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            统计总览
+                        </a>
+                        <a href="filter.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            台区筛选
+                        </a>
+                        <a href="diagnostic.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            诊断分析
+                        </a>
+                        <a href="governance.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            治理建议
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题 -->
+            <div class="mt-6 mb-4">
+                <h1 class="text-2xl font-bold text-gray-900">辅助信息</h1>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 左侧：系统说明 -->
+                <div class="col-span-1 lg:col-span-2">
+                    <!-- 系统功能说明 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">系统功能说明</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-base font-medium text-gray-900 mb-2">1. 统计总览</h3>
+                                    <p class="text-sm text-gray-600">展示系统整体运行状况，包括核心指标、线损分布、趋势分析等。支持多维度数据展示和交互式分析。</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-medium text-gray-900 mb-2">2. 台区筛选</h3>
+                                    <p class="text-sm text-gray-600">提供灵活的筛选条件配置，支持时间范围、线损阈值、台区属性等多维度筛选。可保存常用筛选方案。</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-medium text-gray-900 mb-2">3. 诊断分析</h3>
+                                    <p class="text-sm text-gray-600">基于多维度数据分析，智能识别线损异常原因。提供详细的诊断报告和可视化分析工具。</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-medium text-gray-900 mb-2">4. 治理建议</h3>
+                                    <p class="text-sm text-gray-600">根据诊断结果，生成标准化的治理流程建议。包含案例库匹配、工单生成和跟踪管理功能。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 数据采集说明 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">数据采集说明</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900 mb-1">采集频率</h3>
+                                    <p class="text-sm text-gray-600">- 台区总表：15分钟/次</p>
+                                    <p class="text-sm text-gray-600">- 用户电表：1小时/次</p>
+                                    <p class="text-sm text-gray-600">- 电压电流：5分钟/次</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900 mb-1">数据来源</h3>
+                                    <p class="text-sm text-gray-600">- 用电信息采集系统</p>
+                                    <p class="text-sm text-gray-600">- 计量装置管理系统</p>
+                                    <p class="text-sm text-gray-600">- 配电网自动化系统</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900 mb-1">数据质量</h3>
+                                    <p class="text-sm text-gray-600">- 采集成功率 ≥ 99.9%</p>
+                                    <p class="text-sm text-gray-600">- 数据完整性 ≥ 99.5%</p>
+                                    <p class="text-sm text-gray-600">- 数据准确性 ≥ 99.9%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 常见问题 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">常见问题</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <div class="border-b border-gray-200 pb-4">
+                                    <h3 class="text-sm font-medium text-gray-900 mb-2">Q: 如何判断线损异常？</h3>
+                                    <p class="text-sm text-gray-600">A: 系统通过对比实际线损与理论线损的差值来判断异常。当差值超过设定阈值（默认±2%）时，系统会标记为异常。</p>
+                                </div>
+                                <div class="border-b border-gray-200 pb-4">
+                                    <h3 class="text-sm font-medium text-gray-900 mb-2">Q: 理论线损如何计算？</h3>
+                                    <p class="text-sm text-gray-600">A: 系统采用积分电流法计算理论线损，考虑线路参数、负荷分布、运行工况等因素。支持多种计算模型切换。</p>
+                                </div>
+                                <div class="border-b border-gray-200 pb-4">
+                                    <h3 class="text-sm font-medium text-gray-900 mb-2">Q: 如何导出分析报告？</h3>
+                                    <p class="text-sm text-gray-600">A: 在各页面右上角均有"导出报告"按钮，点击后可选择导出格式（PDF/Excel）和报告内容范围。</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900 mb-2">Q: 系统支持哪些数据格式？</h3>
+                                    <p class="text-sm text-gray-600">A: 系统支持Excel、CSV、XML等常用数据格式的导入导出。具体格式要求请参考数据接口文档。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：快捷工具 -->
+                <div class="col-span-1">
+                    <!-- 计算工具 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">计算工具</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">线损率计算</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="number" placeholder="输入电量" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                        <input type="number" placeholder="输出电量" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                    </div>
+                                    <button class="mt-2 w-full bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                                        计算线损率
+                                    </button>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">CT倍率计算</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="number" placeholder="一次电流" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                        <input type="number" placeholder="二次电流" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                    </div>
+                                    <button class="mt-2 w-full bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                                        计算倍率
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 系统状态 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">系统状态</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">系统运行状态</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            正常运行
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">数据采集状态</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            正常采集
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">系统版本</span>
+                                        <span class="text-sm text-gray-900">v2.1.3</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">最后更新</span>
+                                        <span class="text-sm text-gray-900">2023-05-12</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 帮助支持 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">帮助支持</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <a href="#" class="flex items-center text-sm text-primary hover:text-primary-dark">
+                                    <i class="fas fa-book mr-2"></i> 用户手册
+                                </a>
+                                <a href="#" class="flex items-center text-sm text-primary hover:text-primary-dark">
+                                    <i class="fas fa-file-alt mr-2"></i> 接口文档
+                                </a>
+                                <a href="#" class="flex items-center text-sm text-primary hover:text-primary-dark">
+                                    <i class="fas fa-question-circle mr-2"></i> 在线帮助
+                                </a>
+                                <a href="#" class="flex items-center text-sm text-primary hover:text-primary-dark">
+                                    <i class="fas fa-headset mr-2"></i> 技术支持
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

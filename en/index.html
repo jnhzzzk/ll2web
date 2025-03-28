@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Loss Diagnostic Analysis Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center relative">
+                        <span id="main-menu-button" class="text-primary text-xl font-bold cursor-pointer flex items-center">
+                            Line Loss Diagnostic Analysis Application
+                            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                        <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                Statistical Overview
+                            </a>
+                            <a href="filter.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                Area Filtering
+                            </a>
+                            <a href="diagnostic.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                Diagnostic Analysis
+                            </a>
+                            <a href="governance.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                Governance Suggestions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">Engineer Wang</span>
+                    <a href="../cn/index.html" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark mr-3">中文</a>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User Avatar">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Page Title -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">Statistical Overview Dashboard</h1>
+                <div class="flex space-x-3">
+                    <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-sm leading-4 text-gray-700 focus:outline-none focus:ring-primary focus:border-primary">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>This quarter</option>
+                            <option>This year</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                        Export Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Core Metrics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-bolt text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Total Areas</p>
+                            <p class="text-2xl font-bold">1,243</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-red-100 p-3 mr-4">
+                            <i class="fas fa-exclamation-triangle text-red-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Abnormal Areas</p>
+                            <p class="text-2xl font-bold">87 <span class="text-sm text-red-500 font-normal">(7.0%)</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-percentage text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Average Theoretical Line Loss Rate</p>
+                            <p class="text-2xl font-bold">5.32%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-primary-light p-3 mr-4">
+                            <i class="fas fa-exchange-alt text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Actual vs Theoretical Difference</p>
+                            <p class="text-2xl font-bold">+1.27%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Loss Distribution and Time Trend Analysis -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Absolute Line Loss Interval Distribution -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900">Absolute Line Loss Interval Distribution</h2>
+                    </div>
+                    <div class="p-5 h-80">
+                        <canvas id="lossDistributionChart"></canvas>
+                    </div>
+                </div>
+                <!-- Time Trend Analysis -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">Line Loss Trend Analysis</h2>
+                        <div class="flex space-x-2">
+                            <button class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm" id="day-btn">Day</button>
+                            <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="week-btn">Week</button>
+                            <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="month-btn">Month</button>
+                        </div>
+                    </div>
+                    <div class="p-5 h-80">
+                        <canvas id="lossTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relative Line Loss Distribution -->
+            <div class="bg-white rounded-lg shadow mb-6">
+                <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-lg font-medium text-gray-900">Relative Line Loss Distribution</h2>
+                </div>
+                <div class="p-5">
+                    <div id="scatterView" class="space-y-4">
+                        <div class="bg-gray-100 rounded-lg h-96 relative">
+                            <canvas id="relativeLossScatterChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 5 Abnormal Areas -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-lg font-medium text-gray-900">Top 5 Abnormal Areas</h2>
+                    <a href="filter.html" class="text-primary hover:text-primary-dark text-sm flex items-center">
+                        View All <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area Name</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actual Line Loss Rate</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Theoretical Line Loss Rate</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difference</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Hexi Transformer 1324 Area</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12.76%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.32%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500">+6.44%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        Long-term High Loss
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=longHigh" class="text-primary hover:text-primary-dark">Diagnose</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">South City 532 Area</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.21%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.66%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500">+5.55%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        Sudden High Loss
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=suddenHigh" class="text-primary hover:text-primary-dark">Diagnose</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">North Suburb 198 Area</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.21%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.45%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-4.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Long-term Negative Loss
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=longNegative" class="text-primary hover:text-primary-dark">Diagnose</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Development Zone 672 Area</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2.13%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5.37%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-3.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Sudden Negative Loss
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=suddenNegative" class="text-primary hover:text-primary-dark">Diagnose</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">East Lake 785 Area</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.58%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.85%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">-1.27%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Small Negative Loss
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="diagnostic.html?area=smallNegative" class="text-primary hover:text-primary-dark">Diagnose</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 绝对线损区间分布图
+        const distributionCtx = document.getElementById('lossDistributionChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['0-2%', '2-5%', '5-8%', '8-10%', '10-15%', '>15%'],
+                datasets: [{
+                    label: '',
+                    data: [245, 412, 378, 124, 57, 27],
+                    backgroundColor: [
+                        'rgba(48, 156, 159, 0.4)',
+                        'rgba(48, 156, 159, 0.5)',
+                        'rgba(48, 156, 159, 0.6)',
+                        'rgba(48, 156, 159, 0.7)',
+                        'rgba(48, 156, 159, 0.8)',
+                        'rgba(48, 156, 159, 0.9)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                const value = context.raw;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                label += `${value} 个台区 (${percentage}%)`;
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '台区数量'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '线损率区间'
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                afterDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const meta = chart.getDatasetMeta(0);
+                    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                    
+                    ctx.font = '11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    
+                    meta.data.forEach((bar, index) => {
+                        const value = chart.data.datasets[0].data[index];
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        const position = bar.getCenterPoint();
+                        
+                        // 在柱状图上方显示数值
+                        ctx.fillStyle = '#000';
+                        ctx.fillText(`${value}`, position.x, position.y - 15);
+                        
+                        // 在数值下方显示百分比
+                        ctx.fillStyle = '#666';
+                        ctx.fillText(`${percentage}%`, position.x, position.y - 2);
+                    });
+                }
+            }]
+        });
+
+        // Line Loss Trend Chart
+        const trendCtx = document.getElementById('lossTrendChart').getContext('2d');
+        let trendChart;
+
+        // Data for different time periods
+        const trendData = {
+            day: {
+                labels: ['5/1', '5/2', '5/3', '5/4', '5/5', '5/6', '5/7'],
+                datasets: [
+                    {
+                        label: 'Actual Line Loss Rate',
+                        data: [6.2, 6.3, 6.5, 7.1, 6.8, 6.6, 6.59],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Theoretical Line Loss Rate',
+                        data: [5.3, 5.2, 5.4, 5.3, 5.35, 5.4, 5.32],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            week: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [
+                    {
+                        label: 'Actual Line Loss Rate',
+                        data: [6.4, 6.7, 6.2, 6.9, 7.2, 6.8, 6.5, 6.6],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Theoretical Line Loss Rate',
+                        data: [5.2, 5.3, 5.4, 5.2, 5.3, 5.4, 5.3, 5.3],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            month: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [
+                    {
+                        label: 'Actual Line Loss Rate',
+                        data: [6.8, 7.1, 6.9, 6.5, 6.3, 6.6],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Theoretical Line Loss Rate',
+                        data: [5.4, 5.5, 5.3, 5.2, 5.3, 5.4],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            }
+        };
+
+        // Function to create or update chart
+        function updateTrendChart(period) {
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: trendData[period],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y.toFixed(2);
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15
+                            }
+                        },
+                        datalabels: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Line Loss Rate (%)'
+                            },
+                            min: 4,
+                            max: 8
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time Period'
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    afterDraw: function(chart) {
+                        const ctx = chart.ctx;
+                        
+                        chart.data.datasets.forEach((dataset, i) => {
+                            const meta = chart.getDatasetMeta(i);
+                            if (!meta.hidden) {
+                                meta.data.forEach((element, index) => {
+                                    // Draw value labels
+                                    const value = dataset.data[index].toFixed(1) + '%';
+                                    const position = element.getCenterPoint();
+                                    
+                                    ctx.fillStyle = dataset.borderColor;
+                                    ctx.font = 'bold 11px Arial';
+                                    ctx.textAlign = 'center';
+                                    
+                                    // Position above or below point depending on dataset
+                                    const yOffset = i === 0 ? -15 : 15; // First dataset above, second below
+                                    ctx.fillText(value, position.x, position.y + yOffset);
+                                });
+                            }
+                        });
+                    }
+                }]
+            });
+        }
+
+        // Initialize with day period
+        updateTrendChart('day');
+
+        // Add event listeners to period buttons
+        document.getElementById('day-btn').addEventListener('click', function() {
+            document.getElementById('day-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('day');
+        });
+
+        document.getElementById('week-btn').addEventListener('click', function() {
+            document.getElementById('week-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('week');
+        });
+
+        document.getElementById('month-btn').addEventListener('click', function() {
+            document.getElementById('month-btn').classList.add('bg-primary-light', 'text-primary');
+            document.getElementById('month-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
+            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
+            
+            updateTrendChart('month');
+        });
+
+        // 相对线损分布散点图
+        const scatterCtx = document.getElementById('relativeLossScatterChart').getContext('2d');
+        const scatterChart = new Chart(scatterCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'East China',
+                        data: [{ x: 2.7, y: 12 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.9)',
+                        pointRadius: 15,
+                        pointHoverRadius: 18
+                    },
+                    {
+                        label: 'South China',
+                        data: [{ x: 1.8, y: 8 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.8)',
+                        pointRadius: 12,
+                        pointHoverRadius: 15
+                    },
+                    {
+                        label: 'North China',
+                        data: [{ x: 2.4, y: 15 }],
+                        backgroundColor: 'rgba(48, 156, 159, 1)',
+                        pointRadius: 18,
+                        pointHoverRadius: 20
+                    },
+                    {
+                        label: 'Northeast China',
+                        data: [{ x: 1.5, y: 10 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.85)',
+                        pointRadius: 14,
+                        pointHoverRadius: 16
+                    },
+                    {
+                        label: 'Northwest China',
+                        data: [{ x: 0.6, y: 6 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.65)',
+                        pointRadius: 10,
+                        pointHoverRadius: 12
+                    },
+                    {
+                        label: 'Southwest China',
+                        data: [{ x: 0.3, y: 3 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.5)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    },
+                    {
+                        label: 'Central China',
+                        data: [{ x: 0.5, y: 5 }],
+                        backgroundColor: 'rgba(48, 156, 159, 0.6)',
+                        pointRadius: 9,
+                        pointHoverRadius: 11
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label;
+                                const x = context.parsed.x.toFixed(1);
+                                const y = context.parsed.y;
+                                return `${label}: 相对线损差值 ${x}%, 异常台区数量 ${y}个`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '异常台区数量'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '相对线损差值 (%)'
+                        },
+                        min: -5,
+                        max: 5
+                    }
+                },
+                onClick: (e, elements) => {
+                    if (elements && elements.length > 0) {
+                        const index = elements[0].datasetIndex;
+                        const region = scatterChart.data.datasets[index].label;
+                        showRegionDetails(region);
+                    }
+                }
+            }
+        });
+
+        // 为散点图添加标签显示
+        Chart.register({
+            id: 'datalabels',
+            afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach((element, index) => {
+                            // 绘制标签
+                            ctx.fillStyle = '#000';
+                            const fontSize = 11;
+                            ctx.font = `${fontSize}px Arial`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            const position = element.getCenterPoint();
+                            ctx.fillText(dataset.label, position.x, position.y - 12);
+                        });
+                    }
+                });
+            }
+        });
+
+        // Region details function
+        function showRegionDetails(region) {
+            // Region links mapping
+            const regionLinks = {
+                'East China': 'filter.html?region=east',
+                'South China': 'filter.html?region=south',
+                'North China': 'filter.html?region=north',
+                'Northeast China': 'filter.html?region=northeast',
+                'Northwest China': 'filter.html?region=northwest',
+                'Southwest China': 'filter.html?region=southwest',
+                'Central China': 'filter.html?region=central'
+            };
+            
+            // Region details modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+            modal.id = 'regionDetailModal';
+            
+            // Modal content
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+                    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-gray-900">${region} Details</h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-500">Relative Line Loss Difference</span>
+                                <span class="text-sm font-medium">${getRegionData(region).x.toFixed(1)}%</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-500">Abnormal Areas Count</span>
+                                <span class="text-sm font-medium">${getRegionData(region).y} areas</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Total Areas</span>
+                                <span class="text-sm font-medium">${getRegionTotalAreas(region)} areas</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex flex-col space-y-2">
+                            <a href="${regionLinks[region]}" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm text-center transition-colors duration-200">
+                                View Area Details
+                            </a>
+                            <a href="diagnostic.html?region=${encodeURIComponent(region)}" class="border border-primary text-primary hover:bg-primary-light py-2 px-4 rounded-md text-sm text-center transition-colors duration-200">
+                                Perform Diagnostic Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal event
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('regionDetailModal').remove();
+            });
+            
+            // Click outside to close
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+        
+        // Get region data
+        function getRegionData(region) {
+            const datasets = scatterChart.data.datasets;
+            for (let i = 0; i < datasets.length; i++) {
+                if (datasets[i].label === region) {
+                    return datasets[i].data[0];
+                }
+            }
+            return { x: 0, y: 0 };
+        }
+        
+        // Get region total areas (mock data)
+        function getRegionTotalAreas(region) {
+            const totals = {
+                'East China': 168,
+                'South China': 145,
+                'North China': 203,
+                'Northeast China': 179,
+                'Northwest China': 134,
+                'Southwest China': 112,
+                'Central China': 142
+            };
+            return totals[region] || 100;
+        }
+
+        // Dropdown menu behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('main-menu-button');
+            const menuDropdown = document.getElementById('main-menu-dropdown');
+            
+            // Toggle dropdown when menu button is clicked
+            menuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线损诊断分析应用 - 研发需求文档</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'neutral',
+                securityLevel: 'loose',
+                flowchart: {
+                    useMaxWidth: false,
+                    htmlLabels: true
+                }
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .mermaid {
+            margin: 20px 0;
+            overflow: auto;
+        }
+        .requirement {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #f9f9f9;
+        }
+        .requirement-id {
+            font-weight: bold;
+            color: #3498db;
+        }
+        .api-spec {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #fffbd0;
+            padding: 10px 15px;
+            border-left: 3px solid #e9bc0c;
+            margin: 10px 0;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tech-item {
+            background-color: #e8f4fc;
+            border: 1px solid #b6d9f5;
+            border-radius: 5px;
+            padding: 8px 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>线损诊断分析应用 - 研发需求文档</h1>
+    
+    <div id="toc">
+        <h2>目录</h2>
+        <ul>
+            <li><a href="#introduction">1. 文档简介</a></li>
+            <li><a href="#architecture">2. 系统架构</a></li>
+            <li><a href="#use-cases">3. 用例图</a></li>
+            <li><a href="#sequence-diagrams">4. 序列图</a></li>
+            <li><a href="#class-diagram">5. 类图</a></li>
+            <li><a href="#tech-requirements">6. 技术需求</a>
+                <ul>
+                    <li><a href="#frontend">6.1 前端需求</a></li>
+                    <li><a href="#backend">6.2 后端需求</a></li>
+                    <li><a href="#database">6.3 数据库需求</a></li>
+                    <li><a href="#algorithm">6.4 算法需求</a></li>
+                </ul>
+            </li>
+            <li><a href="#api-spec">7. API规范</a></li>
+            <li><a href="#deployment">8. 部署架构</a></li>
+            <li><a href="#testing">9. 测试需求</a></li>
+            <li><a href="#timeline">10. 开发时间线</a></li>
+        </ul>
+    </div>
+
+    <section id="introduction">
+        <h2>1. 文档简介</h2>
+        <p>本文档是线损诊断分析应用的研发需求文档，基于产品需求规格书(PRD)编写，旨在为开发团队提供清晰的技术实现指导。文档详细描述了系统架构、技术需求、API规范、开发时间线等内容，确保开发团队能够准确理解并实现产品需求。</p>
+    </section>
+
+    <section id="architecture">
+        <h2>2. 系统架构</h2>
+        <p>线损诊断分析应用采用前后端分离的架构，遵循微服务设计理念，主要由以下几个核心组件构成：</p>
+        
+        <div class="mermaid">
+        flowchart TB
+            subgraph 前端层
+                UI[用户界面]
+                VIS[数据可视化组件]
+                FORM[表单和控件]
+            end
+            
+            subgraph 应用层
+                API[RESTful API]
+                AUTH[认证授权服务]
+                CACHE[缓存服务]
+            end
+            
+            subgraph 业务逻辑层
+                STAT[统计分析模块]
+                FILTER[台区筛选模块]
+                DIAG[诊断分析模块]
+                GOV[治理建议模块]
+                REPORT[报表导出模块]
+            end
+            
+            subgraph 数据层
+                DB[(关系型数据库)]
+                TS[(时序数据库)]
+                NOSQL[(NoSQL数据库)]
+                MQ[消息队列]
+            end
+            
+            subgraph 外部系统
+                COLLECT[数据采集系统]
+                ERP[企业资源系统]
+                WORKFLOW[工作流系统]
+            end
+            
+            UI --> API
+            VIS --> API
+            FORM --> API
+            
+            API --> AUTH
+            API --> CACHE
+            
+            AUTH --> STAT
+            AUTH --> FILTER
+            AUTH --> DIAG
+            AUTH --> GOV
+            AUTH --> REPORT
+            
+            STAT --> DB
+            STAT --> TS
+            FILTER --> DB
+            DIAG --> DB
+            DIAG --> NOSQL
+            DIAG --> TS
+            GOV --> DB
+            GOV --> NOSQL
+            REPORT --> DB
+            
+            COLLECT --> MQ
+            MQ --> DB
+            MQ --> TS
+            
+            DIAG --> ERP
+            GOV --> WORKFLOW
+        </div>
+        
+        <h3>2.1 架构说明</h3>
+        <ul>
+            <li><strong>前端层</strong>：采用现代Web框架构建响应式用户界面，包含丰富的数据可视化组件。</li>
+            <li><strong>应用层</strong>：提供RESTful API接口，处理认证授权和缓存管理。</li>
+            <li><strong>业务逻辑层</strong>：实现核心业务功能，包括统计分析、台区筛选、诊断分析、治理建议和报表导出。</li>
+            <li><strong>数据层</strong>：使用多种数据库技术满足不同数据存储需求，包括关系型数据库、时序数据库和NoSQL数据库。</li>
+            <li><strong>外部系统集成</strong>：与数据采集系统、企业资源系统和工作流系统集成，实现数据采集和业务流程闭环。</li>
+        </ul>
+        
+        <h3>2.2 技术栈选型</h3>
+        <div class="tech-stack">
+            <div class="tech-item">前端框架: Vue.js 3</div>
+            <div class="tech-item">UI组件库: Element Plus</div>
+            <div class="tech-item">图表库: ECharts 5</div>
+            <div class="tech-item">后端框架: Spring Boot 2.6</div>
+            <div class="tech-item">API文档: Swagger</div>
+            <div class="tech-item">关系型数据库: PostgreSQL 14</div>
+            <div class="tech-item">时序数据库: InfluxDB</div>
+            <div class="tech-item">NoSQL数据库: MongoDB</div>
+            <div class="tech-item">消息队列: RabbitMQ</div>
+            <div class="tech-item">缓存: Redis</div>
+            <div class="tech-item">容器化: Docker</div>
+            <div class="tech-item">编排管理: Kubernetes</div>
+        </div>
+    </section>
+
+    <section id="use-cases">
+        <h2>3. 用例图</h2>
+        <p>以下用例图描述了系统中不同角色用户与功能模块之间的交互关系：</p>
+        
+        <div class="mermaid">
+        %%{init: {'theme': 'neutral', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#333'}}}%%
+        flowchart TD
+            %% 角色定义
+            OM[运维工程师]:::actor
+            DM[台区管理人员]:::actor
+            SA[系统管理员]:::actor
+            
+            %% 用例定义
+            UC1[查看统计总览]:::usecase
+            UC2[筛选异常台区]:::usecase
+            UC3[诊断分析台区]:::usecase
+            UC4[获取治理建议]:::usecase
+            UC5[执行治理措施]:::usecase
+            UC6[记录治理结果]:::usecase
+            UC7[导出分析报告]:::usecase
+            UC8[查看历史记录]:::usecase
+            UC9[管理用户权限]:::usecase
+            UC10[配置系统参数]:::usecase
+            UC11[维护基础数据]:::usecase
+
+            %% 关系定义
+            OM --- UC1
+            OM --- UC3
+            OM --- UC5
+            OM --- UC6
+            
+            DM --- UC1
+            DM --- UC2
+            DM --- UC7
+            DM --- UC8
+            
+            UC3 --- UC4
+            UC4 --- UC5
+            UC2 --- UC3
+            
+            SA --- UC9
+            SA --- UC10
+            SA --- UC11
+            
+            %% 分组定义
+            subgraph 统计监控功能
+                UC1
+                UC7
+            end
+            
+            subgraph 诊断分析功能
+                UC2
+                UC3
+                UC4
+            end
+            
+            subgraph 治理管理功能
+                UC5
+                UC6
+                UC8
+            end
+            
+            subgraph 系统管理功能
+                UC9
+                UC10
+                UC11
+            end
+            
+            classDef actor fill:#ffd78c,stroke:#ffab40,stroke-width:2px
+            classDef usecase fill:#e1f5fe,stroke:#4fc3f7,stroke-width:1px,rx:10px,ry:10px
+        </div>
+        
+        <h3>3.1 核心用例描述</h3>
+        
+        <div class="requirement">
+            <p><span class="requirement-id">UC-001</span> <strong>查看统计总览</strong></p>
+            <table>
+                <tr>
+                    <th width="20%">用例名称</th>
+                    <td>查看统计总览</td>
+                </tr>
+                <tr>
+                    <th>参与者</th>
+                    <td>运维工程师、台区管理人员</td>
+                </tr>
+                <tr>
+                    <th>前置条件</th>
+                    <td>用户已登录系统并具有查看权限</td>
+                </tr>
+                <tr>
+                    <th>基本流程</th>
+                    <td>
+                        1. 用户访问统计总览页面<br>
+                        2. 系统加载并展示核心指标卡片<br>
+                        3. 系统加载并展示线损分布图表<br>
+                        4. 系统加载并展示趋势分析图表<br>
+                        5. 系统加载并展示Top 5异常台区列表
+                    </td>
+                </tr>
+                <tr>
+                    <th>替代流程</th>
+                    <td>
+                        2a. 数据加载失败：显示错误提示，提供重试选项<br>
+                        3a. 用户选择不同时间范围：重新加载对应时间范围的数据
+                    </td>
+                </tr>
+                <tr>
+                    <th>后置条件</th>
+                    <td>页面展示最新的统计总览数据</td>
+                </tr>
+                <tr>
+                    <th>技术要点</th>
+                    <td>使用ECharts实现图表可视化，支持图表联动和数据钻取</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="requirement">
+            <p><span class="requirement-id">UC-003</span> <strong>诊断分析台区</strong></p>
+            <table>
+                <tr>
+                    <th width="20%">用例名称</th>
+                    <td>诊断分析台区</td>
+                </tr>
+                <tr>
+                    <th>参与者</th>
+                    <td>运维工程师</td>
+                </tr>
+                <tr>
+                    <th>前置条件</th>
+                    <td>用户已登录系统并具有诊断权限，已选择待诊断的台区</td>
+                </tr>
+                <tr>
+                    <th>基本流程</th>
+                    <td>
+                        1. 用户选择需要诊断的台区<br>
+                        2. 系统加载台区基本信息和线损异常概况<br>
+                        3. 系统执行智能诊断算法分析<br>
+                        4. 系统生成诊断标签及匹配概率<br>
+                        5. 系统展示线损波动溯源图<br>
+                        6. 系统展示多维度对比分析结果
+                    </td>
+                </tr>
+                <tr>
+                    <th>替代流程</th>
+                    <td>
+                        3a. 诊断分析超时：显示提示信息，建议稍后重试<br>
+                        4a. 无法生成明确诊断：提供可能原因列表并建议人工分析
+                    </td>
+                </tr>
+                <tr>
+                    <th>后置条件</th>
+                    <td>完成台区诊断分析，展示分析结果，支持生成治理建议</td>
+                </tr>
+                <tr>
+                    <th>技术要点</th>
+                    <td>实现多模型诊断算法，支持诊断过程可解释性，使用图表可视化展示诊断结果</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="sequence-diagrams">
+        <h2>4. 序列图</h2>
+        <p>以下序列图描述了系统关键流程中各组件之间的交互顺序：</p>
+        
+        <h3>4.1 线损异常诊断流程</h3>
+        <div class="mermaid">
+        sequenceDiagram
+            participant 前端 as 前端界面
+            participant API as API网关
+            participant 诊断 as 诊断分析服务
+            participant 台区 as 台区数据服务
+            participant 模型 as 诊断模型服务
+            participant DB as 数据库
+            
+            前端->>API: 请求诊断分析(台区ID)
+            API->>诊断: 转发诊断请求
+            诊断->>台区: 获取台区基础数据
+            台区->>DB: 查询台区信息
+            DB-->>台区: 返回台区数据
+            台区->>DB: 查询历史测量数据
+            DB-->>台区: 返回测量数据
+            台区-->>诊断: 返回台区基础数据包
+            
+            诊断->>模型: 执行特征提取
+            模型->>模型: 计算统计特征
+            模型->>模型: 提取时序特征
+            模型-->>诊断: 返回特征集
+            
+            诊断->>模型: 执行模型推理
+            模型->>模型: 运行主分类模型
+            模型->>模型: 运行原因归因模型
+            模型->>模型: 计算置信度
+            模型-->>诊断: 返回诊断结果
+            
+            诊断->>诊断: 生成诊断报告
+            诊断->>DB: 保存诊断记录
+            DB-->>诊断: 确认保存成功
+            诊断-->>API: 返回诊断结果
+            API-->>前端: 返回诊断数据包
+            
+            前端->>前端: 渲染诊断结果
+            前端->>前端: 展示诊断标签
+            前端->>前端: 绘制分析图表
+        </div>
+        
+        <h3>4.2 实时数据采集与处理流程</h3>
+        <div class="mermaid">
+        sequenceDiagram
+            participant 采集 as 数据采集系统
+            participant MQ as 消息队列
+            participant 处理 as 数据处理服务
+            participant 计算 as 线损计算服务
+            participant 检测 as 异常检测服务
+            participant TSDB as 时序数据库
+            participant DB as 关系型数据库
+            
+            采集->>采集: 定时采集测量数据
+            采集->>MQ: 发送原始数据(topic: raw-data)
+            MQ-->>处理: 消费原始数据
+            
+            处理->>处理: 数据清洗和预处理
+            处理->>处理: 数据格式转换
+            处理->>处理: 异常值处理
+            处理->>MQ: 发送处理后数据(topic: clean-data)
+            
+            MQ-->>计算: 消费处理后数据
+            计算->>计算: 计算实际线损率
+            计算->>TSDB: 存储实际线损数据
+            TSDB-->>计算: 确认存储成功
+            
+            计算->>DB: 获取台区参数
+            DB-->>计算: 返回台区参数
+            计算->>计算: 计算理论线损率
+            计算->>TSDB: 存储理论线损数据
+            TSDB-->>计算: 确认存储成功
+            
+            计算->>MQ: 发送线损计算结果(topic: loss-data)
+            MQ-->>检测: 消费线损数据
+            
+            检测->>TSDB: 获取历史线损数据
+            TSDB-->>检测: 返回历史数据
+            检测->>检测: 执行异常检测算法
+            检测->>检测: 判断线损异常类型
+            
+            检测->>DB: 存储异常检测结果
+            DB-->>检测: 确认存储成功
+            
+            alt 存在异常
+                检测->>MQ: 发送异常告警(topic: alert)
+            end
+        </div>
+        
+        <h3>4.3 治理建议生成流程</h3>
+        <div class="mermaid">
+        sequenceDiagram
+            participant 前端 as 前端界面
+            participant API as API网关
+            participant 治理 as 治理建议服务
+            participant 诊断 as 诊断结果服务
+            participant 案例 as 案例库服务
+            participant 工单 as 工单系统
+            participant DB as 数据库
+            
+            前端->>API: 请求治理建议(诊断ID)
+            API->>治理: 转发治理请求
+            
+            治理->>诊断: 获取诊断结果详情
+            诊断->>DB: 查询诊断记录
+            DB-->>诊断: 返回诊断数据
+            诊断-->>治理: 返回诊断结果
+            
+            治理->>案例: 检索相似案例
+            案例->>DB: 查询案例库
+            DB-->>案例: 返回相似案例
+            案例-->>治理: 返回匹配案例
+            
+            治理->>治理: 生成标准化治理流程
+            治理->>治理: 计算经济效益分析
+            治理->>治理: 整合专家建议
+            
+            治理->>DB: 保存治理建议
+            DB-->>治理: 确认保存成功
+            
+            治理-->>API: 返回治理建议结果
+            API-->>前端: 返回治理数据包
+            
+            前端->>前端: 渲染治理建议
+            
+            alt 用户确认生成工单
+                前端->>API: 请求生成工单
+                API->>治理: 转发工单请求
+                治理->>工单: 创建治理工单
+                工单->>工单: 分配处理人员
+                工单->>工单: 设置流程和期限
+                工单-->>治理: 返回工单号
+                治理-->>API: 返回工单创建结果
+                API-->>前端: 通知工单创建成功
+            end
+        </div>
+    </section>
+
+    <section id="class-diagram">
+        <h2>5. 类图</h2>
+        <p>以下类图描述了系统核心领域模型的结构和关系：</p>
+        
+        <div class="mermaid">
+        classDiagram
+            %% 用户与权限相关类
+            class User {
+                -Long id
+                -String username
+                -String password
+                -String email
+                -UserRole role
+                -List~Permission~ permissions
+                +login() Boolean
+                +logout() void
+                +resetPassword(String) Boolean
+            }
+            
+            class Permission {
+                -Long id
+                -String name
+                -String code
+                -String description
+                +checkPermission(User) Boolean
+            }
+            
+            class Administrator {
+                -Integer adminLevel
+                +manageUsers() void
+                +configSystem() void
+                +maintainData() void
+            }
+            
+            %% 台区相关类
+            class District {
+                -Long id
+                -String name
+                -String code
+                -String location
+                -DistrictType type
+                -Float capacity
+                -Integer userCount
+                -String loadType
+                -Float transformerRatio
+                +calculateTheoretical() Float
+                +detectAnomaly() List~AnomalyType~
+            }
+            
+            class Measurement {
+                -Long id
+                -Long districtId
+                -Date timestamp
+                -Float totalPower
+                -Float usedPower
+                -Float loss
+                +calculateLoss() Float
+            }
+            
+            %% 诊断相关类
+            class DiagnosticLog {
+                -Long id
+                -Long districtId
+                -Date timestamp
+                -Float actualLoss
+                -Float theoreticalLoss
+                -Float difference
+                -AnomalyType anomalyType
+                -List~String~ tags
+                -String status
+                +generateTags() List~String~
+                +matchCases() List~DiagnosticResult~
+            }
+            
+            class DiagnosticResult {
+                -Long id
+                -Long diagnosticId
+                -Float confidenceScore
+                -String mainCause
+                -List~String~ secondaryCauses
+                -List~String~ evidence
+                +analyzeData() void
+                +calculateConfidence() Float
+            }
+            
+            %% 异常检测相关类
+            class AnomalyDetection {
+                -JSON threshold
+                -List pattern
+                +detectLongHigh() Boolean
+                +detectSuddenHigh() Boolean
+                +detectLongNegative() Boolean
+                +detectSuddenNegative() Boolean
+            }
+            
+            class DiagnosticEngine {
+                -List algorithm
+                -List model
+                -Float confidenceThreshold
+                +diagnose(District) DiagnosticResult
+                +analyzeTrend(List~Measurement~) JSON
+                +comparePatterns(JSON) List~String~
+            }
+            
+            %% 治理相关类
+            class Governance {
+                -Long id
+                -Long diagnosticId
+                -List~String~ recommendedActions
+                -List~String~ implementedActions
+                -String implementer
+                -Date implementDate
+                -String result
+                +generateActions() List~String~
+                +trackImplementation() void
+                +evaluateEffect() JSON
+            }
+            
+            %% 关系定义
+            User <|-- Administrator : 继承
+            User "*" -- "*" Permission : 拥有
+            District "1" -- "*" Measurement : 包含
+            District "1" -- "*" DiagnosticLog : 关联
+            DiagnosticLog "1" -- "1" DiagnosticResult : 生成
+            DiagnosticEngine -- AnomalyDetection : 使用
+            DiagnosticResult "1" -- "0..1" Governance : 对应
+        </div>
+        
+        <h3>5.1 核心类说明</h3>
+        
+        <table>
+            <tr>
+                <th>类名</th>
+                <th>职责</th>
+                <th>关键方法</th>
+            </tr>
+            <tr>
+                <td>District</td>
+                <td>台区实体类，包含台区的基本信息和属性</td>
+                <td>calculateTheoretical(), detectAnomaly()</td>
+            </tr>
+            <tr>
+                <td>Measurement</td>
+                <td>测量数据类，记录台区的电量测量数据</td>
+                <td>calculateLoss()</td>
+            </tr>
+            <tr>
+                <td>DiagnosticEngine</td>
+                <td>诊断引擎类，实现诊断算法的核心逻辑</td>
+                <td>diagnose(), analyzeTrend(), comparePatterns()</td>
+            </tr>
+            <tr>
+                <td>AnomalyDetection</td>
+                <td>异常检测类，实现各类异常的检测算法</td>
+                <td>detectLongHigh(), detectSuddenHigh(), detectLongNegative(), detectSuddenNegative()</td>
+            </tr>
+            <tr>
+                <td>DiagnosticResult</td>
+                <td>诊断结果类，存储诊断分析的结果</td>
+                <td>analyzeData(), calculateConfidence()</td>
+            </tr>
+            <tr>
+                <td>Governance</td>
+                <td>治理类，管理治理建议和实施过程</td>
+                <td>generateActions(), trackImplementation(), evaluateEffect()</td>
+            </tr>
+        </table>
+        
+        <h3>5.2 数据模型设计</h3>
+        <p>系统采用多种数据存储技术，针对不同类型的数据采用适合的存储策略：</p>
+        
+        <h4>5.2.1 关系型数据库模型</h4>
+        <p>关系型数据库主要存储结构化业务数据，包括以下核心表：</p>
+        <ul>
+            <li><strong>t_user</strong>：用户信息表</li>
+            <li><strong>t_permission</strong>：权限表</li>
+            <li><strong>t_user_permission</strong>：用户权限关联表</li>
+            <li><strong>t_district</strong>：台区基本信息表</li>
+            <li><strong>t_district_param</strong>：台区参数表</li>
+            <li><strong>t_diagnostic_log</strong>：诊断日志表</li>
+            <li><strong>t_diagnostic_result</strong>：诊断结果表</li>
+            <li><strong>t_governance</strong>：治理信息表</li>
+            <li><strong>t_governance_action</strong>：治理措施表</li>
+            <li><strong>t_case_library</strong>：案例库表</li>
+        </ul>
+        
+        <h4>5.2.2 时序数据库模型</h4>
+        <p>时序数据库主要存储大量的时间序列测量数据，支持高效的时序查询：</p>
+        <ul>
+            <li><strong>measurement</strong>：测量数据集
+                <ul>
+                    <li>tags: district_id, device_id, measure_type</li>
+                    <li>fields: total_power, used_power, loss_rate, a_phase, b_phase, c_phase, etc.</li>
+                    <li>timestamp: 测量时间</li>
+                </ul>
+            </li>
+            <li><strong>loss_analysis</strong>：线损分析数据集
+                <ul>
+                    <li>tags: district_id, analysis_type</li>
+                    <li>fields: actual_loss, theoretical_loss, difference, etc.</li>
+                    <li>timestamp: 分析时间</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h4>5.2.3 NoSQL数据库模型</h4>
+        <p>NoSQL数据库主要存储非结构化或半结构化数据，如诊断报告、治理建议等：</p>
+        <ul>
+            <li><strong>diagnostic_reports</strong>：存储完整的诊断报告文档，包含丰富的诊断细节和证据</li>
+            <li><strong>governance_plans</strong>：存储详细的治理计划文档</li>
+            <li><strong>analytics_results</strong>：存储各类分析结果，支持灵活的数据结构</li>
+        </ul>
+    </section>
+    
+    <section id="tech-requirements">
+        <h2>6. 技术需求</h2>
+        
+        <section id="frontend">
+            <h3>6.1 前端需求</h3>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">FR-001</span> <strong>响应式用户界面</strong></p>
+                <p>系统前端需支持多种设备(PC、平板)的响应式布局，确保在不同屏幕尺寸下都能提供良好的用户体验。</p>
+                <ul>
+                    <li>采用Vue.js 3框架，结合Composition API实现组件化开发</li>
+                    <li>使用Element Plus组件库构建统一的UI风格</li>
+                    <li>实现至少三个断点的响应式布局：Desktop (≥1200px), Tablet (≥768px), Mobile (＜768px)</li>
+                    <li>针对复杂图表，在移动设备上提供适配版本或替代展示方式</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">FR-002</span> <strong>数据可视化</strong></p>
+                <p>系统需提供丰富的数据可视化功能，支持多种图表类型和交互方式。</p>
+                <ul>
+                    <li>使用ECharts 5.0+实现所有图表，确保高性能和灵活定制</li>
+                    <li>实现以下图表类型：折线图、柱状图、散点图、饼图、热力图、关系图、雷达图等</li>
+                    <li>支持图表交互功能：缩放、数据点悬停提示、图例交互、图表联动</li>
+                    <li>支持数据钻取功能，允许用户从宏观数据逐步深入到微观细节</li>
+                    <li>优化大数据量图表的渲染性能，对于超过1000个数据点的图表实现数据抽样或分页加载</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">FR-003</span> <strong>离线功能支持</strong></p>
+                <p>系统需支持基本的离线功能，确保在网络连接不稳定的环境下也能提供有限服务。</p>
+                <ul>
+                    <li>使用Service Worker实现资源缓存，确保应用框架和UI资源可离线加载</li>
+                    <li>实现本地数据存储，使用IndexedDB存储用户最近查看的数据</li>
+                    <li>提供离线状态提示，并在恢复网络连接后自动同步数据</li>
+                    <li>支持将关键报告导出为PDF或Excel格式，便于离线查看</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">FR-004</span> <strong>性能优化</strong></p>
+                <p>前端应用需达到高性能标准，确保良好的用户体验。</p>
+                <ul>
+                    <li>首次加载核心资源 ≤ 3秒（基于4G网络环境）</li>
+                    <li>实现代码分割(Code Splitting)，采用路由级别的懒加载</li>
+                    <li>利用Tree Shaking减小bundle体积</li>
+                    <li>实现组件级别的虚拟滚动，优化长列表渲染性能</li>
+                    <li>实现关键资源预加载，优化页面切换体验</li>
+                    <li>页面操作响应时间 ≤ 100ms</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="backend">
+            <h3>6.2 后端需求</h3>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">BR-001</span> <strong>微服务架构</strong></p>
+                <p>后端采用微服务架构，划分为多个领域服务，实现松耦合、高内聚的系统结构。</p>
+                <ul>
+                    <li>采用Spring Cloud框架构建微服务生态</li>
+                    <li>使用Spring Boot 2.6+作为基础开发框架</li>
+                    <li>实现以下核心微服务：
+                        <ul>
+                            <li>用户认证服务：负责用户认证和授权</li>
+                            <li>台区管理服务：负责台区基础数据管理</li>
+                            <li>数据采集服务：对接外部数据源，处理数据采集</li>
+                            <li>统计分析服务：提供统计总览功能</li>
+                            <li>诊断分析服务：实现智能诊断算法</li>
+                            <li>治理建议服务：生成治理建议和工单</li>
+                        </ul>
+                    </li>
+                    <li>使用Spring Cloud Gateway作为API网关，实现请求路由和负载均衡</li>
+                    <li>使用Eureka或Nacos实现服务注册与发现</li>
+                    <li>通过统一的API版本控制策略支持API演进</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">BR-002</span> <strong>API设计</strong></p>
+                <p>系统需提供规范化的RESTful API，支持前端和第三方系统集成。</p>
+                <ul>
+                    <li>遵循RESTful设计原则，正确使用HTTP方法和状态码</li>
+                    <li>使用Swagger/OpenAPI 3.0规范进行API文档管理</li>
+                    <li>实现标准化的错误处理机制和错误码体系</li>
+                    <li>支持API限流和熔断机制，防止系统过载</li>
+                    <li>为复杂查询实现GraphQL接口，支持灵活的数据获取</li>
+                    <li>所有API响应时间需满足性能需求（简单查询≤1秒，复杂查询≤3秒）</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">BR-003</span> <strong>数据处理能力</strong></p>
+                <p>系统需具备高效的数据处理能力，支持大规模线损数据的实时处理和分析。</p>
+                <ul>
+                    <li>使用RabbitMQ实现消息队列，支持数据流的异步处理</li>
+                    <li>采用批处理策略，优化大数据量查询和统计</li>
+                    <li>实现数据处理管道，支持ETL流程</li>
+                    <li>支持增量数据同步和实时数据处理</li>
+                    <li>系统需支持处理至少1000个台区的实时数据（每台区15分钟/次的采集频率）</li>
+                    <li>历史数据查询需支持至少5年的数据回溯</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">BR-004</span> <strong>安全性</strong></p>
+                <p>系统需实现全面的安全防护措施，保障数据安全和系统稳定。</p>
+                <ul>
+                    <li>使用Spring Security实现身份认证和授权</li>
+                    <li>采用JWT实现无状态会话管理</li>
+                    <li>实现HTTPS传输加密</li>
+                    <li>敏感数据存储加密</li>
+                    <li>实现防SQL注入、XSS攻击、CSRF攻击等安全措施</li>
+                    <li>采用RBAC权限模型，实现细粒度的权限控制</li>
+                    <li>所有API访问需进行鉴权和操作日志记录</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="database">
+            <h3>6.3 数据库需求</h3>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">DB-001</span> <strong>数据存储策略</strong></p>
+                <p>系统采用多种数据库技术，针对不同类型的数据选择适合的存储方案。</p>
+                <ul>
+                    <li>使用PostgreSQL 14+作为关系型数据库，存储结构化业务数据</li>
+                    <li>使用InfluxDB作为时序数据库，存储大量时间序列测量数据</li>
+                    <li>使用MongoDB作为NoSQL数据库，存储半结构化的诊断结果和治理方案</li>
+                    <li>使用Redis作为缓存和会话存储</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">DB-002</span> <strong>数据访问层</strong></p>
+                <p>系统需实现高效、统一的数据访问层，支持各种数据库操作。</p>
+                <ul>
+                    <li>使用MyBatis-Plus实现关系型数据库的ORM映射</li>
+                    <li>为时序数据库实现专用的访问组件，优化时序查询效率</li>
+                    <li>使用Spring Data MongoDB支持文档数据库访问</li>
+                    <li>实现统一的数据访问接口和异常处理机制</li>
+                    <li>支持分布式事务，确保跨服务数据一致性</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">DB-003</span> <strong>数据迁移和版本管理</strong></p>
+                <p>系统需支持数据库结构的版本管理和平滑迁移。</p>
+                <ul>
+                    <li>使用Flyway管理数据库结构变更</li>
+                    <li>实现向前兼容的数据库设计，支持无停机升级</li>
+                    <li>支持数据库分区策略，优化大表性能</li>
+                    <li>实现历史数据归档机制，支持冷热数据分离</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">DB-004</span> <strong>备份与恢复</strong></p>
+                <p>系统需实现完善的数据备份和恢复机制，确保数据安全。</p>
+                <ul>
+                    <li>实现每日增量备份、每周全量备份策略</li>
+                    <li>支持时间点恢复(Point-in-Time Recovery)</li>
+                    <li>实现跨区域备份，防止区域性故障导致数据丢失</li>
+                    <li>备份恢复过程需要自动化，支持命令行操作</li>
+                    <li>备份数据需加密存储</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="algorithm">
+            <h3>6.4 算法需求</h3>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">AL-001</span> <strong>理论线损计算算法</strong></p>
+                <p>系统需实现精确的理论线损计算算法，作为线损异常判断的基准。</p>
+                <ul>
+                    <li>支持以下理论线损计算方法：
+                        <ul>
+                            <li>积分电流法：基于各时段电流测量值计算理论线损</li>
+                            <li>等效电阻法：根据线路参数和负荷分布计算理论线损</li>
+                            <li>典型日负荷曲线法：结合负荷特性曲线计算理论线损</li>
+                        </ul>
+                    </li>
+                    <li>计算精度：理论线损率计算误差≤0.5%</li>
+                    <li>支持参数自动校准，根据历史数据优化计算参数</li>
+                    <li>考虑环境因素(温度、湿度等)对线损的影响</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">AL-002</span> <strong>线损异常检测算法</strong></p>
+                <p>系统需实现自动化的线损异常检测算法，支持多种异常类型的识别。</p>
+                <ul>
+                    <li>支持以下异常类型的检测：
+                        <ul>
+                            <li>长期高损：连续30天内线损率高于理论值5%以上，且异常天数≥20天</li>
+                            <li>突发高损：线损率突然升高5%以上，且持续3天以上</li>
+                            <li>长期负损：连续7天以上线损率小于0%</li>
+                            <li>小负损：线损率在-1%~0%之间，持续7天以上</li>
+                            <li>突发负损：线损率突然降低至0%以下，且持续3天以上</li>
+                        </ul>
+                    </li>
+                    <li>实现时序异常检测算法，基于统计方法和机器学习模型</li>
+                    <li>支持阈值动态调整，根据不同台区特性自适应调整检测参数</li>
+                    <li>防止误报：检测准确率≥90%</li>
+                    <li>支持自定义检测规则和参数配置</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">AL-003</span> <strong>智能诊断算法</strong></p>
+                <p>系统需实现智能诊断算法，自动分析线损异常原因并生成诊断标签。</p>
+                <ul>
+                    <li>支持以下诊断方法：
+                        <ul>
+                            <li>基于规则的专家系统：根据预设规则判断异常原因</li>
+                            <li>机器学习分类模型：基于历史案例训练的分类模型</li>
+                            <li>时序特征分析：分析线损时间序列的变化特征</li>
+                            <li>关联因素分析：考虑天气、用电负荷等外部因素的影响</li>
+                        </ul>
+                    </li>
+                    <li>支持的诊断标签类别：
+                        <ul>
+                            <li>电气原因：CT/PT参数设置错误、计量装置故障、三相不平衡等</li>
+                            <li>管理原因：抄表周期错误、用户分类错误、台区归属错误等</li>
+                            <li>窃电原因：低压窃电、私拉乱接等</li>
+                            <li>分布式能源原因：光伏发电并网影响等</li>
+                        </ul>
+                    </li>
+                    <li>诊断结果需提供置信度评分和依据说明</li>
+                    <li>支持多标签诊断，识别可能的复合原因</li>
+                    <li>诊断算法准确率≥85%</li>
+                </ul>
+            </div>
+            
+            <div class="requirement">
+                <p><span class="requirement-id">AL-004</span> <strong>案例匹配算法</strong></p>
+                <p>系统需实现案例匹配算法，根据当前异常情况检索历史相似案例。</p>
+                <ul>
+                    <li>基于特征向量的相似度计算，考虑线损特征、台区特征等多维因素</li>
+                    <li>使用向量索引技术实现高效相似案例检索</li>
+                    <li>支持按相似度排序和多条件筛选</li>
+                    <li>案例匹配准确度≥80%</li>
+                    <li>实现案例知识库的持续学习更新机制</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+    
+    <!-- 以下部分将在后续添加 -->
+</body>
+</html> 

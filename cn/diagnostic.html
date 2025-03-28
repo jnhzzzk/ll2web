@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诊断分析 - 线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center relative">
+                        <span id="main-menu-button" class="text-primary text-xl font-bold cursor-pointer flex items-center">
+                            线损诊断分析应用
+                            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                        <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                统计总览
+                            </a>
+                            <a href="filter.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                筛选配置
+                            </a>
+                            <a href="diagnostic.html" class="block px-4 py-2 text-sm text-gray-700 bg-primary-light text-primary">
+                                诊断分析
+                            </a>
+                            <a href="governance.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                治理建议
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <a href="../en/diagnostic.html" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark mr-3">English</a>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题和台区选择 -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">诊断分析</h1>
+                <div class="flex items-center space-x-3">
+                    <div class="relative w-64">
+                        <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
+                            <option value="long-high" selected>河西变1324台区 (+6.44%) - 长期高损</option>
+                            <option value="sudden-high">城南532台区 (+5.55%) - 突发高损</option>
+                            <option value="long-negative">东湖785台区 (-4.24%) - 长期负损</option>
+                            <option value="small-negative">北郊198台区 (-0.85%) - 小负损</option>
+                            <option value="sudden-negative">开发区672台区 (-3.76%) - 突发负损</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                        生成治理建议
+                    </button>
+                </div>
+            </div>
+
+            <!-- 台区基本信息卡片 -->
+            <div class="bg-white rounded-lg shadow-sm mb-6 p-5">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                    <div class="col-span-3">
+                        <h2 class="text-lg font-medium text-gray-900 mb-3">台区基本信息</h2>
+                        <div class="grid grid-cols-2 gap-x-6 gap-y-2">
+                            <div>
+                                <p class="text-sm text-gray-500">台区名称</p>
+                                <p class="text-sm font-medium">河西变1324台区</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">台区编号</p>
+                                <p class="text-sm font-medium">TQ-HX1324</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">变压器容量</p>
+                                <p class="text-sm font-medium">400 kVA</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">用户数量</p>
+                                <p class="text-sm font-medium">87户</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">负荷类型</p>
+                                <p class="text-sm font-medium">居民+商业混合</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">所属区域</p>
+                                <p class="text-sm font-medium">河西区域</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">CT变比</p>
+                                <p class="text-sm font-medium">300/5 A</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">PT变比</p>
+                                <p class="text-sm font-medium">10000/100 V</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">综合倍率</p>
+                                <p class="text-sm font-medium">600</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">接线方式</p>
+                                <p class="text-sm font-medium">三相四线</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">可再生能源</p>
+                                <p class="text-sm font-medium">无</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">通讯方式</p>
+                                <p class="text-sm font-medium">4G</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <h2 class="text-lg font-medium text-gray-900 mb-3">线损异常概况</h2>
+                        <div class="grid grid-cols-1 gap-y-2">
+                            <div>
+                                <p class="text-sm text-gray-500">实际线损率</p>
+                                <p class="text-lg font-bold text-red-500">12.76%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">理论线损率</p>
+                                <p class="text-lg font-bold text-primary">6.32%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">差值</p>
+                                <p class="text-lg font-bold text-red-500">+6.44%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">线损异常天数</p>
+                                <p class="text-sm font-medium">28天 <span class="text-xs text-gray-500">(近30天)</span></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">异常状态</p>
+                                <p class="text-sm font-medium text-red-500">长期高损</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- 诊断分类看板 -->
+                <div class="col-span-1">
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">智能诊断标签</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex flex-col space-y-3">
+                                <div class="flex items-center p-3 bg-red-50 border border-red-100 rounded-lg">
+                                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-red-100 rounded-full">
+                                        <i class="fas fa-exclamation-triangle text-red-500"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-red-800">CT互感器倍率错误</h3>
+                                        <p class="text-xs text-red-700 mt-1">匹配概率：92%</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-3 bg-orange-50 border border-orange-100 rounded-lg">
+                                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-orange-100 rounded-full">
+                                        <i class="fas fa-file-alt text-orange-500"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-orange-800">档案户变关系异常</h3>
+                                        <p class="text-xs text-orange-700 mt-1">匹配概率：68%</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-3 bg-yellow-50 border border-yellow-100 rounded-lg">
+                                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-yellow-100 rounded-full">
+                                        <i class="fas fa-bolt text-yellow-500"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-yellow-800">疑似低压窃电</h3>
+                                        <p class="text-xs text-yellow-700 mt-1">匹配概率：45%</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-blue-100 rounded-full">
+                                        <i class="fas fa-sync-alt text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-blue-800">三相不平衡</h3>
+                                        <p class="text-xs text-blue-700 mt-1">匹配概率：38%</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 添加额外的垂直空间以便与右侧卡片对齐 -->
+                                <div class="py-10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中间列：线损波动溯源图和多维度对比分析 -->
+                <div class="col-span-1 lg:col-span-2">
+                    <!-- 线损波动溯源图 -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">线损波动溯源图</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="h-72">
+                                <canvas id="lossAnalysisChart"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-600 mb-1">波动分析：</p>
+                                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                                    <li>理论线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右</li>
+                                    <li><span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与理论线损差值明显增大</li>
+                                    <li>期间<span class="font-medium">用户用电量、负荷分布</span>无明显变化</li>
+                                    <li>CT二次侧电流检查发现<span class="text-red-500 font-medium">倍率设置</span>存在问题</li>
+                                </ul>
+                            </div>
+                            <!-- 多维度分析按钮 -->
+                            <div class="mt-3 flex justify-end">
+                                <button id="openAnalysisModal" class="flex items-center text-primary hover:text-primary-dark">
+                                    <i class="fas fa-chart-bar mr-1"></i>
+                                    <span class="text-sm">多维度对比分析</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部操作区域 -->
+            <div class="flex justify-between">
+                <a href="filter.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回筛选
+                </a>
+                <!-- <a href="governance.html" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    生成治理建议 <i class="fas fa-arrow-right ml-1"></i>
+                </a> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 多维度对比分析弹窗 -->
+    <div id="analysisModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-6xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-lg font-medium text-gray-900">多维度对比分析</h2>
+                <div class="flex space-x-2 items-center">
+                    <button id="compareNormal" class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm">同类正常台区</button>
+                    <button id="compareHistory" class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm">历史同期</button>
+                    <button id="closeAnalysisModal" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 同类正常台区对比 -->
+            <div id="normalComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 对比指标卡片 -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">负荷特性对比</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">平均负载率</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">42.7%</span>
+                                <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">45.2%</span>
+                                <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">最大/平均负荷比</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">1.68</span>
+                                <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">1.72</span>
+                                <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="loadCurveChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 三相不平衡度 -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">三相不平衡度分析</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">三相不平衡度</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">17.3%</span>
+                                <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">12.1%</span>
+                                <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">功率因数</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">0.92</span>
+                                <span class="text-xs text-gray-500 ml-1">(本台区)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">0.94</span>
+                                <span class="text-xs text-gray-500 ml-1">(对比组)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="phaseBalanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 历史同期对比 (新增) -->
+            <div id="historyComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                <!-- 线损率季节性变化 -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">线损率季节性变化</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">本季度平均线损率</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">12.76%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">去年同期平均线损率</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">6.78%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="seasonalLossChart"></canvas>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500">
+                        <p>异常说明：与去年同期相比，线损率上升了<span class="text-red-500 font-medium">5.98%</span>，明显高于季节性波动范围。</p>
+                    </div>
+                </div>
+                
+                <!-- 用电负荷历史对比 -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">用电负荷历史对比</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">本期平均用电量</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">3,246 kWh</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">去年同期用电量</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">3,127 kWh</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="historicalLoadChart"></canvas>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500">
+                        <p>结论：用电负荷与去年同期相比增长<span class="text-primary font-medium">3.8%</span>，在正常范围内，不足以解释线损率的大幅增加。</p>
+                    </div>
+                </div>
+                
+                <!-- 关键节点分析 -->
+                <div class="col-span-1 md:col-span-2 bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">关键节点分析</h3>
+                    <div class="relative">
+                        <div class="absolute h-full w-1 bg-gray-200 left-2.5 top-0"></div>
+                        <div class="space-y-4 relative">
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-red-500 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">2023年4月6日</p>
+                                    <p class="text-xs text-gray-600">线损率突然从6.8%跃升至12.5%，系统自动标记为异常点</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">2023年3月15日</p>
+                                    <p class="text-xs text-gray-600">完成了上一次治理，线损率恢复正常(6.8%)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">2023年2月18日</p>
+                                    <p class="text-xs text-gray-600">发现疑似低压窃电问题，启动治理流程</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">2022年同期</p>
+                                    <p class="text-xs text-gray-600">线损率稳定在6.5%~7.0%之间，属于正常范围</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 交互式排查工具 -->
+            <div class="p-5">
+                <div class="bg-gray-50 rounded-lg p-4 col-span-1 md:col-span-2">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">交互式排查工具</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="col-span-1">
+                            <p class="text-xs text-gray-500 mb-1">调整CT倍率</p>
+                            <div class="flex rounded-md shadow-sm">
+                                <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">当前</span>
+                                <input type="text" value="300/5" class="flex-1 min-w-0 block w-full px-3 py-1.5 rounded-none border border-gray-300 focus:ring-primary focus:border-primary text-sm">
+                                <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">A</span>
+                            </div>
+                            <div class="mt-2">
+                                <select class="block w-full pl-3 pr-10 py-1.5 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                    <option>模拟修正为 150/5 A</option>
+                                    <option>模拟修正为 200/5 A</option>
+                                    <option selected>模拟修正为 250/5 A</option>
+                                    <option>模拟修正为 400/5 A</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-xs text-gray-500 mb-1">修正后线损预测</p>
+                            <div class="flex h-20 items-center">
+                                <div class="flex-1 flex items-center space-x-2">
+                                    <div class="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                                        6.51%
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">修正后预计线损率</p>
+                                        <p class="text-xs text-green-500 font-medium mt-1">与理论线损偏差: +0.19%</p>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="relative w-full h-4 bg-gray-200 rounded">
+                                        <div class="absolute h-4 bg-primary rounded" style="width: 21.7%;"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-1 text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span>6.51%</span>
+                                        <span>30%</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">线损率降低了 <span class="text-green-500 font-medium">6.25%</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+            <!-- 底部操作区域 -->
+            <div class="flex justify-between">
+                <a href="filter.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回筛选
+                </a>
+                <a href="governance.html" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    生成治理建议 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 线损波动溯源图
+        const lossCtx = document.getElementById('lossAnalysisChart').getContext('2d');
+        const lossAnalysisChart = new Chart(lossCtx, {
+            type: 'line',
+            data: {
+                labels: ['3/15', '3/22', '3/29', '4/5', '4/12', '4/19', '4/26', '5/3'],
+                datasets: [
+                    {
+                        label: '实际线损率',
+                        data: [6.8, 6.9, 6.7, 12.5, 12.8, 12.7, 12.9, 12.76],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: '理论线损率',
+                        data: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: '损失电量',
+                        data: [245, 252, 238, 450, 462, 458, 465, 460],
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgba(239, 68, 68, 0.8)',
+                        borderWidth: 1,
+                        yAxisID: 'y1',
+                        type: 'bar'
+                    },
+                    {
+                        label: '偏差损失电量',
+                        data: [0, 0, 0, 205, 212, 208, 215, 210],
+                        backgroundColor: 'rgba(48, 156, 159, 0.2)',
+                        borderColor: 'rgba(48, 156, 159, 0.8)',
+                        borderWidth: 1,
+                        yAxisID: 'y1',
+                        type: 'bar'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            point1: {
+                                type: 'point',
+                                xValue: 3,
+                                yValue: 12.5,
+                                backgroundColor: 'rgba(255, 99, 132, 0.25)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                radius: 10
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: false,
+                        min: 0,
+                        max: 15,
+                        title: {
+                            display: true,
+                            text: '线损率 (%)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '损失电量 (kWh)'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // 负载曲线对比图
+        const loadCtx = document.getElementById('loadCurveChart').getContext('2d');
+        const loadCurveChart = new Chart(loadCtx, {
+            type: 'line',
+            data: {
+                labels: ['0:00', '4:00', '8:00', '12:00', '16:00', '20:00'],
+                datasets: [
+                    {
+                        label: '本台区',
+                        data: [35, 25, 40, 60, 55, 68],
+                        borderColor: '#309C9F',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        tension: 0.4
+                    },
+                    {
+                        label: '对比组',
+                        data: [38, 28, 45, 65, 60, 70],
+                        borderColor: '#9ca3af',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: '日负荷曲线'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: false,
+                            text: '负载百分比'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 三相不平衡图
+        const phaseCtx = document.getElementById('phaseBalanceChart').getContext('2d');
+        const phaseBalanceChart = new Chart(phaseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['A相', 'B相', 'C相'],
+                datasets: [
+                    {
+                        label: '本台区',
+                        data: [145, 98, 162],
+                        backgroundColor: '#309C9F',
+                    },
+                    {
+                        label: '对比组',
+                        data: [125, 118, 142],
+                        backgroundColor: '#9ca3af',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '电流 (A)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 季节性线损率变化图
+        const seasonalCtx = document.getElementById('seasonalLossChart').getContext('2d');
+        const seasonalLossChart = new Chart(seasonalCtx, {
+            type: 'line',
+            data: {
+                labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                datasets: [
+                    {
+                        label: '今年',
+                        data: [6.8, 6.7, 6.6, 12.7, 12.8, null, null, null, null, null, null, null],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: '去年',
+                        data: [6.9, 6.7, 6.8, 6.8, 6.7, 6.5, 6.4, 6.6, 6.7, 6.9, 7.0, 6.8],
+                        borderColor: '#9ca3af',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 4,
+                        max: 14,
+                        title: {
+                            display: true,
+                            text: '线损率 (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 用电负荷历史对比图
+        const histLoadCtx = document.getElementById('historicalLoadChart').getContext('2d');
+        const historicalLoadChart = new Chart(histLoadCtx, {
+            type: 'bar',
+            data: {
+                labels: ['第一季度', '第二季度', '第三季度', '第四季度'],
+                datasets: [
+                    {
+                        label: '今年',
+                        data: [3120, 3246, null, null],
+                        backgroundColor: '#309C9F',
+                    },
+                    {
+                        label: '去年',
+                        data: [3050, 3127, 3405, 3280],
+                        backgroundColor: '#9ca3af',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '用电量 (kWh)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 视图切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const normalView = document.getElementById('normalComparisonView');
+            const historyView = document.getElementById('historyComparisonView');
+            const normalBtn = document.getElementById('compareNormal');
+            const historyBtn = document.getElementById('compareHistory');
+
+            normalBtn.addEventListener('click', function() {
+                normalView.classList.remove('hidden');
+                historyView.classList.add('hidden');
+                normalBtn.classList.add('bg-primary-light', 'text-primary');
+                normalBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                historyBtn.classList.remove('bg-primary-light', 'text-primary');
+                historyBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+            });
+
+            historyBtn.addEventListener('click', function() {
+                historyView.classList.remove('hidden');
+                normalView.classList.add('hidden');
+                historyBtn.classList.add('bg-primary-light', 'text-primary');
+                historyBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                normalBtn.classList.remove('bg-primary-light', 'text-primary');
+                normalBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+            });
+            
+            // 台区切换功能
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.addEventListener('change', function() {
+                updateDistrictInfo(this.value);
+            });
+            
+            // 初始化台区信息
+            updateDistrictInfo('long-high');
+        });
+        
+        // 台区信息更新函数
+        function updateDistrictInfo(districtType) {
+            // 基础信息配置
+            const districtConfig = {
+                'long-high': {
+                    name: '河西变1324台区',
+                    code: 'TQ-HX1324',
+                    capacity: '400 kVA',
+                    users: '87户',
+                    loadType: '居民+商业混合',
+                    area: '河西区域',
+                    ctRatio: '300/5 A',
+                    ptRatio: '10000/100 V',
+                    totalRatio: '600',
+                    wireType: '三相四线',
+                    renewableEnergy: '无',
+                    commType: '4G',
+                    actualLoss: '12.76%',
+                    theoryLoss: '6.32%',
+                    difference: '+6.44%',
+                    abnormalDays: '28天',
+                    abnormalState: '长期高损',
+                    abnormalStateColor: 'text-red-500'
+                },
+                'sudden-high': {
+                    name: '城南532台区',
+                    code: 'TQ-CN532',
+                    capacity: '315 kVA',
+                    users: '65户',
+                    loadType: '居民+商业混合',
+                    area: '城南区域',
+                    ctRatio: '250/5 A',
+                    ptRatio: '10000/100 V',
+                    totalRatio: '500',
+                    wireType: '三相四线',
+                    renewableEnergy: '光伏',
+                    commType: '4G',
+                    actualLoss: '11.95%',
+                    theoryLoss: '6.40%',
+                    difference: '+5.55%',
+                    abnormalDays: '5天',
+                    abnormalState: '突发高损',
+                    abnormalStateColor: 'text-orange-500'
+                },
+                'long-negative': {
+                    name: '东湖785台区',
+                    code: 'TQ-DH785',
+                    capacity: '500 kVA',
+                    users: '95户',
+                    loadType: '居民+工业混合',
+                    area: '东湖区域',
+                    ctRatio: '400/5 A',
+                    ptRatio: '10000/100 V',
+                    totalRatio: '800',
+                    wireType: '三相四线',
+                    renewableEnergy: '风电',
+                    commType: '光纤',
+                    actualLoss: '-4.24%',
+                    theoryLoss: '6.8%',
+                    difference: '-4.24%',
+                    abnormalDays: '32天',
+                    abnormalState: '长期负损',
+                    abnormalStateColor: 'text-blue-500'
+                },
+                'small-negative': {
+                    name: '北郊198台区',
+                    code: 'TQ-BJ198',
+                    capacity: '200 kVA',
+                    users: '42户',
+                    loadType: '居民为主',
+                    area: '北郊区域',
+                    ctRatio: '150/5 A',
+                    ptRatio: '10000/100 V',
+                    totalRatio: '300',
+                    wireType: '三相四线',
+                    renewableEnergy: '无',
+                    commType: '4G',
+                    actualLoss: '-0.85%',
+                    theoryLoss: '5.20%',
+                    difference: '-6.05%',
+                    abnormalDays: '25天',
+                    abnormalState: '小负损',
+                    abnormalStateColor: 'text-indigo-500'
+                },
+                'sudden-negative': {
+                    name: '开发区672台区',
+                    code: 'TQ-KF672',
+                    capacity: '630 kVA',
+                    users: '23户',
+                    loadType: '工业为主',
+                    area: '开发区',
+                    ctRatio: '500/5 A',
+                    ptRatio: '10000/100 V',
+                    totalRatio: '1000',
+                    wireType: '三相四线',
+                    renewableEnergy: '无',
+                    commType: '光纤',
+                    actualLoss: '-3.76%',
+                    theoryLoss: '4.95%',
+                    difference: '-8.71%',
+                    abnormalDays: '4天',
+                    abnormalState: '突发负损',
+                    abnormalStateColor: 'text-purple-500'
+                }
+            };
+            
+            // 获取配置
+            const config = districtConfig[districtType];
+            
+            // 更新基础信息
+            const infoLabels = document.querySelectorAll('.grid.grid-cols-2.gap-x-6.gap-y-2 > div > p:first-child');
+            infoLabels.forEach(label => {
+                const valueEl = label.nextElementSibling;
+                if (!valueEl) return;
+                
+                switch(label.textContent.trim()) {
+                    case '台区名称': valueEl.textContent = config.name; break;
+                    case '台区编号': valueEl.textContent = config.code; break;
+                    case '变压器容量': valueEl.textContent = config.capacity; break;
+                    case '用户数量': valueEl.textContent = config.users; break;
+                    case '负荷类型': valueEl.textContent = config.loadType; break;
+                    case '所属区域': valueEl.textContent = config.area; break;
+                    case 'CT变比': valueEl.textContent = config.ctRatio; break;
+                    case 'PT变比': valueEl.textContent = config.ptRatio; break;
+                    case '综合倍率': valueEl.textContent = config.totalRatio; break;
+                    case '接线方式': valueEl.textContent = config.wireType; break;
+                    case '可再生能源': valueEl.textContent = config.renewableEnergy; break;
+                    case '通讯方式': valueEl.textContent = config.commType; break;
+                }
+            });
+            
+            // 更新线损异常概况
+            const abnormalLabels = document.querySelectorAll('.col-span-2 .grid.grid-cols-1.gap-y-2 > div > p:first-child');
+            abnormalLabels.forEach(label => {
+                const valueEl = label.nextElementSibling;
+                if (!valueEl) return;
+                
+                switch(label.textContent.trim()) {
+                    case '实际线损率': 
+                        valueEl.textContent = config.actualLoss;
+                        valueEl.className = 'text-lg font-bold ' + (parseFloat(config.actualLoss) > 0 ? 'text-red-500' : 'text-blue-500');
+                        break;
+                    case '理论线损率': 
+                        valueEl.textContent = config.theoryLoss;
+                        break;
+                    case '差值': 
+                        valueEl.textContent = config.difference;
+                        valueEl.className = 'text-lg font-bold ' + (parseFloat(config.difference) > 0 ? 'text-red-500' : 'text-blue-500');
+                        break;
+                    case '线损异常天数': 
+                        valueEl.innerHTML = config.abnormalDays + ' <span class="text-xs text-gray-500">(近30天)</span>';
+                        break;
+                    case '异常状态':
+                        valueEl.textContent = config.abnormalState;
+                        valueEl.className = 'text-sm font-medium ' + config.abnormalStateColor;
+                        break;
+                }
+            });
+            
+            // 更新诊断标签
+            updateDiagnosticTags(districtType);
+            
+            // 更新图表
+            updateCharts(districtType);
+        }
+        
+        // 诊断标签更新函数
+        function updateDiagnosticTags(districtType) {
+            // 清空当前诊断标签
+            const tagContainer = document.querySelector('.flex.flex-col.space-y-3');
+            tagContainer.innerHTML = '';
+            
+            // 根据台区类型显示对应的诊断标签
+            const diagnosticTags = {
+                'long-high': [
+                    {
+                        title: 'CT互感器倍率错误',
+                        probability: '92%',
+                        icon: 'exclamation-triangle',
+                        color: 'red',
+                        details: [
+                            '事件代码：E-269, E-270',
+                            '线损稳定性：0.85',
+                            '常见原因：互感器更换后系统参数未更新'
+                        ]
+                    },
+                    {
+                        title: '档案户变关系异常',
+                        probability: '68%',
+                        icon: 'file-alt',
+                        color: 'orange',
+                        details: [
+                            '台户一致性：0.72',
+                            '用户变更记录：3次',
+                            '常见原因：用户迁移后系统未更新'
+                        ]
+                    },
+                    {
+                        title: '疑似低压窃电',
+                        probability: '45%',
+                        icon: 'bolt',
+                        color: 'yellow',
+                        details: [
+                            '夜间用电模式：异常',
+                            '节假日用电：异常',
+                            '负荷突变：2次'
+                        ]
+                    },
+                    {
+                        title: '三相不平衡',
+                        probability: '38%',
+                        icon: 'sync-alt',
+                        color: 'blue',
+                        details: [
+                            '不平衡度：17.3%',
+                            '持续时间：15天',
+                            '事件代码：E-279, E-280'
+                        ]
+                    }
+                ],
+                'sudden-high': [
+                    {
+                        title: '用电负荷突增',
+                        probability: '87%',
+                        icon: 'bolt',
+                        color: 'red',
+                        details: [
+                            '负荷增幅：32.6%',
+                            '突变时间点：4月28日',
+                            '常见原因：季节性用电设备启用'
+                        ]
+                    },
+                    {
+                        title: '低压设备故障',
+                        probability: '65%',
+                        icon: 'exclamation-triangle',
+                        color: 'orange',
+                        details: [
+                            '设备温度：异常',
+                            '故障报警数：2次',
+                            '常见原因：设备老化损坏'
+                        ]
+                    },
+                    {
+                        title: '短时漏电故障',
+                        probability: '52%',
+                        icon: 'tint',
+                        color: 'yellow',
+                        details: [
+                            '接地电流：异常',
+                            '环境湿度：较高',
+                            '绝缘阻抗：降低'
+                        ]
+                    },
+                    {
+                        title: '恶劣天气引发问题',
+                        probability: '48%',
+                        icon: 'cloud-rain',
+                        color: 'blue',
+                        details: [
+                            '天气相关性：4月27日暴雨',
+                            '设备状态：可能受潮',
+                            '常见原因：雨水渗入设备'
+                        ]
+                    }
+                ],
+                'long-negative': [
+                    {
+                        title: '计量装置接线错误',
+                        probability: '94%',
+                        icon: 'plug',
+                        color: 'red',
+                        details: [
+                            '接线检查：异常',
+                            '线损稳定性：0.88',
+                            '常见原因：接线施工错误'
+                        ]
+                    },
+                    {
+                        title: '电表正反向接错',
+                        probability: '78%',
+                        icon: 'exchange-alt',
+                        color: 'orange',
+                        details: [
+                            '事件代码：E-257, E-258',
+                            '光伏容量：15kW',
+                            '常见原因：分布式电源并网计量点设置不规范'
+                        ]
+                    },
+                    {
+                        title: '台户关系不一致',
+                        probability: '63%',
+                        icon: 'file-alt',
+                        color: 'yellow',
+                        details: [
+                            '户表比对：不一致',
+                            '异常记录：5次',
+                            '常见原因：系统迁移数据错误'
+                        ]
+                    },
+                    {
+                        title: '光伏发电档案错误',
+                        probability: '42%',
+                        icon: 'solar-panel',
+                        color: 'blue',
+                        details: [
+                            '光伏容量差异：+8kW',
+                            '发电记录：异常',
+                            '常见原因：光伏容量登记不准确'
+                        ]
+                    }
+                ],
+                'small-negative': [
+                    {
+                        title: '理论模型计算偏差',
+                        probability: '89%',
+                        icon: 'calculator',
+                        color: 'red',
+                        details: [
+                            '负荷率：低于15%',
+                            '理论模型参数灵敏度：高',
+                            '常见原因：低负荷时模型不适用'
+                        ]
+                    },
+                    {
+                        title: '互感器配置不合理',
+                        probability: '72%',
+                        icon: 'cogs',
+                        color: 'orange',
+                        details: [
+                            '二次负载率：8.2%',
+                            '互感器精度等级：0.5S',
+                            '常见原因：互感器倍率选择过大'
+                        ]
+                    },
+                    {
+                        title: '采集数据偏差',
+                        probability: '58%',
+                        icon: 'database',
+                        color: 'yellow',
+                        details: [
+                            '数据质量评分：83',
+                            '时钟同步状态：轻微偏差',
+                            '常见原因：数据时间戳不同步'
+                        ]
+                    },
+                    {
+                        title: '电表时钟超差',
+                        probability: '45%',
+                        icon: 'clock',
+                        color: 'blue',
+                        details: [
+                            '事件代码：E-1538',
+                            '时钟偏差：2.3分钟',
+                            '常见原因：电表时钟芯片漂移'
+                        ]
+                    }
+                ],
+                'sudden-negative': [
+                    {
+                        title: '电表计量故障',
+                        probability: '91%',
+                        icon: 'tachometer-alt',
+                        color: 'red',
+                        details: [
+                            '故障代码：E-258',
+                            '时间相关性：4月20日',
+                            '常见原因：电表内部组件损坏'
+                        ]
+                    },
+                    {
+                        title: '倍率变更未同步',
+                        probability: '79%',
+                        icon: 'sync',
+                        color: 'orange',
+                        details: [
+                            '设备变更记录：4月19日',
+                            '时间相关性：高',
+                            '常见原因：更换互感器后系统档案未更新'
+                        ]
+                    },
+                    {
+                        title: '功率因数补偿设备异常',
+                        probability: '64%',
+                        icon: 'bolt',
+                        color: 'yellow',
+                        details: [
+                            '功率因数变化：0.95→0.82',
+                            '时间相关性：高',
+                            '常见原因：补偿电容器故障'
+                        ]
+                    },
+                    {
+                        title: '台区总表某相异常',
+                        probability: '58%',
+                        icon: 'exclamation-triangle',
+                        color: 'blue',
+                        details: [
+                            '不平衡度变化：增大15%',
+                            '事件代码：E-299',
+                            '常见原因：某相接触不良'
+                        ]
+                    }
+                ]
+            };
+            
+            // 添加对应标签
+            const tags = diagnosticTags[districtType];
+            tags.forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
+                tagElement.innerHTML = `
+                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
+                        <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
+                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
+                        <div class="mt-2 text-xs text-gray-600">
+                            ${tag.details.map(detail => `<p>• ${detail}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+                tagContainer.appendChild(tagElement);
+            });
+            
+            // 更新历史诊断记录
+            updateHistoryRecords(districtType);
+        }
+        
+        // 历史诊断记录更新函数
+        function updateHistoryRecords(districtType) {
+            // 查找历史记录容器
+            const historyHeaderEl = document.querySelector('h3.text-sm.font-medium.text-gray-700.mb-2');
+            if (!historyHeaderEl) return;
+            
+            const historyContainer = historyHeaderEl.nextElementSibling;
+            if (!historyContainer) return;
+            
+            const historyRecords = {
+                'long-high': [
+                    {
+                        date: '2023-05-01',
+                        value: '+6.12%',
+                        description: 'CT互感器倍率错误 (未处理)',
+                        details: [
+                            '事件代码：E-269',
+                            '线损稳定性：0.82'
+                        ]
+                    },
+                    {
+                        date: '2023-03-15',
+                        value: '+5.87%',
+                        description: '疑似低压窃电 (已治理)',
+                        details: [
+                            '夜间用电异常',
+                            '负荷突变：1次'
+                        ]
+                    }
+                ],
+                'sudden-high': [
+                    {
+                        date: '2023-04-28',
+                        value: '+5.55%',
+                        description: '用电负荷突增 (处理中)',
+                        details: [
+                            '负荷增长32.6%',
+                            '季节性设备启用'
+                        ]
+                    },
+                    {
+                        date: '2022-12-15',
+                        value: '+4.28%',
+                        description: '低压设备故障 (已处理)',
+                        details: [
+                            '设备温度异常',
+                            '已更换低压设备'
+                        ]
+                    }
+                ],
+                'long-negative': [
+                    {
+                        date: '2023-04-15',
+                        value: '-4.24%',
+                        description: '计量装置接线错误 (未处理)',
+                        details: [
+                            '接线检查异常',
+                            '计划5月10日处理'
+                        ]
+                    },
+                    {
+                        date: '2023-03-02',
+                        value: '-4.12%',
+                        description: '电表正反向接错 (未处理)',
+                        details: [
+                            'E-257事件',
+                            '涉及光伏并网用户'
+                        ]
+                    }
+                ],
+                'small-negative': [
+                    {
+                        date: '2023-04-20',
+                        value: '-0.85%',
+                        description: '理论模型计算偏差 (观察中)',
+                        details: [
+                            '负荷率低',
+                            '模型参数调整中'
+                        ]
+                    },
+                    {
+                        date: '2023-03-10',
+                        value: '-0.92%',
+                        description: '互感器配置不合理 (规划更换)',
+                        details: [
+                            '二次负载率低',
+                            '计划更换合适规格'
+                        ]
+                    }
+                ],
+                'sudden-negative': [
+                    {
+                        date: '2023-04-20',
+                        value: '-3.76%',
+                        description: '电表计量故障 (已安排维修)',
+                        details: [
+                            '故障代码E-258',
+                            '已安排4月25日更换'
+                        ]
+                    },
+                    {
+                        date: '2023-01-15',
+                        value: '-2.65%',
+                        description: '倍率变更未同步 (已处理)',
+                        details: [
+                            '系统参数更新',
+                            '已修正倍率设置'
+                        ]
+                    }
+                ]
+            };
+            
+            // 清空并添加新记录
+            historyContainer.innerHTML = '';
+            const records = historyRecords[districtType];
+            
+            records.forEach(record => {
+                const recordElement = document.createElement('div');
+                recordElement.className = 'p-2 bg-gray-50 rounded text-xs';
+                recordElement.innerHTML = `
+                    <p class="flex justify-between">
+                        <span class="text-gray-800">${record.date}</span>
+                        <span class="${parseFloat(record.value) > 0 ? 'text-red-500' : 'text-blue-500'}">${record.value}</span>
+                    </p>
+                    <p class="text-gray-600 mt-1">${record.description}</p>
+                    ${record.details.map(detail => `<p class="text-gray-500 mt-1">• ${detail}</p>`).join('')}
+                `;
+                historyContainer.appendChild(recordElement);
+            });
+        }
+        
+        function updateCharts(districtType) {
+            // 线损图表数据配置
+            const chartConfig = {
+                'long-high': {
+                    lossRates: {
+                        actual: [6.8, 6.9, 6.7, 12.5, 12.8, 12.7, 12.9, 12.76],
+                        theory: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
+                        lossQuantity: [245, 252, 238, 450, 462, 458, 465, 460],
+                        diffQuantity: [0, 0, 0, 205, 212, 208, 215, 210]
+                    },
+                    analysisText: [
+                        '理论线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右',
+                        '<span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与理论线损差值明显增大',
+                        '期间<span class="font-medium">用户用电量、负荷分布</span>无明显变化',
+                        'CT二次侧电流检查发现<span class="text-red-500 font-medium">倍率设置</span>存在问题'
+                    ]
+                },
+                'sudden-high': {
+                    lossRates: {
+                        actual: [6.2, 6.3, 6.1, 6.0, 11.8, 11.95, 11.9, 11.95],
+                        theory: [6.3, 6.4, 6.2, 6.3, 6.35, 6.4, 6.38, 6.4],
+                        lossQuantity: [220, 225, 218, 215, 425, 430, 428, 432],
+                        diffQuantity: [0, 0, 0, 0, 190, 198, 195, 200]
+                    },
+                    analysisText: [
+                        '理论线损率保持在<span class="font-medium">6.2%-6.4%</span>的正常范围',
+                        '<span class="text-red-500 font-medium">4月28日</span>发生突发负荷增长，线损率陡然升高',
+                        '从用电负荷数据看，<span class="font-medium">负荷增幅超过30%</span>',
+                        '结合现场检查，发现<span class="text-red-500 font-medium">季节性空调设备</span>大量启用'
+                    ]
+                },
+                'long-negative': {
+                    lossRates: {
+                        actual: [-4.1, -4.2, -4.3, -4.25, -4.2, -4.3, -4.24, -4.24],
+                        theory: [5.8, 5.9, 5.85, 5.8, 5.85, 5.9, 5.85, 5.85],
+                        lossQuantity: [-155, -160, -165, -162, -160, -164, -162, -162],
+                        diffQuantity: [-380, -385, -390, -388, -385, -390, -388, -388]
+                    },
+                    analysisText: [
+                        '理论线损率在<span class="font-medium">5.8%-5.9%</span>范围内正常波动',
+                        '实际线损率持续为<span class="text-blue-500 font-medium">负值</span>，表明电能计量存在系统性问题',
+                        '负值线损率<span class="font-medium">稳定且持续时间长</span>，典型的长期负损特征',
+                        '现场检查发现总表端<span class="text-red-500 font-medium">电表接线错误</span>，导致正反向电能记录异常'
+                    ]
+                },
+                'small-negative': {
+                    lossRates: {
+                        actual: [-0.8, -0.85, -0.82, -0.87, -0.83, -0.86, -0.85, -0.85],
+                        theory: [5.1, 5.2, 5.25, 5.2, 5.15, 5.2, 5.2, 5.2],
+                        lossQuantity: [-25, -26, -25, -27, -26, -27, -26, -26],
+                        diffQuantity: [-180, -182, -181, -183, -182, -183, -182, -182]
+                    },
+                    analysisText: [
+                        '理论线损率在<span class="font-medium">5.1%-5.25%</span>范围内波动',
+                        '实际线损率持续为<span class="text-blue-500 font-medium">小负值</span>，且波动很小',
+                        '台区<span class="font-medium">负荷率较低</span>，仅15%左右',
+                        '综合评估认为<span class="text-red-500 font-medium">理论模型在低负荷工况下计算偏差</span>是主因'
+                    ]
+                },
+                'sudden-negative': {
+                    lossRates: {
+                        actual: [4.8, 4.9, 5.0, 4.85, -3.6, -3.7, -3.76, -3.75],
+                        theory: [4.9, 5.0, 4.95, 4.9, 4.95, 5.0, 4.95, 4.95],
+                        lossQuantity: [320, 325, 330, 322, -240, -245, -248, -247],
+                        diffQuantity: [0, 0, 0, 0, -565, -570, -573, -572]
+                    },
+                    analysisText: [
+                        '早期线损率在<span class="font-medium">4.8%-5.0%</span>范围内正常波动',
+                        '<span class="text-red-500 font-medium">4月20日</span>线损率突然转为负值，且幅度较大',
+                        '线损率从<span class="font-medium">正常值突变为负值</span>，变化剧烈',
+                        '结合事件记录，推断<span class="text-red-500 font-medium">电表计量故障</span>是主要原因'
+                    ]
+                }
+            };
+            
+            // 更新线损波动溯源图
+            const config = chartConfig[districtType];
+            lossAnalysisChart.data.datasets[0].data = config.lossRates.actual;
+            lossAnalysisChart.data.datasets[1].data = config.lossRates.theory;
+            lossAnalysisChart.data.datasets[2].data = config.lossRates.lossQuantity;
+            lossAnalysisChart.data.datasets[3].data = config.lossRates.diffQuantity;
+            
+            // 调整Y轴范围
+            const minLoss = Math.min(...config.lossRates.actual);
+            const maxLoss = Math.max(...config.lossRates.actual);
+            lossAnalysisChart.options.scales.y.min = Math.floor(minLoss < 0 ? minLoss * 1.2 : 0);
+            lossAnalysisChart.options.scales.y.max = Math.ceil(maxLoss * 1.2);
+            
+            // 更新标注点
+            if (districtType === 'long-high' || districtType === 'sudden-high') {
+                lossAnalysisChart.options.plugins.annotation = {
+                    annotations: {
+                        point1: {
+                            type: 'point',
+                            xValue: districtType === 'long-high' ? 3 : 4,
+                            yValue: districtType === 'long-high' ? 12.5 : 11.8,
+                            backgroundColor: 'rgba(255, 99, 132, 0.25)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            radius: 10
+                        }
+                    }
+                };
+            } else if (districtType === 'sudden-negative') {
+                lossAnalysisChart.options.plugins.annotation = {
+                    annotations: {
+                        point1: {
+                            type: 'point',
+                            xValue: 4,
+                            yValue: -3.6,
+                            backgroundColor: 'rgba(66, 153, 225, 0.25)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(66, 153, 225, 1)',
+                            radius: 10
+                        }
+                    }
+                };
+            } else {
+                lossAnalysisChart.options.plugins.annotation = {
+                    annotations: {}
+                };
+            }
+            
+            lossAnalysisChart.update();
+            
+            // 更新波动分析文本
+            const analysisContainer = document.querySelector('.mt-4 ul');
+            analysisContainer.innerHTML = config.analysisText.map(text => `<li>${text}</li>`).join('');
+            
+            // 根据台区类型更新其他图表
+            updateSpecificCharts(districtType);
+        }
+        
+        // 更新其他特定图表
+        function updateSpecificCharts(districtType) {
+            // 这里可以根据台区类型更新其他图表
+            // 比如负载曲线、三相不平衡等
+            
+            // 示例：更新负载曲线
+            if (districtType === 'sudden-high') {
+                loadCurveChart.data.datasets[0].data = [42, 30, 48, 75, 70, 82];
+                loadCurveChart.data.datasets[1].data = [38, 28, 45, 65, 60, 70];
+                loadCurveChart.update();
+            } else if (districtType === 'long-high') {
+                loadCurveChart.data.datasets[0].data = [35, 25, 40, 60, 55, 68];
+                loadCurveChart.data.datasets[1].data = [38, 28, 45, 65, 60, 70];
+                loadCurveChart.update();
+            }
+            
+            // 示例：更新三相不平衡数据
+            if (districtType === 'long-high') {
+                phaseBalanceChart.data.datasets[0].data = [145, 98, 162];
+                phaseBalanceChart.data.datasets[1].data = [125, 118, 142];
+                phaseBalanceChart.update();
+            } else if (districtType === 'long-negative') {
+                phaseBalanceChart.data.datasets[0].data = [165, 85, 155];
+                phaseBalanceChart.data.datasets[1].data = [125, 118, 142];
+                phaseBalanceChart.update();
+            }
+        }
+
+        // 下拉菜单行为
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('main-menu-button');
+            const menuDropdown = document.getElementById('main-menu-dropdown');
+            
+            // 点击菜单按钮时切换下拉菜单
+            menuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('hidden');
+            });
+            
+            // 点击外部时关闭下拉菜单
+            document.addEventListener('click', function(e) {
+                if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.add('hidden');
+                }
+            });
+            
+            // 防止点击下拉菜单内部时关闭
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        // 多维度对比分析弹窗控制
+        document.addEventListener('DOMContentLoaded', function() {
+            // 原有的下拉菜单行为代码...
+            
+            // 多维度对比分析弹窗控制
+            const modal = document.getElementById('analysisModal');
+            const openModalBtn = document.getElementById('openAnalysisModal');
+            const closeModalBtn = document.getElementById('closeAnalysisModal');
+            
+            // 打开弹窗
+            openModalBtn.addEventListener('click', function() {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+            
+            // 关闭弹窗
+            closeModalBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                document.body.style.overflow = ''; // 恢复背景滚动
+            });
+            
+            // 点击弹窗外部关闭弹窗
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // 视图切换功能 - 保持原有逻辑
+            const normalView = document.getElementById('normalComparisonView');
+            const historyView = document.getElementById('historyComparisonView');
+            const normalBtn = document.getElementById('compareNormal');
+            const historyBtn = document.getElementById('compareHistory');
+
+            normalBtn.addEventListener('click', function() {
+                normalView.classList.remove('hidden');
+                historyView.classList.add('hidden');
+                normalBtn.classList.add('bg-primary-light', 'text-primary');
+                normalBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                historyBtn.classList.remove('bg-primary-light', 'text-primary');
+                historyBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+            });
+
+            historyBtn.addEventListener('click', function() {
+                historyView.classList.remove('hidden');
+                normalView.classList.add('hidden');
+                historyBtn.classList.add('bg-primary-light', 'text-primary');
+                historyBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                normalBtn.classList.remove('bg-primary-light', 'text-primary');
+                normalBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+            });
+            
+            // 台区切换功能
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.addEventListener('change', function() {
+                updateDistrictInfo(this.value);
+            });
+            
+            // 初始化台区信息
+            updateDistrictInfo('long-high');
+        });
+    </script>
+</body>
+</html> 
