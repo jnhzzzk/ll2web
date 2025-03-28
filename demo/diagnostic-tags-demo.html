@@ -2268,6 +2268,591 @@
                 }, 100);
             }
             
+            // 针对光伏发电档案错误标签显示特殊内容
+            else if (type === 'long-negative' && tagData.title === '光伏发电档案错误') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">光伏接入情况</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">系统档案记录</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-gray-700">2</span>
+                                    <span class="text-xs text-gray-500 ml-1">户</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-gray-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-gray-500">总容量: 12.5kW</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">实际光伏接入</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">8</span>
+                                    <span class="text-xs text-gray-500 ml-1">户</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">总容量: 42.8kW</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">台区线损率</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">-8.6%</span>
+                                    <span class="text-xs text-gray-500 ml-1">月平均</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">明显负损</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">负损与光伏发电关系</h3>
+                                <span class="text-xs py-1 px-2 bg-yellow-100 text-yellow-800 rounded-full">强相关</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="solarChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">未登记光伏用户</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">档案缺失</span>
+                            </div>
+                            <div class="bg-white rounded-lg border overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">表号</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">反向电量</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">容量</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">逆流占比</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21264851</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">687 kWh</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">8.5 kW</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">62%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21268473</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">542 kWh</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">6.8 kW</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">51%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21271569</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">478 kWh</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">5.5 kW</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">48%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">21265928</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">425 kWh</td>
+                                            <td class="px-3 py-1.5 text-xs text-red-600 font-medium">5.2 kW</td>
+                                            <td class="px-3 py-1.5 text-xs text-gray-900">46%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="bg-gray-50 px-3 py-1.5 text-xs text-gray-500 text-center">
+                                    显示4条 (共6条未登记光伏用户)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">反向电量分析</h3>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-2">日反向电量分布 (kWh)</p>
+                                        <div class="h-36">
+                                            <canvas id="solarDailyChartModal"></canvas>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-2">月反向电量趋势 (kWh)</p>
+                                        <div class="h-36">
+                                            <canvas id="solarMonthlyChartModal"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>系统档案中仅记录<span class="text-gray-700 font-medium">2户</span>光伏用户，总容量<span class="text-gray-700 font-medium">12.5kW</span></li>
+                                <li>实际接入光伏用户<span class="text-red-500 font-medium">8户</span>，总容量达<span class="text-red-500 font-medium">42.8kW</span>，超出档案记录<span class="text-red-500 font-medium">242%</span></li>
+                                <li>台区总表测量的反向电量与户表数据对比，确认存在<span class="text-red-500 font-medium">6户</span>未登记光伏用户</li>
+                                <li>光伏发电高峰期（10:00-15:00）台区线损率达<span class="text-red-500 font-medium">-15.2%</span>，明显呈负值</li>
+                                <li>台区线损率与光照强度呈<span class="text-yellow-500 font-medium">明显负相关</span>，证实负损主要由光伏发电引起</li>
+                                <li>未登记光伏装机容量预计<span class="text-red-500 font-medium">30.3kW</span>，占台区总光伏容量的<span class="text-red-500 font-medium">70.8%</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                            <p class="text-sm font-medium text-yellow-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-yellow-700 list-decimal pl-4">
+                                <li>开展台区光伏用户专项普查，更新系统档案记录</li>
+                                <li>对未登记光伏用户进行规范接入管理，完善装机容量和并网手续</li>
+                                <li>建立光伏用户动态监测机制，及时掌握新增装机情况</li>
+                                <li>调整线损考核指标，对光伏高渗透台区制定合理评价标准</li>
+                                <li>开展居民光伏接入宣传，引导规范申报和安装</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    // 光伏发电与线损率关系图
+                    const solarCtx = document.getElementById('solarChartModal').getContext('2d');
+                    const solarChartModal = new Chart(solarCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+                            datasets: [
+                                {
+                                    label: '线损率(%)',
+                                    data: [3.8, 3.6, 2.1, -4.5, -15.2, -12.6, -2.1, 2.5],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '光照强度(kW/㎡)',
+                                    data: [0, 0, 0.1, 0.5, 0.95, 0.8, 0.2, 0],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    suggestedMin: -20,
+                                    suggestedMax: 10
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '光照强度 (kW/㎡)'
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 1,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 日反向电量分布图
+                    const solarDailyCtx = document.getElementById('solarDailyChartModal').getContext('2d');
+                    const solarDailyChartModal = new Chart(solarDailyCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                            datasets: [
+                                {
+                                    label: '反向电量',
+                                    data: [142, 165, 148, 138, 155, 172, 168],
+                                    backgroundColor: '#3b82f6',
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 月反向电量趋势图
+                    const solarMonthlyCtx = document.getElementById('solarMonthlyChartModal').getContext('2d');
+                    const solarMonthlyChartModal = new Chart(solarMonthlyCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                            datasets: [
+                                {
+                                    label: '反向电量',
+                                    data: [820, 1250, 2850, 3620, 4150, 4280],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对台区总表前接电标签显示特殊内容
+            else if (type === 'long-negative' && tagData.title === '台区总表前接电') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">总表前接电分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">台区线损率</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">-12.8%</span>
+                                    <span class="text-xs text-gray-500 ml-1">月平均</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">明显负损</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">估计接入负荷</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">32.5</span>
+                                    <span class="text-xs text-gray-500 ml-1">kW</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">占台区容量17.6%</span>
+                                </div>
+                            </div>
+                            <div class="rounded-lg bg-white p-3 border">
+                                <p class="text-xs text-gray-500 mb-1">负损持续时间</p>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-bold text-red-500">76</span>
+                                    <span class="text-xs text-gray-500 ml-1">天</span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-xs text-red-500">长期持续状态</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">线损率异常趋势</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">持续负损</span>
+                            </div>
+                            <div class="h-60">
+                                <canvas id="preConnectChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-sm font-medium text-gray-700">异常类型定位</h3>
+                                <span class="text-xs py-1 px-2 bg-red-100 text-red-800 rounded-full">总表计量点前越线</span>
+                            </div>
+                            <div class="bg-white rounded-lg border p-3">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-700 mb-2">供电线路示意图</p>
+                                        <div class="bg-gray-50 p-3 rounded-lg relative">
+                                            <div class="flex items-start justify-between">
+                                                <div class="text-center">
+                                                    <div class="h-12 w-12 mx-auto bg-blue-100 rounded-lg flex items-center justify-center">
+                                                        <i class="fas fa-bolt text-blue-600"></i>
+                                                    </div>
+                                                    <p class="text-xs mt-1">配变</p>
+                                                </div>
+                                                <div class="flex-1 flex items-center justify-center">
+                                                    <div class="h-1 bg-gray-400 flex-1"></div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <div class="h-12 w-12 mx-auto bg-yellow-100 rounded-lg flex items-center justify-center">
+                                                        <i class="fas fa-tachometer-alt text-yellow-600"></i>
+                                                    </div>
+                                                    <p class="text-xs mt-1">总表</p>
+                                                </div>
+                                                <div class="flex-1 flex items-center justify-center relative">
+                                                    <div class="h-1 bg-gray-400 flex-1"></div>
+                                                    <div class="absolute -top-5 w-full text-center">
+                                                        <div class="inline-block bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded">
+                                                            <i class="fas fa-arrow-up mr-1"></i>异常接入点
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <div class="h-12 w-12 mx-auto bg-green-100 rounded-lg flex items-center justify-center">
+                                                        <i class="fas fa-home text-green-600"></i>
+                                                    </div>
+                                                    <p class="text-xs mt-1">用户</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-700 mb-2">总表与用户表电量统计</p>
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">电量类型</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">用户表合计</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">总表测量</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">差值</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200 bg-white">
+                                                <tr>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">月供电量</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">54,385 kWh</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">48,215 kWh</td>
+                                                    <td class="px-3 py-1.5 text-xs text-red-600 font-medium">-6,170 kWh</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">日最大负荷</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">228.6 kW</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">186.2 kW</td>
+                                                    <td class="px-3 py-1.5 text-xs text-red-600 font-medium">-42.4 kW</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">日平均负荷</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">75.5 kW</td>
+                                                    <td class="px-3 py-1.5 text-xs text-gray-900">66.9 kW</td>
+                                                    <td class="px-3 py-1.5 text-xs text-red-600 font-medium">-8.6 kW</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">负载特性分析</h3>
+                            <div class="h-48">
+                                <canvas id="loadProfileChartModal"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区线损率持续<span class="text-red-500 font-medium">76天</span>呈现负值，月平均线损率达<span class="text-red-500 font-medium">-12.8%</span></li>
+                                <li>用户表电量合计<span class="text-red-500 font-medium">大于</span>总表测量电量，差值<span class="text-red-500 font-medium">6,170 kWh/月</span></li>
+                                <li>负载特性分析显示异常接入用电主要发生在<span class="text-red-500 font-medium">工作日白天</span>，符合工商业用电特征</li>
+                                <li>根据负荷差异情况，估计总表前接入负荷约<span class="text-red-500 font-medium">32.5 kW</span>，占台区总容量<span class="text-red-500 font-medium">17.6%</span></li>
+                                <li>负损状况持续恶化，从4月初<span class="text-red-500 font-medium">-8.3%</span>下降至目前<span class="text-red-500 font-medium">-12.8%</span>，需紧急处理</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4 bg-red-50 p-3 rounded-md border border-red-100">
+                            <p class="text-sm font-medium text-red-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-red-700 list-decimal pl-4">
+                                <li>组织专业人员现场勘查，确认总表前接电点位置</li>
+                                <li>开展对台区沿线用户检查，重点排查总表前区域工商业用户</li>
+                                <li>采用红外测温、负荷测量等技术手段定位异常接入点</li>
+                                <li>联合稽查部门调查处理越线接入行为，规范用电秩序</li>
+                                <li>优化台区供电线路设计，消除总表前接入可能性</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    // 线损率异常趋势图
+                    const preConnectCtx = document.getElementById('preConnectChartModal').getContext('2d');
+                    const preConnectChartModal = new Chart(preConnectCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['4月初', '4月中', '4月底', '5月初', '5月中', '5月底', '6月初', '6月中'],
+                            datasets: [
+                                {
+                                    label: '线损率(%)',
+                                    data: [-8.3, -9.1, -10.5, -11.2, -11.8, -12.3, -12.6, -12.8],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '正常线损警戒线',
+                                    data: [2, 2, 2, 2, 2, 2, 2, 2],
+                                    borderColor: '#22c55e',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0,
+                                    fill: false,
+                                    tension: 0
+                                },
+                                {
+                                    label: '负损警戒线',
+                                    data: [-3, -3, -3, -3, -3, -3, -3, -3],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0,
+                                    fill: false,
+                                    tension: 0
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                },
+                                annotation: {
+                                    annotations: {
+                                        line1: {
+                                            type: 'line',
+                                            yMin: 0,
+                                            yMax: 0,
+                                            borderColor: 'rgba(0, 0, 0, 0.3)',
+                                            borderWidth: 1,
+                                            borderDash: [2, 2]
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    suggestedMin: -15,
+                                    suggestedMax: 5
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 负载特性分析图
+                    const loadProfileCtx = document.getElementById('loadProfileChartModal').getContext('2d');
+                    const loadProfileChartModal = new Chart(loadProfileCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+                            datasets: [
+                                {
+                                    label: '工作日(kW)',
+                                    data: [8.2, 7.5, 14.8, 32.5, 28.4, 30.2, 18.5, 12.3],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '节假日(kW)',
+                                    data: [7.8, 6.9, 7.2, 11.3, 12.8, 10.5, 9.6, 8.5],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.dataset.label}: ${context.parsed.y} kW`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '估计总表前用电负荷 (kW)'
+                                    },
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
             // 显示弹窗
             modal.classList.remove('hidden');
         }
