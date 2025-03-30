@@ -2853,6 +2853,1195 @@
                 }, 100);
             }
             
+            // 针对理论模型计算偏差标签显示特殊内容
+            else if (type === 'small-negative' && tagData.title === '理论模型计算偏差') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">模型计算偏差分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">理论模型与实际线损对比</h4>
+                                <div class="h-48">
+                                    <canvas id="modelDeviationChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">计算参数偏差分析</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">理论线损率:</span>
+                                        <span class="text-xs font-medium text-primary">6.82%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">实际线损率:</span>
+                                        <span class="text-xs font-medium text-blue-600">-2.35%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">偏差值:</span>
+                                        <span class="text-xs font-medium text-red-500">-9.17%</span>
+                                    </div>
+                                    <div class="h-px bg-gray-200 my-2"></div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">模型失效置信度:</span>
+                                        <span class="text-xs font-medium text-red-500">89%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">影响因素分析</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">参数名称</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">模型假设值</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">实际测量值</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">偏差率</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">影响程度</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">线路参数</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">R=0.642Ω/km</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">R=0.587Ω/km</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">-8.6%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 40%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">平均功率因数</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">cosφ=0.85</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">cosφ=0.93</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">+9.4%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 45%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">三相不平衡度</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">10%</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">4.2%</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">-58.0%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-red-500 h-1.5 rounded-full" style="width: 85%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">变压器负载率</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">65%</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">38%</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">-41.5%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-red-500 h-1.5 rounded-full" style="width: 75%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">供电半径</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">520m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">635m</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">+22.1%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-red-500 h-1.5 rounded-full" style="width: 65%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">数据采集精度分析</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="p-2 bg-white rounded-lg border border-gray-200 flex items-center">
+                                    <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                        <i class="fas fa-tachometer-alt text-sm"></i>
+                                    </div>
+                                    <div class="ml-2">
+                                        <p class="text-xs text-gray-600">电表采集率</p>
+                                        <p class="text-sm font-medium">98.5% <span class="text-xs text-green-500">(合格)</span></p>
+                                    </div>
+                                </div>
+                                <div class="p-2 bg-white rounded-lg border border-gray-200 flex items-center">
+                                    <div class="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 flex-shrink-0">
+                                        <i class="fas fa-clock text-sm"></i>
+                                    </div>
+                                    <div class="ml-2">
+                                        <p class="text-xs text-gray-600">电表时钟准确率</p>
+                                        <p class="text-sm font-medium">96.2% <span class="text-xs text-green-500">(合格)</span></p>
+                                    </div>
+                                </div>
+                                <div class="p-2 bg-white rounded-lg border border-gray-200 flex items-center">
+                                    <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0">
+                                        <i class="fas fa-database text-sm"></i>
+                                    </div>
+                                    <div class="ml-2">
+                                        <p class="text-xs text-gray-600">数据完整率</p>
+                                        <p class="text-sm font-medium">92.4% <span class="text-xs text-yellow-500">(警告)</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>理论模型与实际线损存在<span class="text-red-500 font-medium">-9.17%</span>的显著偏差</li>
+                                <li>主要影响因素为<span class="text-red-500 font-medium">变压器负载率</span>和<span class="text-red-500 font-medium">三相不平衡度</span>的实际值远低于模型假设值</li>
+                                <li>供电半径实际值超出模型假设值<span class="text-red-500 font-medium">22.1%</span>，增加了线路损耗的不确定性</li>
+                                <li>数据采集精度总体良好，但数据完整率存在一定问题</li>
+                                <li>理论模型未考虑用户侧<span class="text-red-500 font-medium">功率因数补偿设备</span>的影响，导致理论线损率估计偏高</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                            <p class="text-sm font-medium text-yellow-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-yellow-700 list-decimal pl-4">
+                                <li>更新理论线损模型参数，根据实测数据校准模型参数</li>
+                                <li>对台区用户进行详细调查，核实是否有未登记的功率因数补偿设备</li>
+                                <li>提高现场测量数据的准确性和完整性，增加关键参数抽样检测频率</li>
+                                <li>针对变压器负载率偏低问题，优化台区配置或负荷转移</li>
+                                <li>建立台区模型参数动态调整机制，定期校准模型参数</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    const modelDeviationCtx = document.getElementById('modelDeviationChart').getContext('2d');
+                    const modelDeviationChart = new Chart(modelDeviationCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+                            datasets: [
+                                {
+                                    label: '理论线损率(%)',
+                                    data: [6.75, 6.82, 6.79, 6.84, 6.80, 6.83, 6.78, 6.82],
+                                    borderColor: '#309C9F',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    pointRadius: 3
+                                },
+                                {
+                                    label: '实际线损率(%)',
+                                    data: [0.25, -0.62, -1.25, -1.84, -2.17, -2.35, -2.28, -2.35],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    pointRadius: 3
+                                },
+                                {
+                                    label: '理论线损警戒线',
+                                    data: [2, 2, 2, 2, 2, 2, 2, 2],
+                                    borderColor: '#22c55e',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0
+                                },
+                                {
+                                    label: '负损警戒线',
+                                    data: [-3, -3, -3, -3, -3, -3, -3, -3],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '线损率 (%)'
+                                    },
+                                    suggestedMin: -4,
+                                    suggestedMax: 8
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            // 针对采集数据偏差标签显示特殊内容
+            else if (type === 'small-negative' && tagData.title === '采集数据偏差') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">数据采集偏差分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">采集成功率趋势</h4>
+                                <div class="h-48">
+                                    <canvas id="dataCollectionChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">数据质量统计</h4>
+                                <div class="space-y-3 mt-3">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-xs text-gray-600">普通表采集率</span>
+                                            <span class="text-xs font-medium text-orange-500">78.4%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-orange-500 h-1.5 rounded-full" style="width: 78.4%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-xs text-gray-600">总表采集率</span>
+                                            <span class="text-xs font-medium text-green-500">100%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-green-500 h-1.5 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-xs text-gray-600">数据完整性</span>
+                                            <span class="text-xs font-medium text-orange-500">82.5%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-orange-500 h-1.5 rounded-full" style="width: 82.5%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-xs text-gray-600">数据时效性</span>
+                                            <span class="text-xs font-medium text-red-500">68.2%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-red-500 h-1.5 rounded-full" style="width: 68.2%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">采集异常事件分析</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">异常类型</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">事件数量</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">影响电表数</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">占比</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">影响程度</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">通信模块异常</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">42</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">15</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">28.3%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-red-500 h-1.5 rounded-full" style="width: 85%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">电表时钟超差</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">28</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">8</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">15.1%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-orange-500 h-1.5 rounded-full" style="width: 65%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">采集器故障</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">8</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">6</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">11.3%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-orange-500 h-1.5 rounded-full" style="width: 60%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">网络信号弱</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">36</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">12</td>
+                                            <td class="px-4 py-2 text-xs text-yellow-600">22.6%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 45%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">数据冻结失败</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">15</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">7</td>
+                                            <td class="px-4 py-2 text-xs text-yellow-600">13.2%</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                    <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 40%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">采集数据缺失影响评估</h3>
+                            <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0">
+                                            <i class="fas fa-exclamation-triangle text-sm"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-gray-700">数据缺失估算误差</p>
+                                            <p class="text-xs text-gray-500">相比完整采集数据的估算误差范围</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-orange-500 font-medium text-lg">-8.2%</div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="text-xs text-gray-500 mb-1">数据缺失对线损计算影响</div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-orange-500 h-2 rounded-full" style="width: 72%"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-1">
+                                        <span class="text-xs text-gray-500">轻微</span>
+                                        <span class="text-xs text-orange-500 font-medium">显著</span>
+                                        <span class="text-xs text-gray-500">严重</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">失采用户负荷特性分析</h3>
+                            <div class="h-48">
+                                <canvas id="missedUserLoadChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>普通表采集率低于标准要求，仅达到<span class="text-orange-500 font-medium">78.4%</span>，数据质量不高</li>
+                                <li>通信模块异常是主要问题，影响<span class="text-red-500 font-medium">28.3%</span>的采集失败电表</li>
+                                <li>采集失败用户多为<span class="text-red-500 font-medium">工商业用户</span>，用电负荷较大</li>
+                                <li>数据缺失造成线损计算有显著偏差，估算误差高达<span class="text-orange-500 font-medium">-8.2%</span></li>
+                                <li>近期采集率呈下降趋势，且波动较大，网络稳定性差</li>
+                                <li>夜间和早期采集成功率明显高于工作日用电高峰期</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4 bg-orange-50 p-3 rounded-md border border-orange-100">
+                            <p class="text-sm font-medium text-orange-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-orange-700 list-decimal pl-4">
+                                <li>及时更换或修复故障通信模块，提高电表通信可靠性</li>
+                                <li>检查并优化通信网络覆盖，解决信号弱区域问题</li>
+                                <li>对电表时钟进行校准，确保数据采集时间准确性</li>
+                                <li>优先解决工商业用户的采集问题，减少大负荷用户数据缺失</li>
+                                <li>建立数据质量监测预警机制，提前发现并解决采集异常</li>
+                                <li>设置数据修复和估算规则，减少缺失数据对线损计算的影响</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    // 采集成功率趋势图
+                    const dataCollectionCtx = document.getElementById('dataCollectionChart').getContext('2d');
+                    const dataCollectionChart = new Chart(dataCollectionCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+                            datasets: [
+                                {
+                                    label: '总表采集率',
+                                    data: [100, 100, 100, 100, 100, 100, 100, 100],
+                                    borderColor: '#22c55e',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.1,
+                                    pointRadius: 3
+                                },
+                                {
+                                    label: '普通表采集率',
+                                    data: [92.3, 90.4, 86.2, 83.5, 81.7, 80.2, 79.5, 78.4],
+                                    borderColor: '#f97316',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    tension: 0.1,
+                                    pointRadius: 3
+                                },
+                                {
+                                    label: '合格线',
+                                    data: [95, 95, 95, 95, 95, 95, 95, 95],
+                                    borderColor: '#22c55e',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0
+                                },
+                                {
+                                    label: '警戒线',
+                                    data: [85, 85, 85, 85, 85, 85, 85, 85],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '采集成功率 (%)'
+                                    },
+                                    min: 70,
+                                    max: 100
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 失采用户负荷特性分析图
+                    const missedUserLoadCtx = document.getElementById('missedUserLoadChart').getContext('2d');
+                    const missedUserLoadChart = new Chart(missedUserLoadCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['居民用户', '商业用户', '工业用户', '农业用户', '公共事业'],
+                            datasets: [
+                                {
+                                    label: '失采率(%)',
+                                    data: [12.5, 28.7, 38.2, 15.3, 18.6],
+                                    backgroundColor: '#f97316',
+                                    borderWidth: 0,
+                                    borderRadius: 4,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '平均日用电量(kWh)',
+                                    data: [8.5, 75.3, 186.2, 42.5, 58.7],
+                                    backgroundColor: '#3b82f6',
+                                    borderWidth: 0,
+                                    borderRadius: 4,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '失采率 (%)'
+                                    },
+                                    beginAtZero: true,
+                                    max: 50
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '平均日用电量 (kWh)'
+                                    },
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            // 针对电表时钟超差标签显示特殊内容
+            else if (type === 'small-negative' && tagData.title === '电表时钟超差') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">电表时钟偏差分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">时钟偏差统计</h4>
+                                <div class="h-48">
+                                    <canvas id="clockDeviationChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">台区时钟同步状态</h4>
+                                <div class="mt-3 space-y-2">
+                                    <div class="flex items-center">
+                                        <div class="h-3 w-3 bg-green-500 rounded-full mr-2"></div>
+                                        <div class="text-xs text-gray-600 flex-1">正常同步 (±1分钟内)</div>
+                                        <div class="text-xs text-gray-800 font-medium">22块 (41.5%)</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="h-3 w-3 bg-yellow-500 rounded-full mr-2"></div>
+                                        <div class="text-xs text-gray-600 flex-1">轻微偏差 (±1~5分钟)</div>
+                                        <div class="text-xs text-gray-800 font-medium">13块 (24.5%)</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="h-3 w-3 bg-orange-500 rounded-full mr-2"></div>
+                                        <div class="text-xs text-gray-600 flex-1">中度偏差 (±5~15分钟)</div>
+                                        <div class="text-xs text-gray-800 font-medium">10块 (18.9%)</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="h-3 w-3 bg-red-500 rounded-full mr-2"></div>
+                                        <div class="text-xs text-gray-600 flex-1">严重偏差 (>±15分钟)</div>
+                                        <div class="text-xs text-gray-800 font-medium">8块 (15.1%)</div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-xs text-gray-600">时钟超差事件数量</span>
+                                        <span class="text-xs font-medium text-red-500">62次 / 月</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-xs text-gray-600">最大时钟偏差</span>
+                                        <span class="text-xs font-medium text-red-500">+127分钟</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">平均时钟偏差</span>
+                                        <span class="text-xs font-medium text-orange-500">±8.3分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">时钟偏差对计量的影响</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                            <i class="fas fa-tachometer-alt text-sm"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-xs text-gray-600">尖峰电量偏差</p>
+                                            <p class="text-sm font-medium text-blue-600">-587 kWh/月</p>
+                                            <p class="text-xs text-red-500">偏差率 -12.8%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0">
+                                            <i class="fas fa-bolt text-sm"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-xs text-gray-600">峰谷计量错误</p>
+                                            <p class="text-sm font-medium text-orange-600">815 kWh/月</p>
+                                            <p class="text-xs text-red-500">偏差率 +9.7%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0">
+                                            <i class="fas fa-chart-line text-sm"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-xs text-gray-600">线损计算偏差</p>
+                                            <p class="text-sm font-medium text-red-600">-3.85%</p>
+                                            <p class="text-xs text-red-500">影响显著</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">时钟超差事件记录</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">电表号</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">首次记录时间</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">事件编码</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">偏差值</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">21253487</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2023-07-12 08:34</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">Event-1538</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">+127分钟</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">未修复</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">21385692</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2023-07-15 14:22</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">Event-12803</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">-18分钟</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">已修复</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">21146783</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2023-07-18 22:05</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">Event-12803</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">+22分钟</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">处理中</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">21659324</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2023-07-20 06:17</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">Event-1538</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">+85分钟</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">未修复</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">21498275</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2023-07-22 19:56</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">Event-12803</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">-13分钟</td>
+                                            <td class="px-4 py-2 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">已修复</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">负荷曲线时移分析</h3>
+                            <div class="h-48">
+                                <canvas id="loadCurveShiftChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区内<span class="text-red-500 font-medium">34%</span>的电表存在明显的时钟偏差问题</li>
+                                <li>事件统计显示每月约有<span class="text-red-500 font-medium">62次</span>时钟超差报警事件</li>
+                                <li>最大时钟偏差达<span class="text-red-500 font-medium">+127分钟</span>，严重影响分时计量准确性</li>
+                                <li>时钟超差主要集中在<span class="text-orange-500 font-medium">工商业用户</span>的电表中，导致尖峰电量记录偏少</li>
+                                <li>负荷曲线分析显示存在明显的<span class="text-orange-500 font-medium">时移现象</span>，峰谷特征不明显</li>
+                                <li>时钟偏差导致线损计算出现<span class="text-red-500 font-medium">-3.85%</span>的负偏差，是小负损主要成因之一</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">
+                            <p class="text-sm font-medium text-blue-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-blue-700 list-decimal pl-4">
+                                <li>组织专项校时工作，优先处理偏差超过15分钟的电表</li>
+                                <li>加强主站校时功能建设，提高自动校时成功率</li>
+                                <li>针对重点工商业用户进行现场校时，确保分时计量准确</li>
+                                <li>定期检查时钟偏差情况，建立常态化监测和预警机制</li>
+                                <li>完善电能数据校核方法，对有明显时钟偏差的数据进行时间修正</li>
+                                <li>对不能远程校时的电表进行硬件检查，必要时更换电表</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    // 时钟偏差统计图
+                    const clockDeviationCtx = document.getElementById('clockDeviationChart').getContext('2d');
+                    const clockDeviationChart = new Chart(clockDeviationCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['<-15分钟', '-15~-5分钟', '-5~-1分钟', '±1分钟内', '1~5分钟', '5~15分钟', '>15分钟'],
+                            datasets: [{
+                                label: '电表数量',
+                                data: [3, 5, 7, 22, 6, 5, 5],
+                                backgroundColor: [
+                                    '#ef4444', '#f97316', '#facc15', '#22c55e', '#facc15', '#f97316', '#ef4444'
+                                ],
+                                borderWidth: 0,
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '电表数量'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '时钟偏差范围'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 负荷曲线时移分析图
+                    const loadCurveShiftCtx = document.getElementById('loadCurveShiftChart').getContext('2d');
+                    const loadCurveShiftChart = new Chart(loadCurveShiftCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                            datasets: [
+                                {
+                                    label: '正常时钟负荷曲线',
+                                    data: [42, 38, 35, 48, 72, 95, 88, 93, 105, 115, 82, 60],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: '时钟偏差负荷曲线',
+                                    data: [46, 40, 37, 42, 58, 76, 85, 91, 98, 112, 102, 75],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '负荷 (kW)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
+            // 针对供电半径过长标签显示特殊内容
+            else if (type === 'small-negative' && tagData.title === '供电半径过长') {
+                modalContent.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">供电半径分析</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">台区供电半径分布</h4>
+                                <div class="h-48">
+                                    <canvas id="supplyRadiusChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">供电半径基本指标</h4>
+                                <div class="space-y-3 mt-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">当前台区平均供电半径</span>
+                                        <span class="text-xs font-medium text-red-500">635m</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">最远供电距离</span>
+                                        <span class="text-xs font-medium text-red-500">842m</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">标准供电半径</span>
+                                        <span class="text-xs font-medium text-green-500">≤350m</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">超长供电用户数</span>
+                                        <span class="text-xs font-medium text-red-500">32户 (60.4%)</span>
+                                    </div>
+                                    <div class="h-px bg-gray-200 my-2"></div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">理论线损率(当前半径)</span>
+                                        <span class="text-xs font-medium text-red-500">8.65%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">理论线损率(标准半径)</span>
+                                        <span class="text-xs font-medium text-green-500">4.32%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">电压降分析</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-2">电压降与距离关系</h4>
+                                    <div class="h-48">
+                                        <canvas id="voltageDropChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-gray-200">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-2">三相电压降情况</h4>
+                                    <div class="mt-3 space-y-2">
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-xs text-gray-600">A相平均电压降</span>
+                                                <span class="text-xs font-medium text-red-500">6.83%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-red-500 h-1.5 rounded-full" style="width: 68.3%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-xs text-gray-600">B相平均电压降</span>
+                                                <span class="text-xs font-medium text-red-500">5.75%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-red-500 h-1.5 rounded-full" style="width: 57.5%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-xs text-gray-600">C相平均电压降</span>
+                                                <span class="text-xs font-medium text-orange-500">4.92%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-orange-500 h-1.5 rounded-full" style="width: 49.2%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="h-px bg-gray-200 my-2"></div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-xs text-gray-600">最大电压降</span>
+                                                <span class="text-xs font-medium text-red-500">9.38% (A相)</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-xs text-gray-600">标准电压允许偏差</span>
+                                                <span class="text-xs font-medium text-green-500">±7%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">用户分布与负荷情况</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">距离范围</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">用户数量</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">平均负荷(kW)</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">平均电压(V)</th>
+                                            <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500">电压合格率</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">0-200m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">8</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">3.8</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">227.5</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">100%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">200-350m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">13</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2.9</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">225.8</td>
+                                            <td class="px-4 py-2 text-xs text-green-600">100%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">350-500m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">15</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2.2</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">221.3</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">93.3%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">500-650m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">10</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">1.8</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">218.4</td>
+                                            <td class="px-4 py-2 text-xs text-orange-600">80.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">650-800m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">5</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">1.5</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">214.6</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">60.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 text-xs text-gray-900">>800m</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">2</td>
+                                            <td class="px-4 py-2 text-xs text-gray-600">1.2</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">208.3</td>
+                                            <td class="px-4 py-2 text-xs text-red-600">0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-2">线损异常原因分析</h3>
+                            <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0">
+                                            <i class="fas fa-ruler text-sm"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-xs text-gray-600">导线阻抗增加</p>
+                                            <p class="text-sm font-medium text-red-600">线损增加 2.7%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0">
+                                            <i class="fas fa-bolt text-sm"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-xs text-gray-600">计量不准确</p>
+                                            <p class="text-sm font-medium text-orange-600">线损偏差 -1.8%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 flex-shrink-0">
+                                            <i class="fas fa-balance-scale text-sm"></i>
+                                        </div>
+                                        <div class="ml-2">
+                                            <p class="text-xs text-gray-600">三相不平衡</p>
+                                            <p class="text-sm font-medium text-yellow-600">线损增加 1.2%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h4 class="text-xs font-medium text-gray-700 mb-1">电压偏低导致计量误差</h4>
+                                    <p class="text-xs text-gray-600">远端用户电压低于额定电压，计量装置存在负误差，导致计量电量少于实际用电量。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p class="font-medium mb-2">分析结论：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>台区平均供电半径<span class="text-red-500 font-medium">635m</span>，远超标准供电半径<span class="text-green-500 font-medium">350m</span></li>
+                                <li>超过<span class="text-red-500 font-medium">60%</span>的用户供电半径超长，导致电压质量问题</li>
+                                <li>A相电压降最严重，最大电压降达<span class="text-red-500 font-medium">9.38%</span>，超出标准电压允许偏差</li>
+                                <li>距离总表<span class="text-red-500 font-medium">650m以上</span>的用户电压合格率低于70%</li>
+                                <li>供电半径过长导致线损增加，同时远端电压偏低引起计量误差</li>
+                                <li>远端用户的计量装置电压低于额定值，产生<span class="text-red-500 font-medium">-1.8%</span>的计量负误差</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4 bg-green-50 p-3 rounded-md border border-green-100">
+                            <p class="text-sm font-medium text-green-800 mb-1">治理建议</p>
+                            <ol class="text-xs text-green-700 list-decimal pl-4">
+                                <li>优化台区规划，拆分供电半径过长的台区，新建变压器靠近负荷中心</li>
+                                <li>增设无功补偿装置，提高远端用户电压质量</li>
+                                <li>更换远端线路为大截面导线，降低线路阻抗</li>
+                                <li>调整分界点，将远端用户转供至相邻台区</li>
+                                <li>定期开展电压监测分析，确保各相电压均衡</li>
+                                <li>校验远端用户计量装置，消除低电压引起的计量误差</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+                
+                // 初始化图表
+                setTimeout(() => {
+                    // 台区供电半径分布图
+                    const supplyRadiusCtx = document.getElementById('supplyRadiusChart').getContext('2d');
+                    const supplyRadiusChart = new Chart(supplyRadiusCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['0-200m', '200-350m', '350-500m', '500-650m', '650-800m', '>800m'],
+                            datasets: [{
+                                data: [8, 13, 15, 10, 5, 2],
+                                backgroundColor: [
+                                    '#22c55e', '#15803d', '#facc15', '#f97316', '#ef4444', '#b91c1c'
+                                ],
+                                borderWidth: 0,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 电压降与距离关系图
+                    const voltageDropCtx = document.getElementById('voltageDropChart').getContext('2d');
+                    const voltageDropChart = new Chart(voltageDropCtx, {
+                        type: 'scatter',
+                        data: {
+                            datasets: [
+                                {
+                                    label: '电压降-距离关系',
+                                    data: [
+                                        {x: 50, y: 0.8}, {x: 120, y: 1.5}, {x: 180, y: 2.2},
+                                        {x: 250, y: 3.1}, {x: 320, y: 3.8}, {x: 380, y: 4.2},
+                                        {x: 430, y: 4.8}, {x: 490, y: 5.3}, {x: 530, y: 5.7},
+                                        {x: 580, y: 6.2}, {x: 630, y: 6.7}, {x: 680, y: 7.2},
+                                        {x: 720, y: 7.8}, {x: 780, y: 8.5}, {x: 840, y: 9.4}
+                                    ],
+                                    backgroundColor: '#ef4444',
+                                    borderColor: '#ef4444',
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                },
+                                {
+                                    label: '允许偏差上限',
+                                    data: [{x: 0, y: 7}, {x: 900, y: 7}],
+                                    borderColor: '#f59e0b',
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 5],
+                                    pointRadius: 0,
+                                    fill: false,
+                                    tension: 0,
+                                    type: 'line'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '电压降 (%)'
+                                    },
+                                    beginAtZero: true,
+                                    suggestedMax: 10
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '距离 (m)'
+                                    },
+                                    beginAtZero: true,
+                                    suggestedMax: 900
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            }
+            
             // 显示弹窗
             modal.classList.remove('hidden');
         }
