@@ -106,15 +106,7 @@
             <div class="mt-6 mb-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-900">台区筛选</h1>
                 <div>
-                    <button id="saveConfig" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm leading-4 mr-2 transition-colors duration-200">
-                        <i class="fas fa-save mr-1"></i> 保存配置
-                    </button>
-                    <button id="previewButton" class="bg-primary-light hover:bg-gray-200 text-primary py-2 px-4 rounded-md text-sm leading-4 mr-2 transition-colors duration-200">
-                        预览筛选结果
-                    </button>
-                    <button id="generateReport" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
-                        生成诊断报告
-                    </button>
+                    <!-- Generate Report button removed from here -->
                 </div>
             </div>
 
@@ -135,7 +127,22 @@
                 <div class="bg-white rounded-lg shadow-sm mb-6">
                     <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
                         <h2 class="text-lg font-medium text-gray-900">线损异常台区报表</h2>
-                        <span class="text-sm text-gray-500">线损统计窗口：2024-04-10 - 2024-05-10</span>
+                        <!-- Replace the static text with the dropdown -->
+                        <div class="relative w-80"> <!-- Adjusted width -->
+                            <select id="report-history-filter" class="block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                <option>选择历史报告...</option>
+                                <option>2024-03-15 14:30:22 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-14 16:45:18 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-13 09:12:35 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-12 11:28:47 - 筛选B - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-11 15:33:56 - 筛选B - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-5">
                         <!-- 快速筛选选项 -->
@@ -496,15 +503,18 @@
             <div id="content-abnormal-filter" class="hidden space-y-6">
                 <!-- 识别标准内容 (Moved Here) -->
                 <div class="bg-white rounded-lg shadow-sm">
-                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
                         <h2 class="text-lg font-medium text-gray-900">线损异常类型识别标准</h2>
-                        <div class="flex items-center">
-                            <span class="text-sm text-gray-500 mr-3">线损统计窗口：2024-04-10 - 2024-05-10</span>
+                        <!-- Group buttons on the right -->
+                        <div class="flex items-center space-x-2">
+                            <button id="saveConfig" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
+                                <i class="fas fa-save mr-1"></i> 保存配置
+                            </button>
                             <button id="resetToDefault" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
                                 <i class="fas fa-undo mr-1"></i> 默认
                             </button>
-                        </div>
-                    </div>
+                            </div>
+                                            </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -624,186 +634,188 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
+                                    </div>
+                                </div>
 
                 <!-- 高级筛选条件 (Moved Here) -->
-                <div class="bg-white rounded-lg shadow-sm">
-                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-                        <h2 class="text-lg font-medium text-gray-900">高级筛选条件</h2>
-                        <span class="text-sm text-gray-500">线损统计窗口：2024-04-10 - 2024-05-10</span>
-                    </div>
-                    <div class="p-5 space-y-4">
-                        <!-- 台区属性筛选 -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">台区属性</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">台区容量</label>
-                                    <select id="capacity" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                        <option>全部</option>
-                                        <option>≤ 315kVA</option>
-                                        <option>315kVA - 500kVA</option>
-                                        <option>500kVA - 800kVA</option>
-                                        <option>≥ 800kVA</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">负荷类型</label>
-                                    <select id="loadType" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                        <option>全部</option>
-                                        <option>居民</option>
-                                        <option>商业</option>
-                                        <option>工业</option>
-                                        <option>混合</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">所属区域</label>
-                                    <div id="area-tree-container" class="mt-1">
-                                        <select id="area" multiple class="area-tree mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                            <option value="all">全部区域</option>
-                                            <optgroup label="东区">
-                                                <option value="east-1">东区一片</option>
-                                                <option value="east-2">东区二片</option>
-                                                <option value="east-3">东区三片</option>
-                                            </optgroup>
-                                            <optgroup label="西区">
-                                                <option value="west-1">西区一片</option>
-                                                <option value="west-2">西区二片</option>
-                                            </optgroup>
-                                            <optgroup label="南区">
-                                                <option value="south-1">南区一片</option>
-                                                <option value="south-2">南区二片</option>
-                                                <option value="south-3">南区三片</option>
-                                            </optgroup>
-                                            <optgroup label="北区">
-                                                <option value="north-1">北区一片</option>
-                                                <option value="north-2">北区二片</option>
-                                            </optgroup>
-                                            <optgroup label="开发区">
-                                                <option value="dev-1">开发区一片</option>
-                                                <option value="dev-2">开发区二片</option>
-                                                <option value="dev-3">开发区三片</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">通讯方式</label>
-                                    <select id="station" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                        <option>全部</option>
-                                        <option>PLC</option>
-                                        <option>GPRS</option>
-                                        <option>4G</option>
-                                        <option>5G</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">可再生能源</label>
-                                    <select id="renewable-energy" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                        <option>全部</option>
-                                        <option>光伏</option>
-                                        <option>风电</option>
-                                        <option>无</option>
-                                    </select>
-                                </div>
+                        <div class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                                <h2 class="text-lg font-medium text-gray-900">高级筛选条件</h2>
+                                <button id="previewButton" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
+                                    预览筛选结果
+                                </button>
                             </div>
-                        </div>
+                            <div class="p-5 space-y-4">
+                                <!-- 台区属性筛选 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">台区属性</label>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">台区容量</label>
+                                            <select id="capacity" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>≤ 315kVA</option>
+                                                <option>315kVA - 500kVA</option>
+                                                <option>500kVA - 800kVA</option>
+                                                <option>≥ 800kVA</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">负荷类型</label>
+                                            <select id="loadType" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>居民</option>
+                                                <option>商业</option>
+                                                <option>工业</option>
+                                                <option>混合</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">所属区域</label>
+                                            <div id="area-tree-container" class="mt-1">
+                                                <select id="area" multiple class="area-tree mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                    <option value="all">全部区域</option>
+                                                    <optgroup label="东区">
+                                                        <option value="east-1">东区一片</option>
+                                                        <option value="east-2">东区二片</option>
+                                                        <option value="east-3">东区三片</option>
+                                                    </optgroup>
+                                                    <optgroup label="西区">
+                                                        <option value="west-1">西区一片</option>
+                                                        <option value="west-2">西区二片</option>
+                                                    </optgroup>
+                                                    <optgroup label="南区">
+                                                        <option value="south-1">南区一片</option>
+                                                        <option value="south-2">南区二片</option>
+                                                        <option value="south-3">南区三片</option>
+                                                    </optgroup>
+                                                    <optgroup label="北区">
+                                                        <option value="north-1">北区一片</option>
+                                                        <option value="north-2">北区二片</option>
+                                                    </optgroup>
+                                                    <optgroup label="开发区">
+                                                        <option value="dev-1">开发区一片</option>
+                                                        <option value="dev-2">开发区二片</option>
+                                                        <option value="dev-3">开发区三片</option>
+                                                    </optgroup>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">通讯方式</label>
+                                            <select id="station" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>PLC</option>
+                                                <option>GPRS</option>
+                                                <option>4G</option>
+                                                <option>5G</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">可再生能源</label>
+                                            <select id="renewable-energy" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>光伏</option>
+                                                <option>风电</option>
+                                                <option>无</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- 数据质量过滤 -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">数据质量过滤</label>
-                            <div class="flex flex-col space-y-2">
-                                <div class="flex items-center">
-                                    <input id="exclude-data-error" name="exclude-data-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                                    <label for="exclude-data-error" class="ml-2 block text-sm text-gray-700">排除台区数据条数少于25条</label>
+                                <!-- 数据质量过滤 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">数据质量过滤</label>
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="exclude-data-error" name="exclude-data-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-data-error" class="ml-2 block text-sm text-gray-700">排除台区数据条数少于25条</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-supply-error" name="exclude-supply-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-supply-error" class="ml-2 block text-sm text-gray-700">排除台区供电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-usage-error" name="exclude-usage-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-usage-error" class="ml-2 block text-sm text-gray-700">排除台区用电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-recent-zero" name="exclude-recent-zero" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-recent-zero" class="ml-2 block text-sm text-gray-700">排除台区近3日（包括诊断日当天）的供电两和用电量均为0</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-collect-fail" name="exclude-collect-fail" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-collect-fail" class="ml-2 block text-sm text-gray-700">排除采集成功率 ≤ 5% 的台区</label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="flex items-center">
-                            <input id="exclude-supply-error" name="exclude-supply-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                            <label for="exclude-supply-error" class="ml-2 block text-sm text-gray-700">排除台区供电量为0或null的天数大于15天</label>
-                                </div>
-                                <div class="flex items-center">
-                            <input id="exclude-usage-error" name="exclude-usage-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                            <label for="exclude-usage-error" class="ml-2 block text-sm text-gray-700">排除台区用电量为0或null的天数大于15天</label>
-                                </div>
-                                <div class="flex items-center">
-                            <input id="exclude-recent-zero" name="exclude-recent-zero" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                            <label for="exclude-recent-zero" class="ml-2 block text-sm text-gray-700">排除台区近3日（包括诊断日当天）的供电两和用电量均为0</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="exclude-collect-fail" name="exclude-collect-fail" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                                    <label for="exclude-collect-fail" class="ml-2 block text-sm text-gray-700">排除采集成功率 ≤ 5% 的台区</label>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- 更多筛选条件 -->
-                        <div>
-                            <button id="addMoreConditions" class="text-primary hover:text-primary-dark text-sm flex items-center mt-2">
-                                <i class="fas fa-plus-circle mr-1"></i> 添加更多筛选条件
-                            </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 预览结果内容 (Moved Here) -->
-            <div id="previewContentWrapper" class="bg-white rounded-lg shadow-sm">
-                        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-                            <h2 class="text-lg font-medium text-gray-900">筛选结果预览</h2>
-                            <span class="text-sm text-gray-500">线损统计窗口：2024-04-10 - 2024-05-10</span>
-                        </div>
-            <div id="previewContent" class="p-5 hidden">
-                            <div class="mb-6">
-                                <div class="bg-primary-light rounded-lg p-4 text-center">
-                                    <p class="text-sm text-gray-600 mb-1">符合条件的台区数量</p>
-                                    <p class="text-3xl font-bold text-primary">87</p>
-                                    <p class="text-sm text-gray-500 mt-1">占总台区的 7.0%</p>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-2">Top 5 异常台区</h3>
-                                <div class="space-y-3">
-                                    <div class="p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium">河西变1324台区</span>
-                                            <span class="text-sm text-red-500 font-medium">+6.44%</span>
-                                        </div>
-                                        <div class="mt-1 text-xs text-gray-500">实际:12.76% / 理论:6.32%</div>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium">城南532台区</span>
-                                            <span class="text-sm text-red-500 font-medium">+5.55%</span>
-                                        </div>
-                                        <div class="mt-1 text-xs text-gray-500">实际:10.21% / 理论:4.66%</div>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium">北郊198台区</span>
-                                            <span class="text-sm text-blue-500 font-medium">-4.24%</span>
-                                        </div>
-                                        <div class="mt-1 text-xs text-gray-500">实际:3.21% / 理论:7.45%</div>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium">开发区672台区</span>
-                                            <span class="text-sm text-blue-500 font-medium">-3.24%</span>
-                                        </div>
-                                        <div class="mt-1 text-xs text-gray-500">实际:2.13% / 理论:5.37%</div>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium">东湖785台区</span>
-                                            <span class="text-sm text-blue-500 font-medium">-1.27%</span>
-                                        </div>
-                                        <div class="mt-1 text-xs text-gray-500">实际:3.58% / 理论:4.85%</div>
-                                    </div>
-                                </div>
+                                <!-- 更多筛选条件 -->
+                                <div>
+                                    <button id="addMoreConditions" class="text-primary hover:text-primary-dark text-sm flex items-center mt-2">
+                                        <i class="fas fa-plus-circle mr-1"></i> 添加更多筛选条件
+                                    </button>
                             </div>
                         </div>
                     </div>
+
+                <!-- 预览结果内容 (Moved Here) -->
+                <div id="previewContentWrapper" class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200">
+                                <h2 class="text-lg font-medium text-gray-900">筛选结果预览</h2>
+                            </div>
+                    <div id="previewContent" class="p-5 hidden">
+                                    <div class="mb-6">
+                                        <div class="bg-primary-light rounded-lg p-4 text-center">
+                                            <p class="text-sm text-gray-600 mb-1">符合条件的台区数量</p>
+                                            <p class="text-3xl font-bold text-primary">87</p>
+                                            <p class="text-sm text-gray-500 mt-1">占总台区的 7.0%</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h3 class="text-sm font-medium text-gray-700 mb-2">Top 5 异常台区</h3>
+                                        <div class="space-y-3">
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">河西变1324台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+6.44%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:12.76% / 理论:6.32%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">城南532台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+5.55%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:10.21% / 理论:4.66%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">北郊198台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-4.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.21% / 理论:7.45%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">开发区672台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-3.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:2.13% / 理论:5.37%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">东湖785台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-1.27%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.58% / 理论:4.85%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
             <!-- Original content-filter and content-standards divs are removed -->
 
@@ -815,12 +827,9 @@
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 id="modalTitle" class="text-lg font-medium text-gray-900">编辑识别标准</h3>
-                <div class="flex items-center">
-                    <span class="text-sm text-gray-500 mr-3">线损统计窗口：2024-04-10 - 2024-05-10</span>
-                    <button id="closeModal" class="text-gray-400 hover:text-gray-500">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="px-6 py-4">
                 <form id="editStandardForm">
@@ -949,12 +958,9 @@
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-900">筛选结果预览</h3>
-                <div class="flex items-center">
-                    <span class="text-sm text-gray-500 mr-3">线损统计窗口：2024-04-10 - 2024-05-10</span>
-                    <button id="closePreviewModal" class="text-gray-400 hover:text-gray-500">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <button id="closePreviewModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="p-6">
                 <!-- Content previously in #previewContent goes here -->
@@ -1019,12 +1025,9 @@
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-900">保存配置</h3>
-                <div class="flex items-center">
-                    <span class="text-sm text-gray-500 mr-3">线损统计窗口：2024-04-10 - 2024-05-10</span>
-                    <button id="closeSaveConfigModal" class="text-gray-400 hover:text-gray-500">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <button id="closeSaveConfigModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="px-6 py-4">
                 <div class="mb-4">
@@ -1185,7 +1188,7 @@
                         if (itemElement) {
                             if (allSelected) {
                                 itemElement.classList.add('is-highlighted');
-                            } else {
+                } else {
                                 itemElement.classList.remove('is-highlighted');
                             }
                         }
