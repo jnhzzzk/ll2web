@@ -234,22 +234,6 @@
                             <div class="h-72">
                                 <canvas id="lossAnalysisChart"></canvas>
                             </div>
-                            <div class="mt-4">
-                                <p class="text-sm text-gray-600 mb-1">波动分析：</p>
-                                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
-                                    <li>理论线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右</li>
-                                    <li><span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与理论线损差值明显增大</li>
-                                    <li>期间<span class="font-medium">用户用电量、负荷分布</span>无明显变化</li>
-                                    <li>CT二次侧电流检查发现<span class="text-red-500 font-medium">倍率设置</span>存在问题</li>
-                                </ul>
-                            </div>
-                            <!-- 多维度分析按钮 -->
-                            <div class="mt-3 flex justify-end">
-                                <button id="openAnalysisModal" class="flex items-center text-primary hover:text-primary-dark">
-                                    <i class="fas fa-chart-bar mr-1"></i>
-                                    <span class="text-sm">多维度对比分析</span>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -504,23 +488,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-            
-            <!-- 底部操作区域 -->
-            <div class="flex justify-between">
-                <div class="flex space-x-2">
-                    <a href="/cn/filter" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                        <i class="fas fa-arrow-left mr-1"></i> 返回筛选
-                    </a>
-                    <a href="/demo/diagnostic-tags-demo.html" class="bg-purple-100 hover:bg-purple-200 text-purple-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                        <i class="fas fa-tags mr-1"></i> 查看诊断标签演示
-                    </a>
-                </div>
-                <a href="/cn/governance" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                    生成治理建议 <i class="fas fa-arrow-right ml-1"></i>
-                </a>
             </div>
         </div>
     </div>
@@ -1265,15 +1232,9 @@
                 const tagElement = document.createElement('div');
                 tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
                 tagElement.innerHTML = `
-                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
-                        <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
-                    </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
                         <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
-                        <div class="mt-2 text-xs text-gray-600">
-                            ${tag.details.map(detail => `<p>• ${detail}</p>`).join('')}
-                        </div>
                     </div>
                 `;
                 tagContainer.appendChild(tagElement);
