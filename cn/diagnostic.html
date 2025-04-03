@@ -69,8 +69,8 @@
                     <div class="relative w-64">
                         <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
                             <option value="long-high" selected>河西变1324台区 (+6.44%) - 长期高损</option>
-                            <option value="sudden-high">城南532台区 (+5.55%) - 突发高损</option>
-                            <option value="long-negative">东湖785台区 (-4.24%) - 长期负损</option>
+                            <option value="sudden-high">城南532台区 (+5.55%) - 突发高损 [已生成]</option>
+                            <option value="long-negative">东湖785台区 (-4.24%) - 长期负损 [已生成]</option>
                             <option value="small-negative">北郊198台区 (-0.85%) - 小负损</option>
                             <option value="sudden-negative">开发区672台区 (-3.76%) - 突发负损</option>
                         </select>
@@ -80,7 +80,7 @@
                             </svg>
                         </div>
                     </div>
-                    <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
+                    <button id="governanceButton" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
                         生成治理建议
                     </button>
                 </div>
@@ -165,6 +165,13 @@
                                 <p class="text-sm text-gray-500">异常状态</p>
                                 <p class="text-sm font-medium text-red-500">长期高损</p>
                             </div>
+                            <div>
+                                <p class="text-sm text-gray-500">治理建议</p>
+                                <p class="text-sm font-medium" id="governanceStatus">未生成</p>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-xs text-gray-500">数据来源：筛选A - 线损统计周期：2024-04-10 - 2024-05-10</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,6 +183,10 @@
                     <div class="bg-white rounded-lg shadow-sm mb-6">
                         <div class="px-5 py-4 border-b border-gray-200">
                             <h2 class="text-lg font-medium text-gray-900">智能诊断标签</h2>
+                        </div>
+                        <div class="px-5 pt-4 pb-2 border-b border-gray-100 flex items-center">
+                            <input type="checkbox" id="select-all-tags" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" checked>
+                            <label for="select-all-tags" class="ml-2 text-sm text-gray-700 font-medium cursor-pointer">全选</label>
                         </div>
                         <div class="p-5">
                             <div class="flex flex-col space-y-3">
@@ -842,7 +853,9 @@
                     difference: '+6.44%',
                     abnormalDays: '28天',
                     abnormalState: '长期高损',
-                    abnormalStateColor: 'text-red-500'
+                    abnormalStateColor: 'text-red-500',
+                    governanceStatus: '未生成',
+                    governanceStatusColor: 'text-gray-600'
                 },
                 'sudden-high': {
                     name: '城南532台区',
@@ -862,7 +875,9 @@
                     difference: '+5.55%',
                     abnormalDays: '5天',
                     abnormalState: '突发高损',
-                    abnormalStateColor: 'text-orange-500'
+                    abnormalStateColor: 'text-orange-500',
+                    governanceStatus: '已生成',
+                    governanceStatusColor: 'text-green-600'
                 },
                 'long-negative': {
                     name: '东湖785台区',
@@ -882,7 +897,9 @@
                     difference: '-4.24%',
                     abnormalDays: '32天',
                     abnormalState: '长期负损',
-                    abnormalStateColor: 'text-blue-500'
+                    abnormalStateColor: 'text-blue-500',
+                    governanceStatus: '已生成',
+                    governanceStatusColor: 'text-green-600'
                 },
                 'small-negative': {
                     name: '北郊198台区',
@@ -902,7 +919,9 @@
                     difference: '-6.05%',
                     abnormalDays: '25天',
                     abnormalState: '小负损',
-                    abnormalStateColor: 'text-indigo-500'
+                    abnormalStateColor: 'text-indigo-500',
+                    governanceStatus: '未生成',
+                    governanceStatusColor: 'text-gray-600'
                 },
                 'sudden-negative': {
                     name: '开发区672台区',
@@ -922,7 +941,9 @@
                     difference: '-8.71%',
                     abnormalDays: '4天',
                     abnormalState: '突发负损',
-                    abnormalStateColor: 'text-purple-500'
+                    abnormalStateColor: 'text-purple-500',
+                    governanceStatus: '未生成',
+                    governanceStatusColor: 'text-gray-600'
                 }
             };
             
@@ -976,6 +997,10 @@
                         valueEl.textContent = config.abnormalState;
                         valueEl.className = 'text-sm font-medium ' + config.abnormalStateColor;
                         break;
+                    case '治理建议':
+                        valueEl.textContent = config.governanceStatus;
+                        valueEl.className = 'text-sm font-medium ' + config.governanceStatusColor;
+                        break;
                 }
             });
             
@@ -984,6 +1009,23 @@
             
             // 更新图表
             updateCharts(districtType);
+            
+            // 更新治理建议按钮
+            updateGovernanceButton(districtType);
+        }
+        
+        // 更新治理建议按钮
+        function updateGovernanceButton(districtType) {
+            const button = document.getElementById('governanceButton');
+            const hasGovernance = districtType === 'sudden-high' || districtType === 'long-negative';
+            
+            if (hasGovernance) {
+                button.textContent = '查看治理建议';
+                button.className = 'bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200';
+            } else {
+                button.textContent = '生成治理建议';
+                button.className = 'bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200';
+            }
         }
         
         // 诊断标签更新函数
@@ -1229,19 +1271,26 @@
             // 添加对应标签
             const tags = diagnosticTags[districtType];
             tags.forEach((tag, index) => {
-                const tagElement = document.createElement('div');
-                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
-                tagElement.innerHTML = `
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
+                const tagWrapper = document.createElement('div');
+                tagWrapper.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
+                
+                tagWrapper.innerHTML = `
+                    <div class="flex-shrink-0 mr-3">
+                        <input type="checkbox" id="tag-${index}" class="diagnostic-tag-checkbox w-4 h-4 rounded border-gray-300 text-${tag.color}-600 focus:ring-${tag.color}-500" value="${tag.title}" checked>
+                    </div>
+                    <div class="flex-1">
+                        <label for="tag-${index}" class="text-sm font-medium text-${tag.color}-800 cursor-pointer block">${tag.title}</label>
                         <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
                     </div>
                 `;
-                tagContainer.appendChild(tagElement);
+                tagContainer.appendChild(tagWrapper);
             });
             
             // 更新历史诊断记录
             updateHistoryRecords(districtType);
+            
+            // 更新全选复选框状态
+            setTimeout(updateSelectAllCheckbox, 0);
         }
         
         // 历史诊断记录更新函数
@@ -1621,7 +1670,73 @@
             
             // 初始化台区信息
             updateDistrictInfo('long-high');
+            
+            // 初始化标签选择功能
+            setupTagSelection();
+            
+            // 治理建议按钮点击事件
+            document.getElementById('governanceButton').addEventListener('click', function() {
+                const districtType = document.getElementById('districtSelect').value;
+                const hasGovernance = districtType === 'sudden-high' || districtType === 'long-negative';
+                
+                // 获取选中的诊断标签
+                const selectedTags = getSelectedTags();
+                const tagsParam = encodeURIComponent(JSON.stringify(selectedTags));
+                
+                if (hasGovernance) {
+                    // 查看已生成的治理建议
+                    window.location.href = "/cn/governance?district=" + districtType + "&tags=" + tagsParam;
+                } else {
+                    // 生成新的治理建议
+                    alert("正在为当前台区生成治理建议，稍后将跳转到治理建议页面...");
+                    setTimeout(function() {
+                        window.location.href = "/cn/governance?district=" + districtType + "&new=true";
+                    }, 1500);
+                }
+            });
         });
+
+        // 处理诊断标签选择功能
+        function setupTagSelection() {
+            const selectAllCheckbox = document.getElementById('select-all-tags');
+            
+            // 选择或取消选择所有标签
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.diagnostic-tag-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+            
+            // 监听单个标签的变化以更新全选状态
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.classList.contains('diagnostic-tag-checkbox')) {
+                    updateSelectAllCheckbox();
+                }
+            });
+        }
+        
+        // 更新全选复选框状态
+        function updateSelectAllCheckbox() {
+            const selectAllCheckbox = document.getElementById('select-all-tags');
+            const checkboxes = document.querySelectorAll('.diagnostic-tag-checkbox');
+            const checkedBoxes = document.querySelectorAll('.diagnostic-tag-checkbox:checked');
+            
+            // 如果所有复选框都选中，则全选复选框为选中状态
+            selectAllCheckbox.checked = checkboxes.length === checkedBoxes.length;
+        }
+        
+        // 获取选中的诊断标签
+        function getSelectedTags() {
+            const selectedTags = [];
+            const checkboxes = document.querySelectorAll('.diagnostic-tag-checkbox:checked');
+            
+            checkboxes.forEach(checkbox => {
+                selectedTags.push(checkbox.value);
+            });
+            
+            return selectedTags;
+        }
     </script>
 </body>
 </html> 
