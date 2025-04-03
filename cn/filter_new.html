@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台区筛选 - 线损诊断分析应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Add Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+    <!-- Custom styles for hierarchical dropdown -->
+    <style>
+        /* Style for optgroups in Choices.js */
+        .choices__list--dropdown .choices__list optgroup {
+            padding: 8px 0 0 12px;
+            font-weight: 600;
+            color: #4b5563;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 5px;
+        }
+        
+        .choices__list--dropdown .choices__list optgroup option {
+            margin-left: 12px;
+            padding-left: 8px;
+            font-weight: normal;
+            color: #374151;
+            border-left: 2px solid #e5e7eb;
+        }
+        
+        .choices__list--dropdown .choices__list optgroup option:hover {
+            background-color: #e6f1f1;
+        }
+        
+        /* Highlight parent area in selected items */
+        .choices__list--multiple .choices__item strong {
+            font-weight: 600;
+            color: #256e70;
+        }
+
+        /* Make sure optgroups are properly displayed */
+        .choices__list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Add Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white border-b border-gray-200 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center relative">
+                        <span id="main-menu-button" class="text-primary text-xl font-bold cursor-pointer flex items-center">
+                            线损诊断分析应用
+                            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                        <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="/cn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                统计总览
+                            </a>
+                            <a href="/cn/filter" class="block px-4 py-2 text-sm text-gray-700 bg-primary-light text-primary">
+                                筛选配置
+                            </a>
+                            <a href="/cn/diagnostic" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                诊断分析
+                            </a>
+                            <a href="/cn/governance" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
+                                治理建议
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">王工</span>
+                    <a href="/en/filter" class="px-3 py-1 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark mr-3">English</a>
+                    <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="用户头像">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="pt-16 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页面标题 -->
+            <div class="mt-6 mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">台区筛选</h1>
+                <div>
+                    <!-- Generate Report button removed from here -->
+                </div>
+            </div>
+
+            <!-- 添加标签页切换 -->
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="-mb-px flex">
+                    <button id="tab-reports" class="bg-white inline-flex py-4 px-6 border-b-2 border-primary text-sm font-medium text-primary focus:outline-none">
+                        异常台区报表
+                    </button>
+                    <button id="tab-abnormal-filter" class="bg-white inline-flex py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none">
+                        异常台区筛选
+                    </button>
+                </nav>
+            </div>
+
+            <!-- 异常台区报表内容 -->
+            <div id="content-reports">
+                <div class="bg-white rounded-lg shadow-sm mb-6">
+                    <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">线损异常台区报表</h2>
+                        <!-- Replace the static text with the dropdown -->
+                        <div class="relative w-80"> <!-- Adjusted width -->
+                            <select id="report-history-filter" class="block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                <option>选择历史报告...</option>
+                                <option>2024-03-15 14:30:22 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-14 16:45:18 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-13 09:12:35 - 筛选A - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-12 11:28:47 - 筛选B - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                                <option>2024-03-11 15:33:56 - 筛选B - 线损统计窗口：2024-04-10 - 2024-05-10</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <!-- 快速筛选选项 -->
+                        <div class="flex flex-wrap gap-3 mb-4">
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">所属区域</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部区域</option>
+                                    <option>东区</option>
+                                    <option>西区</option>
+                                    <option>南区</option>
+                                    <option>北区</option>
+                                    <option>开发区</option>
+                                </select>
+                            </div>
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">异常类型</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部异常</option>
+                                    <option>长期高损</option>
+                                    <option>突发高损</option>
+                                    <option>长期负损</option>
+                                    <option>小负损</option>
+                                    <option>突发负损</option>
+                                </select>
+                            </div>
+                            <div class="w-40">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">台区类型</label>
+                                <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <option>全部类型</option>
+                                    <option>居民</option>
+                                    <option>商业</option>
+                                    <option>工业</option>
+                                    <option>混合</option>
+                                </select>
+                            </div>
+                            <!-- 日期范围选择 -->
+                            <div class="flex-grow">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">日期范围</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="date" class="w-full py-1.5 px-3 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <span class="text-gray-500">至</span>
+                                    <input type="date" class="w-full py-1.5 px-3 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                    <button class="bg-primary hover:bg-primary-dark text-white p-2 rounded-md ml-2">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 异常台区报表表格 -->
+                        <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            台区名称
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            所属区域
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            实际线损率
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            理论线损率
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            线损差值
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            总表电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            用电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            损失电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            偏差损失电量(kWh)
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            发生日期
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            异常状态
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            台区类型
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            可再生能源
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- 长期高损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            河西变1324台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            河西区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            12.76%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6.32%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500 font-medium">
+                                            +6.44%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,823
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,208
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            615
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500">
+                                            +310
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                长期高损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            居民
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=longHigh" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 突发高损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            城南532台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            南区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            10.21%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4.66%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500 font-medium">
+                                            +5.55%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            3,612
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            3,243
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            369
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-red-500">
+                                            +200
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-07
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                突发高损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            商业
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            光伏
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=suddenHigh" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 长期负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            北郊198台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            北区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            3.21%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            7.45%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -4.24%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2,850
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2,758
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            92
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -120
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-07
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                长期负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            居民
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=longNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 小负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            东湖785台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            东区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            3.58%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4.85%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -1.27%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            5,105
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            4,922
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            183
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -65
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                小负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            混合
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            风电
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=smallNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                    <!-- 突发负损 -->
+                                    <tr>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            开发区672台区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            开发区
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                            2.13%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            5.37%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500 font-medium">
+                                            -3.24%
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6,780
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            6,636
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            144
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-500">
+                                            -220
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            2024-05-08
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                突发负损
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            工业
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                            无
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                            <a href="diagnostic.html?area=suddenNegative" class="text-primary hover:text-primary-dark">诊断分析</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页 -->
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="text-sm text-gray-700">
+                                共 <span class="font-medium">87</span> 个异常台区
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">上一页</button>
+                                <button class="bg-primary px-3 py-1 rounded text-sm text-white">1</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">2</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">3</button>
+                                <button class="bg-gray-100 px-3 py-1 rounded text-sm text-gray-700">下一页</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 异常台区筛选 (Merged Content) -->
+            <div id="content-abnormal-filter" class="hidden space-y-6">
+                <!-- 识别标准内容 (Moved Here) -->
+                <div class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">线损异常类型识别标准</h2>
+                        <!-- Group buttons on the right -->
+                        <div class="flex items-center space-x-2">
+                            <button id="saveConfig" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
+                                <i class="fas fa-save mr-1"></i> 保存配置
+                            </button>
+                            <button id="resetToDefault" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
+                                <i class="fas fa-undo mr-1"></i> 默认
+                            </button>
+                            </div>
+                                            </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">异常类型</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">定义</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">识别标准</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">识别优先级</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            长期高损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        在较长统计期内【绝对（同期）线损率】高于【理论线损率】持续超过指标要求的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内【相对线损率】5%以上的异常天数≥20天
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        1
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <button data-standard="longHigh" class="edit-standard-btn bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-md text-xs">
+                                            编辑
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                            突发高损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        线损率一直保持平稳，突然发生较大升幅且持续时间在3天以上的台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近7天【相对线损率】突然升高至5%以上，且持续3天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        5
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <button data-standard="suddenHigh" class="edit-standard-btn bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-md text-xs">
+                                            编辑
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            长期负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        用电信息采集系统连续7天以上台区线损率小于0%的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内【相对线损率】0%以下的异常天数≥20天
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        4
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <button data-standard="longNegative" class="edit-standard-btn bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-md text-xs">
+                                            编辑
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
+                                            小负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        统计期内台区线损率在-1%~0%之间的台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近30天内，【相对线损率】线损率在-1%~0%之间，持续7天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        2
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <button data-standard="smallNegative" class="edit-standard-btn bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-md text-xs">
+                                            编辑
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                            突发负损
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        用户用电信息采集系统3天以上台区线损率突然降低并小于0%的异常台区
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        近7天【相对线损率】突然降低至0%以下，且持续3天以上
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        3
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <button data-standard="suddenNegative" class="edit-standard-btn bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-md text-xs">
+                                            编辑
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                                    </div>
+                                </div>
+
+                <!-- 高级筛选条件 (Moved Here) -->
+                        <div class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                                <h2 class="text-lg font-medium text-gray-900">高级筛选条件</h2>
+                                <button id="previewButton" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-3 rounded-md text-sm transition-colors duration-200">
+                                    预览筛选结果
+                                </button>
+                            </div>
+                            <div class="p-5 space-y-4">
+                                <!-- 台区属性筛选 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">台区属性</label>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">台区容量</label>
+                                            <select id="capacity" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>≤ 315kVA</option>
+                                                <option>315kVA - 500kVA</option>
+                                                <option>500kVA - 800kVA</option>
+                                                <option>≥ 800kVA</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">负荷类型</label>
+                                            <select id="loadType" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>居民</option>
+                                                <option>商业</option>
+                                                <option>工业</option>
+                                                <option>混合</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">所属区域</label>
+                                            <div id="area-tree-container" class="mt-1">
+                                                <select id="area" multiple class="area-tree mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                    <option value="all">全部区域</option>
+                                                    <optgroup label="东区">
+                                                        <option value="east-1">东区一片</option>
+                                                        <option value="east-2">东区二片</option>
+                                                        <option value="east-3">东区三片</option>
+                                                    </optgroup>
+                                                    <optgroup label="西区">
+                                                        <option value="west-1">西区一片</option>
+                                                        <option value="west-2">西区二片</option>
+                                                    </optgroup>
+                                                    <optgroup label="南区">
+                                                        <option value="south-1">南区一片</option>
+                                                        <option value="south-2">南区二片</option>
+                                                        <option value="south-3">南区三片</option>
+                                                    </optgroup>
+                                                    <optgroup label="北区">
+                                                        <option value="north-1">北区一片</option>
+                                                        <option value="north-2">北区二片</option>
+                                                    </optgroup>
+                                                    <optgroup label="开发区">
+                                                        <option value="dev-1">开发区一片</option>
+                                                        <option value="dev-2">开发区二片</option>
+                                                        <option value="dev-3">开发区三片</option>
+                                                    </optgroup>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">通讯方式</label>
+                                            <select id="station" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>PLC</option>
+                                                <option>GPRS</option>
+                                                <option>4G</option>
+                                                <option>5G</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">可再生能源</label>
+                                            <select id="renewable-energy" multiple class="mt-1 block w-full text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                                <option>全部</option>
+                                                <option>光伏</option>
+                                                <option>风电</option>
+                                                <option>无</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 数据质量过滤 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">数据质量过滤</label>
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="exclude-data-error" name="exclude-data-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-data-error" class="ml-2 block text-sm text-gray-700">排除台区数据条数少于25条</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-supply-error" name="exclude-supply-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-supply-error" class="ml-2 block text-sm text-gray-700">排除台区供电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-usage-error" name="exclude-usage-error" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-usage-error" class="ml-2 block text-sm text-gray-700">排除台区用电量为0或null的天数大于15天</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                    <input id="exclude-recent-zero" name="exclude-recent-zero" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label for="exclude-recent-zero" class="ml-2 block text-sm text-gray-700">排除台区近3日（包括诊断日当天）的供电两和用电量均为0</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="exclude-collect-fail" name="exclude-collect-fail" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                            <label for="exclude-collect-fail" class="ml-2 block text-sm text-gray-700">排除采集成功率 ≤ 5% 的台区</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 更多筛选条件 -->
+                                <div>
+                                    <button id="addMoreConditions" class="text-primary hover:text-primary-dark text-sm flex items-center mt-2">
+                                        <i class="fas fa-plus-circle mr-1"></i> 添加更多筛选条件
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- 预览结果内容 (Moved Here) -->
+                <div id="previewContentWrapper" class="bg-white rounded-lg shadow-sm">
+                            <div class="px-5 py-4 border-b border-gray-200">
+                                <h2 class="text-lg font-medium text-gray-900">筛选结果预览</h2>
+                            </div>
+                    <div id="previewContent" class="p-5 hidden">
+                                    <div class="mb-6">
+                                        <div class="bg-primary-light rounded-lg p-4 text-center">
+                                            <p class="text-sm text-gray-600 mb-1">符合条件的台区数量</p>
+                                            <p class="text-3xl font-bold text-primary">87</p>
+                                            <p class="text-sm text-gray-500 mt-1">占总台区的 7.0%</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h3 class="text-sm font-medium text-gray-700 mb-2">Top 5 异常台区</h3>
+                                        <div class="space-y-3">
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">河西变1324台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+6.44%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:12.76% / 理论:6.32%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">城南532台区</span>
+                                                    <span class="text-sm text-red-500 font-medium">+5.55%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:10.21% / 理论:4.66%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">北郊198台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-4.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.21% / 理论:7.45%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">开发区672台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-3.24%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:2.13% / 理论:5.37%</div>
+                                            </div>
+                                            <div class="p-3 bg-gray-50 rounded-lg">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium">东湖785台区</span>
+                                                    <span class="text-sm text-blue-500 font-medium">-1.27%</span>
+                                                </div>
+                                                <div class="mt-1 text-xs text-gray-500">实际:3.58% / 理论:4.85%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- Original content-filter and content-standards divs are removed -->
+
+                    </div>
+                </div>
+
+    <!-- 编辑标准模态框 -->
+    <div id="editStandardModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-medium text-gray-900">编辑识别标准</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <form id="editStandardForm">
+                    <input type="hidden" id="standardType" value="">
+                    
+                    <!-- 长期高损参数 -->
+                    <div id="longHighParams" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">统计周期（天）</label>
+                            <input type="number" id="longHigh-period" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="30">
+                    </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">相对线损率阈值（%）</label>
+                            <input type="number" id="longHigh-threshold" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="5">
+                    </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">异常天数阈值</label>
+                            <input type="number" id="longHigh-days" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="20">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">识别优先级</label>
+                            <input type="number" id="longHigh-priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="1">
+                    </div>
+                </div>
+                
+                    <!-- 突发高损参数 -->
+                    <div id="suddenHighParams" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">监控周期（天）</label>
+                            <input type="number" id="suddenHigh-period" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="7">
+                    </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">相对线损率阈值（%）</label>
+                            <input type="number" id="suddenHigh-threshold" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="5">
+                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">持续天数阈值</label>
+                            <input type="number" id="suddenHigh-days" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="3">
+                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">识别优先级</label>
+                            <input type="number" id="suddenHigh-priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="5">
+                            </div>
+                            </div>
+
+                    <!-- 长期负损参数 -->
+                    <div id="longNegativeParams" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">统计周期（天）</label>
+                            <input type="number" id="longNegative-period" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="30">
+                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">相对线损率阈值（%）</label>
+                            <input type="number" id="longNegative-threshold" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">异常天数阈值</label>
+                            <input type="number" id="longNegative-days" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="20">
+                    </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">识别优先级</label>
+                            <input type="number" id="longNegative-priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="4">
+                </div>
+            </div>
+
+                    <!-- 小负损参数 -->
+                    <div id="smallNegativeParams" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">统计周期（天）</label>
+                            <input type="number" id="smallNegative-period" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="30">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">最小线损率（%）</label>
+                                <input type="number" id="smallNegative-min" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="-1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">最大线损率（%）</label>
+                                <input type="number" id="smallNegative-max" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="0">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">持续天数阈值</label>
+                            <input type="number" id="smallNegative-days" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="7">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">识别优先级</label>
+                            <input type="number" id="smallNegative-priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="2">
+                        </div>
+                    </div>
+
+                    <!-- 突发负损参数 -->
+                    <div id="suddenNegativeParams" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">监控周期（天）</label>
+                            <input type="number" id="suddenNegative-period" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="7">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">相对线损率阈值（%）</label>
+                            <input type="number" id="suddenNegative-threshold" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">持续天数阈值</label>
+                            <input type="number" id="suddenNegative-days" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="3">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">识别优先级</label>
+                            <input type="number" id="suddenNegative-priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="3">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="px-6 py-3 bg-gray-50 text-right rounded-b-lg">
+                <button id="cancelEdit" class="bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 mr-2">
+                    取消
+                </button>
+                <button id="saveStandardBtn" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md text-sm font-medium">
+                    保存配置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 筛选结果预览模态框 -->
+    <div id="previewResultModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">筛选结果预览</h3>
+                <button id="closePreviewModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- Content previously in #previewContent goes here -->
+                <div class="mb-6">
+                    <div class="bg-primary-light rounded-lg p-4 text-center">
+                        <p class="text-sm text-gray-600 mb-1">符合条件的台区数量</p>
+                        <p class="text-3xl font-bold text-primary">87</p>
+                        <p class="text-sm text-gray-500 mt-1">占总台区的 7.0%</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Top 5 异常台区</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium">河西变1324台区</span>
+                                <span class="text-sm text-red-500 font-medium">+6.44%</span>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500">实际:12.76% / 理论:6.32%</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium">城南532台区</span>
+                                <span class="text-sm text-red-500 font-medium">+5.55%</span>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500">实际:10.21% / 理论:4.66%</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium">北郊198台区</span>
+                                <span class="text-sm text-blue-500 font-medium">-4.24%</span>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500">实际:3.21% / 理论:7.45%</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium">开发区672台区</span>
+                                <span class="text-sm text-blue-500 font-medium">-3.24%</span>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500">实际:2.13% / 理论:5.37%</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium">东湖785台区</span>
+                                <span class="text-sm text-blue-500 font-medium">-1.27%</span>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500">实际:3.58% / 理论:4.85%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-gray-50 text-right rounded-b-lg">
+                <button id="okPreviewModal" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md text-sm font-medium">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 保存配置名称模态框 -->
+    <div id="saveConfigModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">保存配置</h3>
+                <button id="closeSaveConfigModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <div class="mb-4">
+                    <label for="configName" class="block text-sm font-medium text-gray-700 mb-1">配置名称</label>
+                    <input type="text" id="configName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="请输入配置名称">
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-gray-50 text-right rounded-b-lg">
+                <button id="cancelSaveConfig" class="bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 mr-2">
+                    取消
+                </button>
+                <button id="submitSaveConfig" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md text-sm font-medium">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签页切换逻辑 (Updated for new tab structure)
+            const tabButtons = document.querySelectorAll('[id^="tab-"]');
+            const contentDivs = document.querySelectorAll('[id^="content-"]');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('border-primary', 'text-primary');
+                        btn.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+                    });
+                    this.classList.remove('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+                    this.classList.add('border-primary', 'text-primary');
+                    contentDivs.forEach(div => {
+                        div.classList.add('hidden');
+                    });
+                    const contentId = this.id.replace('tab-', 'content-');
+                    const targetContent = document.getElementById(contentId);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Make '异常台区报表' active by default if needed (or handle server-side)
+            const defaultActiveTab = document.getElementById('tab-reports');
+            const defaultContent = document.getElementById('content-reports');
+            const secondTab = document.getElementById('tab-abnormal-filter');
+            const secondContent = document.getElementById('content-abnormal-filter');
+
+            if (defaultActiveTab && defaultContent && secondTab && secondContent) {
+                 // Assuming 'tab-reports' starts with active classes
+                 secondTab.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+                 secondTab.classList.remove('border-primary', 'text-primary');
+                 secondContent.classList.add('hidden');
+                 defaultActiveTab.classList.add('border-primary', 'text-primary');
+                 defaultActiveTab.classList.remove('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+                 defaultContent.classList.remove('hidden');
+            } else {
+                 // Fallback or default if elements not found as expected
+                 if (tabButtons.length > 0 && contentDivs.length > 0) {
+                     tabButtons[0].click(); // Activate the first tab
+                 }
+            }
+            
+            // 下拉菜单行为 (Keep existing logic)
+            const menuButton = document.getElementById('main-menu-button');
+            const menuDropdown = document.getElementById('main-menu-dropdown');
+            if (menuButton && menuDropdown) {
+            menuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.add('hidden');
+                }
+            });
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            }
+
+            // Initialize Choices.js for multi-select dropdowns
+            const choicesConfig = {
+                removeItemButton: true,
+                searchEnabled: true,
+                placeholder: true,
+                placeholderValue: '请选择...', // Customize placeholder
+                // Add more Choices.js config options if needed
+            };
+
+            const capacitySelect = document.getElementById('capacity');
+            if (capacitySelect) new Choices(capacitySelect, choicesConfig);
+
+            const loadTypeSelect = document.getElementById('loadType');
+            if (loadTypeSelect) new Choices(loadTypeSelect, choicesConfig);
+
+            // Special config for area dropdown to handle optgroups
+            const areaSelect = document.getElementById('area');
+            if (areaSelect) {
+                const areaChoices = new Choices(areaSelect, {
+                    ...choicesConfig,
+                    renderSelectedChoices: 'always',
+                    renderChoiceLimit: -1,
+                    // Make sure the parent optgroup state is updated when children are selected
+                    callbackOnCreateTemplates: function(template) {
+                        return {
+                            item: (classNames, data) => {
+                                const itemHtml = template(`
+                                <div class="${classNames.item} ${
+                                    data.highlighted ? classNames.highlightedState : classNames.itemSelectable
+                                } ${
+                                    data.placeholder ? classNames.placeholder : ''
+                                }" data-item data-id="${data.id}" data-value="${data.value}" ${
+                                    data.active ? 'aria-selected="true"' : ''
+                                } ${
+                                    data.disabled ? 'aria-disabled="true"' : ''
+                                }>
+                                    <span class="choices__item-text">${data.label.replace(/东区|西区|南区|北区|开发区/g, match => `<strong>${match}</strong>`)}</span>
+                                    ${
+                                    data.removeButton ? `
+                                    <button type="button" class="${classNames.button}" data-button aria-label="Remove item">
+                                        Remove item
+                                    </button>
+                                    ` : ''
+                                    }
+                                </div>
+                                `);
+                                return itemHtml;
+                            }
+                        };
+                    }
+                });
+                
+                // Handle special case of selecting "全部区域"
+                areaSelect.addEventListener('change', function() {
+                    const allOption = this.querySelector('option[value="all"]');
+                    const otherOptions = Array.from(this.querySelectorAll('option:not([value="all"])'));
+                    
+                    // If "all" is selected, select/deselect all other options
+                    if (allOption && allOption.selected) {
+                        otherOptions.forEach(option => {
+                            option.selected = true;
+                        });
+                        // Force Choices.js to update
+                        areaChoices.setChoiceByValue(otherOptions.map(o => o.value));
+                    }
+                    
+                    // Handle optgroup selection logic
+                    const optgroups = Array.from(this.querySelectorAll('optgroup'));
+                    optgroups.forEach(group => {
+                        const groupLabel = group.getAttribute('label');
+                        const groupOptions = Array.from(group.querySelectorAll('option'));
+                        const allSelected = groupOptions.every(o => o.selected);
+                        
+                        // Update visual representation in the dropdown
+                        const itemElement = document.querySelector(`.choices__item[data-value="${groupLabel}"]`);
+                        if (itemElement) {
+                            if (allSelected) {
+                                itemElement.classList.add('is-highlighted');
+                } else {
+                                itemElement.classList.remove('is-highlighted');
+                            }
+                        }
+                    });
+                });
+            }
+
+            const stationSelect = document.getElementById('station');
+            if (stationSelect) new Choices(stationSelect, choicesConfig);
+
+            const renewableEnergySelect = document.getElementById('renewable-energy');
+            if (renewableEnergySelect) new Choices(renewableEnergySelect, choicesConfig);
+
+            // --- Combined Tab Logic (异常台区筛选) ---
+            const abnormalFilterContent = document.getElementById('content-abnormal-filter');
+            if (abnormalFilterContent) {
+                 // Add More Filters Button Logic (Keep existing)
+                const addMoreBtn = abnormalFilterContent.querySelector('#addMoreConditions');
+                if (addMoreBtn) {
+                    addMoreBtn.addEventListener('click', function() {
+                        alert('添加更多筛选条件功能待实现');
+                    });
+                }
+                 // Standard Edit Modal Logic (Keep existing)
+                 const editStandardModal = document.getElementById('editStandardModal'); 
+                 const editStandardBtns = abnormalFilterContent.querySelectorAll('.edit-standard-btn');
+                 const closeModalBtn = document.getElementById('closeModal');
+                 const cancelEditBtn = document.getElementById('cancelEdit');
+                 const saveStandardBtn = document.getElementById('saveStandardBtn');
+                 const standardTypeInput = document.getElementById('standardType');
+                 const modalTitle = document.getElementById('modalTitle');
+                 
+                 const paramContainers = {
+                     longHigh: document.getElementById('longHighParams'),
+                     suddenHigh: document.getElementById('suddenHighParams'),
+                     longNegative: document.getElementById('longNegativeParams'),
+                     smallNegative: document.getElementById('smallNegativeParams'),
+                     suddenNegative: document.getElementById('suddenNegativeParams')
+                 };
+                 
+                 const standardNames = {
+                     longHigh: '长期高损',
+                     suddenHigh: '突发高损',
+                     longNegative: '长期负损',
+                     smallNegative: '小负损',
+                     suddenNegative: '突发负损'
+                 };
+                 
+                 if (editStandardModal && editStandardBtns.length > 0 && closeModalBtn && cancelEditBtn && saveStandardBtn && standardTypeInput && modalTitle) {
+                     // 点击编辑按钮
+                     editStandardBtns.forEach(btn => {
+                         btn.addEventListener('click', function() {
+                             const standardType = this.getAttribute('data-standard');
+                             standardTypeInput.value = standardType;
+                             modalTitle.textContent = '编辑' + standardNames[standardType] + '识别标准';
+                             
+                             Object.values(paramContainers).forEach(container => {
+                                 if (container) container.classList.add('hidden');
+                             });
+                             
+                             if (paramContainers[standardType]) {
+                                 paramContainers[standardType].classList.remove('hidden');
+                             }
+                             
+                             editStandardModal.classList.remove('hidden');
+                         });
+                     });
+                     
+                     // 关闭模态框
+                     function closeModal() {
+                         editStandardModal.classList.add('hidden');
+                     }
+                     
+                     closeModalBtn.addEventListener('click', closeModal);
+                     cancelEditBtn.addEventListener('click', closeModal);
+                     editStandardModal.addEventListener('click', function(e) {
+                         if (e.target === editStandardModal) {
+                             closeModal();
+                         }
+                     });
+                     
+                     // 保存标准配置
+                     saveStandardBtn.addEventListener('click', function() {
+                         const standardType = standardTypeInput.value;
+                         const formData = {};
+                         const currentParamsContainer = paramContainers[standardType];
+
+                         if (currentParamsContainer) {
+                             const inputs = currentParamsContainer.querySelectorAll('input[type="number"]');
+                             inputs.forEach(input => {
+                                 const key = input.id.split('-')[1]; 
+                                 if (key) {
+                                     formData[key] = input.value;
+                                 }
+                             });
+                         }
+                         
+                         console.log('Saving standard:', standardType, formData);
+                         updateTableDisplay(standardType, formData, abnormalFilterContent); // Pass context
+                         closeModal();
+                         alert('标准配置已保存');
+                     });
+                 }
+
+                 // 更新表格中的标准显示 (Function needs context for rows)
+                 function updateTableDisplay(standardType, formData, contextElement) {
+                     const rows = contextElement.querySelectorAll('.bg-white.divide-y.divide-gray-200 tr'); // More specific selector
+                     let row;
+                     
+                     rows.forEach(r => {
+                         const btn = r.querySelector('.edit-standard-btn');
+                         if (btn && btn.getAttribute('data-standard') === standardType) {
+                             row = r;
+                         }
+                     });
+                     
+                     if (!row || !formData) return;
+                     
+                     const standardCell = row.querySelector('td:nth-child(3)');
+                     const priorityCell = row.querySelector('td:nth-child(4)');
+                     
+                     if (standardCell && priorityCell) {
+                          priorityCell.textContent = formData.priority || '';
+                          
+                         switch(standardType) {
+                              case 'longHigh':
+                                  standardCell.textContent = `近${formData.period || 'N/A'}天内【相对线损率】${formData.threshold || 'N/A'}%以上的异常天数≥${formData.days || 'N/A'}天`;
+                                  break;
+                              case 'suddenHigh':
+                                  standardCell.textContent = `近${formData.period || 'N/A'}天【相对线损率】突然升高至${formData.threshold || 'N/A'}%以上，且持续${formData.days || 'N/A'}天以上`;
+                                  break;
+                              case 'longNegative':
+                                  standardCell.textContent = `近${formData.period || 'N/A'}天内【相对线损率】${formData.threshold || 'N/A'}%以下的异常天数≥${formData.days || 'N/A'}天`;
+                                  break;
+                              case 'smallNegative':
+                                  standardCell.textContent = `近${formData.period || 'N/A'}天内，【相对线损率】线损率在${formData.min || 'N/A'}%~${formData.max || 'N/A'}%之间，持续${formData.days || 'N/A'}天以上`;
+                                  break;
+                              case 'suddenNegative':
+                                  standardCell.textContent = `近${formData.period || 'N/A'}天【相对线损率】突然降低至${formData.threshold || 'N/A'}%以下，且持续${formData.days || 'N/A'}天以上`;
+                                  break;
+                          }
+                     }
+                 }
+             }
+             // --- End Combined Tab Logic ---
+
+             // --- Preview Modal Logic ---
+             const previewButtonHeader = document.getElementById('previewButton'); 
+             const previewResultModal = document.getElementById('previewResultModal');
+             const closePreviewModalBtn = document.getElementById('closePreviewModal');
+             const okPreviewModalBtn = document.getElementById('okPreviewModal');
+
+             if (previewButtonHeader && previewResultModal && closePreviewModalBtn && okPreviewModalBtn) {
+                 // Open Preview Modal
+                 previewButtonHeader.addEventListener('click', function() {
+                     // Here you might want to fetch real preview data before showing
+                     console.log('Fetching preview data...');
+                     // For now, just show the modal with example data
+                     previewResultModal.classList.remove('hidden');
+                 });
+
+                 // Close Preview Modal Function
+                 function closePreviewModal() {
+                     previewResultModal.classList.add('hidden');
+                 }
+
+                 // Close via X button
+                 closePreviewModalBtn.addEventListener('click', closePreviewModal);
+                 // Close via OK button
+                 okPreviewModalBtn.addEventListener('click', closePreviewModal);
+                 // Close by clicking outside
+                 previewResultModal.addEventListener('click', function(e) {
+                     if (e.target === previewResultModal) {
+                         closePreviewModal();
+                     }
+                 });
+             }
+             // --- End Preview Modal Logic ---
+
+             // 保存配置按钮点击事件 (General)
+             const saveConfigBtn = document.getElementById('saveConfig');
+             if (saveConfigBtn) {
+                 saveConfigBtn.addEventListener('click', function() {
+                     // Show modal for saving configuration with name
+                     const saveConfigModal = document.getElementById('saveConfigModal');
+                     if (saveConfigModal) {
+                         saveConfigModal.classList.remove('hidden');
+                     }
+                 });
+             }
+             
+             // 保存配置模态框逻辑
+             const saveConfigModal = document.getElementById('saveConfigModal');
+             const closeSaveConfigModalBtn = document.getElementById('closeSaveConfigModal');
+             const cancelSaveConfigBtn = document.getElementById('cancelSaveConfig');
+             const submitSaveConfigBtn = document.getElementById('submitSaveConfig');
+             const configNameInput = document.getElementById('configName');
+             
+             if (saveConfigModal && closeSaveConfigModalBtn && cancelSaveConfigBtn && submitSaveConfigBtn && configNameInput) {
+                 // Close modal function
+                 function closeSaveConfigModal() {
+                     saveConfigModal.classList.add('hidden');
+                     configNameInput.value = ''; // Clear input when closing
+                 }
+                 
+                 // Close via X button
+                 closeSaveConfigModalBtn.addEventListener('click', closeSaveConfigModal);
+                 // Close via Cancel button
+                 cancelSaveConfigBtn.addEventListener('click', closeSaveConfigModal);
+                 // Close by clicking outside
+                 saveConfigModal.addEventListener('click', function(e) {
+                     if (e.target === saveConfigModal) {
+                         closeSaveConfigModal();
+                     }
+                 });
+                 
+                 // Submit save configuration
+                 submitSaveConfigBtn.addEventListener('click', function() {
+                     const configName = configNameInput.value.trim();
+                     if (!configName) {
+                         alert('请输入配置名称');
+                         return;
+                     }
+                     
+                     // Collect config from the active tab
+                     const activeConfig = {
+                         name: configName,
+                         timestamp: new Date().toISOString()
+                     };
+                     
+                     const filterContainer = document.getElementById('content-abnormal-filter');
+                     if (filterContainer && !filterContainer.classList.contains('hidden')) {
+                         // Collect values from advanced filters
+                         activeConfig.capacity = filterContainer.querySelector('#capacity')?.value;
+                         activeConfig.loadType = filterContainer.querySelector('#loadType')?.value;
+                         activeConfig.area = filterContainer.querySelector('#area')?.value;
+                         activeConfig.station = filterContainer.querySelector('#station')?.value;
+                         activeConfig.renewableEnergy = filterContainer.querySelector('#renewable-energy')?.value;
+                         activeConfig.excludeDataError = filterContainer.querySelector('#exclude-data-error')?.checked;
+                         activeConfig.excludeSupplyError = filterContainer.querySelector('#exclude-supply-error')?.checked;
+                         activeConfig.excludeUsageError = filterContainer.querySelector('#exclude-usage-error')?.checked;
+                         activeConfig.excludeRecentZero = filterContainer.querySelector('#exclude-recent-zero')?.checked;
+                         activeConfig.excludeCollectFail = filterContainer.querySelector('#exclude-collect-fail')?.checked;
+                     }
+                     
+                     console.log('Saving config:', activeConfig);
+                     alert(`配置"${configName}"已保存`);
+                     closeSaveConfigModal();
+                 });
+             }
+             
+             // 重置为默认值按钮点击事件
+             const resetToDefaultBtn = document.getElementById('resetToDefault');
+             if (resetToDefaultBtn) {
+                 resetToDefaultBtn.addEventListener('click', function() {
+                     if (confirm('确定要重置为默认识别标准吗？')) {
+                         console.log('Resetting to default standards');
+                         
+                         // Example of default values (you would replace these with actual defaults)
+                         const defaultStandards = {
+                             longHigh: {period: 30, threshold: 5, days: 20, priority: 1},
+                             suddenHigh: {period: 7, threshold: 5, days: 3, priority: 5},
+                             longNegative: {period: 30, threshold: 0, days: 20, priority: 4},
+                             smallNegative: {period: 30, min: -1, max: 0, days: 7, priority: 2},
+                             suddenNegative: {period: 7, threshold: 0, days: 3, priority: 3}
+                         };
+                         
+                         // Update displayed standards
+                         const abnormalFilterContent = document.getElementById('content-abnormal-filter');
+                         if (abnormalFilterContent) {
+                             Object.entries(defaultStandards).forEach(([type, values]) => {
+                                 updateTableDisplay(type, values, abnormalFilterContent);
+                             });
+                         }
+                         
+                         alert('已重置为默认识别标准');
+                     }
+                 });
+             }
+
+             // 生成报告按钮点击事件 (General)
+             const generateReportBtn = document.getElementById('generateReport');
+             if (generateReportBtn) {
+                 generateReportBtn.addEventListener('click', function() {
+                     window.location.href = 'diagnostic.html';
+                 });
+             }
+
+             // 报表切换功能 (Inside 异常台区报表 Tab)
+             const reportsTabContent = document.getElementById('content-reports');
+             if (reportsTabContent) {
+                  const reportButtons = reportsTabContent.querySelectorAll('.flex.space-x-2 button');
+            reportButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    reportButtons.forEach(b => {
+                        b.classList.remove('bg-primary', 'text-white');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary', 'text-white');
+                });
+            });
+             }
+
+        });
+    </script>
+</body>
+</html>
