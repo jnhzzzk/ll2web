@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#309C9F;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#309C9F;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FF6B6B;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD166;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFD166;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#4ECDC4;stop-opacity:0.4" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Business Value of Line Loss Diagnostic System</text>
+  
+  <!-- Four value quadrants -->
+  <g transform="translate(50, 80)">
+    <!-- Technical Loss Reduction -->
+    <rect x="0" y="0" width="320" height="120" rx="10" ry="10" fill="url(#grad1)" stroke="#309C9F" stroke-width="1" />
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Technical Loss Reduction</text>
+    <text x="20" y="60" font-family="Arial, sans-serif" font-size="14" fill="#333">• Reduce technical loss rate by 0.2-0.5 percentage points</text>
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="14" fill="#333">• Intelligent detection of equipment faults and anomalies</text>
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="14" fill="#333">• Optimize distribution network operation</text>
+    
+    <!-- Management Loss Reduction -->
+    <rect x="380" y="0" width="320" height="120" rx="10" ry="10" fill="url(#grad2)" stroke="#FF6B6B" stroke-width="1" />
+    <text x="400" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Management Loss Reduction</text>
+    <text x="400" y="60" font-family="Arial, sans-serif" font-size="14" fill="#333">• Reduce management-related losses by 3%-5%</text>
+    <text x="400" y="85" font-family="Arial, sans-serif" font-size="14" fill="#333">• Standardize marketing business processes</text>
+    <text x="400" y="110" font-family="Arial, sans-serif" font-size="14" fill="#333">• Improve electricity fee collection rate</text>
+    
+    <!-- Economic Benefits -->
+    <rect x="0" y="150" width="320" height="120" rx="10" ry="10" fill="url(#grad3)" stroke="#FFD166" stroke-width="1" />
+    <text x="20" y="180" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Economic Benefits</text>
+    <text x="20" y="210" font-family="Arial, sans-serif" font-size="14" fill="#333">• Each 0.1% reduction adds approx. 5 million yuan</text>
+    <text x="20" y="235" font-family="Arial, sans-serif" font-size="14" fill="#333">• Reduce energy loss and save energy costs</text>
+    <text x="20" y="260" font-family="Arial, sans-serif" font-size="14" fill="#333">• Extend equipment lifespan, reduce maintenance costs</text>
+    
+    <!-- Management Efficiency -->
+    <rect x="380" y="150" width="320" height="120" rx="10" ry="10" fill="url(#grad4)" stroke="#4ECDC4" stroke-width="1" />
+    <text x="400" y="180" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Management Efficiency</text>
+    <text x="400" y="210" font-family="Arial, sans-serif" font-size="14" fill="#333">• Reduce anomaly handling time from 7 days to 2 days</text>
+    <text x="400" y="235" font-family="Arial, sans-serif" font-size="14" fill="#333">• Improve work efficiency by over 200%</text>
+    <text x="400" y="260" font-family="Arial, sans-serif" font-size="14" fill="#333">• Intelligent work order dispatch and tracking</text>
+  </g>
+</svg> 

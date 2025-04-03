@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="700" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="700" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="350" y="30" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#333">Long-term High Loss Area Identification and Treatment Priority</text>
+  
+  <!-- Left Side: Identification Process -->
+  <g transform="translate(50, 70)">
+    <rect x="0" y="0" width="250" height="300" rx="5" ry="5" fill="#ffffff" stroke="#ddd" stroke-width="1" />
+    <text x="125" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Identification Process</text>
+    
+    <!-- Process Steps -->
+    <rect x="25" y="45" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="70" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Relative Line Loss Rate Calculation</text>
+    
+    <!-- Arrow -->
+    <line x1="125" y1="85" x2="125" y2="105" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,105 122,98 128,98" fill="#333" />
+    
+    <rect x="25" y="105" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="125" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">Days with Loss Rate ≥5% in 30 Days</text>
+    <text x="125" y="140" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Basic Condition</text>
+    
+    <!-- Arrow -->
+    <line x1="125" y1="145" x2="125" y2="165" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,165 122,158 128,158" fill="#333" />
+    
+    <rect x="25" y="165" width="200" height="50" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="185" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">Abnormal Days ≥20</text>
+    <text x="125" y="203" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">Continuous Anomaly</text>
+    <text x="125" y="215" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">Stability Condition</text>
+    
+    <!-- Arrow -->
+    <line x1="125" y1="215" x2="125" y2="235" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,235 122,228 128,228" fill="#333" />
+    
+    <rect x="25" y="235" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="255" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">Exclude Seasonal and Temporary Load</text>
+    <text x="125" y="270" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">Exclusion Condition</text>
+  </g>
+  
+  <!-- Right Side: Governance Priority -->
+  <g transform="translate(350, 70)">
+    <rect x="0" y="0" width="300" height="300" rx="5" ry="5" fill="#ffffff" stroke="#ddd" stroke-width="1" />
+    <text x="150" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Treatment Priority Assessment</text>
+    
+    <!-- Priority Assessment Framework -->
+    <rect x="20" y="60" width="260" height="200" rx="5" ry="5" fill="#fff" stroke="#ddd" stroke-width="1" />
+    
+    <!-- Priority Indicator -->
+    <rect x="40" y="80" width="220" height="35" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" stroke-width="1" />
+    <text x="150" y="103" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Priority Level: 1 (Regular Treatment)</text>
+    
+    <line x1="40" y1="125" x2="260" y2="125" stroke="#ddd" stroke-width="1" />
+    
+    <!-- Sorting Method -->
+    <text x="50" y="145" font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#333">Sorting Criteria:</text>
+    <rect x="60" y="155" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="172" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Relative Loss Rate Magnitude</text>
+    
+    <rect x="60" y="185" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="202" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Distribution Area Capacity</text>
+    
+    <rect x="60" y="215" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="232" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Historical Treatment Records</text>
+  </g>
+  
+  <!-- Connection Line -->
+  <line x1="300" y1="150" x2="350" y2="150" stroke="#333" stroke-width="2" stroke-dasharray="5,5" />
+  <text x="325" y="140" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Transfer</text>
+  
+  <!-- Bottom Note -->
+  <text x="350" y="385" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">Note: Priority level 1 indicates regular treatment requiring planned measures</text>
+</svg> 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">台区线损异常分类</text>
+  
+  <!-- 相对线损率坐标系 -->
+  <g transform="translate(100, 100)">
+    <!-- Y轴 -->
+    <line x1="300" y1="0" x2="300" y2="350" stroke="#333" stroke-width="2" />
+    <polygon points="300,0 295,10 305,10" fill="#333" />
+    
+    <!-- X轴 -->
+    <line x1="0" y1="175" x2="600" y2="175" stroke="#333" stroke-width="2" />
+    <polygon points="600,175 590,170 590,180" fill="#333" />
+    
+    <!-- 坐标轴标注 -->
+    <text x="300" y="370" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">时间持续性</text>
+    <text x="620" y="175" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">相对线损率</text>
+    <text x="460" y="195" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">正值(高损)</text>
+    <text x="140" y="195" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">负值(负损)</text>
+    <text x="320" y="30" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">突发性</text>
+    <text x="320" y="330" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">长期性</text>
+    
+    <!-- 零点 -->
+    <circle cx="300" cy="175" r="5" fill="#333" />
+    
+    <!-- 异常类型区域 -->
+    <!-- 长期合格台区（中心） -->
+    <rect x="250" y="125" width="100" height="100" rx="10" ry="10" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2" />
+    <text x="300" y="175" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">长期合格台区</text>
+    
+    <!-- 长期高损台区（右下） -->
+    <rect x="400" y="225" width="150" height="100" rx="10" ry="10" fill="#FF5722" fill-opacity="0.2" stroke="#FF5722" stroke-width="2" />
+    <text x="475" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">长期高损台区</text>
+    
+    <!-- 突发高损台区（右上） -->
+    <rect x="400" y="25" width="150" height="100" rx="10" ry="10" fill="#F44336" fill-opacity="0.2" stroke="#F44336" stroke-width="2" />
+    <text x="475" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">突发高损台区</text>
+    
+    <!-- 长期负损台区（左下） -->
+    <rect x="50" y="225" width="150" height="100" rx="10" ry="10" fill="#2196F3" fill-opacity="0.2" stroke="#2196F3" stroke-width="2" />
+    <text x="125" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">长期负损台区</text>
+    
+    <!-- 小负损台区（左下偏中） -->
+    <rect x="150" y="175" width="100" height="100" rx="10" ry="10" fill="#03A9F4" fill-opacity="0.2" stroke="#03A9F4" stroke-width="2" />
+    <text x="200" y="225" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">小负损台区</text>
+    
+    <!-- 突发负损台区（左上） -->
+    <rect x="50" y="25" width="150" height="100" rx="10" ry="10" fill="#3F51B5" fill-opacity="0.2" stroke="#3F51B5" stroke-width="2" />
+    <text x="125" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">突发负损台区</text>
+  </g>
+  
+  <!-- 图例 -->
+  <g transform="translate(150, 465)">
+    <!-- 颜色图例 -->
+    <rect x="0" y="0" width="15" height="15" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2" />
+    <text x="25" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">正常</text>
+    
+    <rect x="80" y="0" width="15" height="15" fill="#FF5722" fill-opacity="0.2" stroke="#FF5722" stroke-width="2" />
+    <text x="105" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">长期高损</text>
+    
+    <rect x="180" y="0" width="15" height="15" fill="#F44336" fill-opacity="0.2" stroke="#F44336" stroke-width="2" />
+    <text x="205" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">突发高损</text>
+    
+    <rect x="280" y="0" width="15" height="15" fill="#2196F3" fill-opacity="0.2" stroke="#2196F3" stroke-width="2" />
+    <text x="305" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">长期负损</text>
+    
+    <rect x="380" y="0" width="15" height="15" fill="#03A9F4" fill-opacity="0.2" stroke="#03A9F4" stroke-width="2" />
+    <text x="405" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">小负损</text>
+    
+    <rect x="480" y="0" width="15" height="15" fill="#3F51B5" fill-opacity="0.2" stroke="#3F51B5" stroke-width="2" />
+    <text x="505" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">突发负损</text>
+  </g>
+</svg> 

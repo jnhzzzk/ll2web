@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#309C9F;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#309C9F;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FF6B6B;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD166;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFD166;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#4ECDC4;stop-opacity:0.4" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">线损诊断分析系统业务价值</text>
+  
+  <!-- 四个价值象限 -->
+  <g transform="translate(50, 80)">
+    <!-- 技术降损 -->
+    <rect x="0" y="0" width="320" height="120" rx="10" ry="10" fill="url(#grad1)" stroke="#309C9F" stroke-width="1" />
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">技术降损</text>
+    <text x="20" y="60" font-family="Arial, sans-serif" font-size="14" fill="#333">• 降低技术线损率0.2-0.5个百分点</text>
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="14" fill="#333">• 智能识别设备故障和参数异常</text>
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="14" fill="#333">• 优化配电网运行方式</text>
+    
+    <!-- 管理降损 -->
+    <rect x="380" y="0" width="320" height="120" rx="10" ry="10" fill="url(#grad2)" stroke="#FF6B6B" stroke-width="1" />
+    <text x="400" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">管理降损</text>
+    <text x="400" y="60" font-family="Arial, sans-serif" font-size="14" fill="#333">• 减少管理性损失电量3%-5%</text>
+    <text x="400" y="85" font-family="Arial, sans-serif" font-size="14" fill="#333">• 规范营销业务流程</text>
+    <text x="400" y="110" font-family="Arial, sans-serif" font-size="14" fill="#333">• 提高电费回收率</text>
+    
+    <!-- 经济效益 -->
+    <rect x="0" y="150" width="320" height="120" rx="10" ry="10" fill="url(#grad3)" stroke="#FFD166" stroke-width="1" />
+    <text x="20" y="180" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">经济效益</text>
+    <text x="20" y="210" font-family="Arial, sans-serif" font-size="14" fill="#333">• 每降低线损率0.1%增加效益约500万元</text>
+    <text x="20" y="235" font-family="Arial, sans-serif" font-size="14" fill="#333">• 减少电能损耗，节约能源成本</text>
+    <text x="20" y="260" font-family="Arial, sans-serif" font-size="14" fill="#333">• 延长设备寿命，降低维护成本</text>
+    
+    <!-- 管理效率 -->
+    <rect x="380" y="150" width="320" height="120" rx="10" ry="10" fill="url(#grad4)" stroke="#4ECDC4" stroke-width="1" />
+    <text x="400" y="180" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">管理效率</text>
+    <text x="400" y="210" font-family="Arial, sans-serif" font-size="14" fill="#333">• 异常处理时间从7天缩短至2天</text>
+    <text x="400" y="235" font-family="Arial, sans-serif" font-size="14" fill="#333">• 提高工作效率200%以上</text>
+    <text x="400" y="260" font-family="Arial, sans-serif" font-size="14" fill="#333">• 智能工单派发和跟踪管理</text>
+  </g>
+</svg> 

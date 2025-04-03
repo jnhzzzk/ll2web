@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="700" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="700" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- 标题 -->
+  <text x="350" y="30" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#333">长期高损台区识别与治理优先级</text>
+  
+  <!-- 左侧：识别流程 -->
+  <g transform="translate(50, 70)">
+    <rect x="0" y="0" width="250" height="300" rx="5" ry="5" fill="#ffffff" stroke="#ddd" stroke-width="1" />
+    <text x="125" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">识别流程</text>
+    
+    <!-- 流程步骤 -->
+    <rect x="25" y="45" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="70" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">台区相对线损率计算</text>
+    
+    <!-- 箭头 -->
+    <line x1="125" y1="85" x2="125" y2="105" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,105 122,98 128,98" fill="#333" />
+    
+    <rect x="25" y="105" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="125" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">近30天内相对线损率≥5%的天数</text>
+    <text x="125" y="140" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">基本条件</text>
+    
+    <!-- 箭头 -->
+    <line x1="125" y1="145" x2="125" y2="165" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,165 122,158 128,158" fill="#333" />
+    
+    <rect x="25" y="165" width="200" height="50" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="185" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">异常天数≥20天</text>
+    <text x="125" y="203" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">持续性异常</text>
+    <text x="125" y="215" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">稳定性条件</text>
+    
+    <!-- 箭头 -->
+    <line x1="125" y1="215" x2="125" y2="235" stroke="#333" stroke-width="1.5" />
+    <polygon points="125,235 122,228 128,228" fill="#333" />
+    
+    <rect x="25" y="235" width="200" height="40" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" />
+    <text x="125" y="255" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">排除季节性因素和临时高负荷</text>
+    <text x="125" y="270" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">排除条件</text>
+  </g>
+  
+  <!-- 右侧：治理优先级 -->
+  <g transform="translate(350, 70)">
+    <rect x="0" y="0" width="300" height="300" rx="5" ry="5" fill="#ffffff" stroke="#ddd" stroke-width="1" />
+    <text x="150" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">治理优先级评估</text>
+    
+    <!-- 优先级评估框架 -->
+    <rect x="20" y="60" width="260" height="200" rx="5" ry="5" fill="#fff" stroke="#ddd" stroke-width="1" />
+    
+    <!-- 优先级指标 -->
+    <rect x="40" y="80" width="220" height="35" rx="5" ry="5" fill="#f8d7da" stroke="#dc3545" stroke-width="1" />
+    <text x="150" y="103" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">识别优先级：1（常规治理优先级）</text>
+    
+    <line x1="40" y1="125" x2="260" y2="125" stroke="#ddd" stroke-width="1" />
+    
+    <!-- 排序方法 -->
+    <text x="50" y="145" font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#333">排序依据：</text>
+    <rect x="60" y="155" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="172" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">相对线损率大小</text>
+    
+    <rect x="60" y="185" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="202" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">台区容量大小</text>
+    
+    <rect x="60" y="215" width="180" height="25" rx="3" ry="3" fill="#fff4e5" stroke="#fd7e14" stroke-width="1" />
+    <text x="150" y="232" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">历史治理记录</text>
+  </g>
+  
+  <!-- 连接线 -->
+  <line x1="300" y1="150" x2="350" y2="150" stroke="#333" stroke-width="2" stroke-dasharray="5,5" />
+  <text x="325" y="140" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">转入</text>
+  
+  <!-- 底部注释 -->
+  <text x="350" y="385" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">注：优先级1表示常规治理优先级，需要计划性治理措施</text>
+</svg> 

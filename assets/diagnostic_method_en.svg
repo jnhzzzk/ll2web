@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Multi-dimensional Diagnosis Method for Line Loss Anomalies</text>
+  
+  <!-- Central Diagnostic Flowchart -->
+  <g transform="translate(220, 100)">
+    <!-- Background Rectangle -->
+    <rect x="0" y="0" width="360" height="350" rx="10" ry="10" fill="#f0f2f5" stroke="#d9d9d9" stroke-width="1" />
+    
+    <!-- Diagnostic Steps -->
+    <rect x="30" y="30" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="65" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Feature Extraction</text>
+    
+    <!-- Arrow -->
+    <line x1="180" y1="90" x2="180" y2="110" stroke="#333" stroke-width="2" />
+    <polygon points="180,110 175,100 185,100" fill="#333" />
+    
+    <rect x="30" y="110" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="145" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Probability Analysis</text>
+    
+    <!-- Arrow -->
+    <line x1="180" y1="170" x2="180" y2="190" stroke="#333" stroke-width="2" />
+    <polygon points="180,190 175,180 185,180" fill="#333" />
+    
+    <rect x="30" y="190" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="225" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Multi-dimensional Diagnosis</text>
+    
+    <!-- Arrow -->
+    <line x1="180" y1="250" x2="180" y2="270" stroke="#333" stroke-width="2" />
+    <polygon points="180,270 175,260 185,260" fill="#333" />
+    
+    <rect x="30" y="270" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="305" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Diagnostic Results</text>
+  </g>
+  
+  <!-- Left Side Input Data -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="120" height="350" rx="5" ry="5" fill="#e6f7ff" stroke="#1890ff" stroke-width="1" />
+    <text x="60" y="25" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">Diagnostic Data Input</text>
+    
+    <rect x="10" y="40" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="65" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Measurement Collection Data</text>
+    
+    <rect x="10" y="95" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="120" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Basic Archival Data</text>
+    
+    <rect x="10" y="150" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="175" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Operational Monitoring Data</text>
+    
+    <rect x="10" y="205" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Event Record Data</text>
+    
+    <rect x="10" y="260" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="285" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Historical Governance Data</text>
+    
+    <!-- Arrow connecting to main process -->
+    <line x1="120" y1="175" x2="220" y2="175" stroke="#333" stroke-width="1.5" />
+    <polygon points="220,175 210,170 210,180" fill="#333" />
+  </g>
+  
+  <!-- Right Side Diagnostic Methods -->
+  <g transform="translate(630, 100)">
+    <rect x="0" y="0" width="120" height="350" rx="5" ry="5" fill="#f9f0ff" stroke="#722ed1" stroke-width="1" />
+    <text x="60" y="25" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">Supporting Diagnostic Methods</text>
+    
+    <rect x="10" y="40" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="60" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Probability-based</text>
+    <text x="60" y="75" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Multi-factor Diagnosis</text>
+    
+    <rect x="10" y="105" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="125" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Evidence-based</text>
+    <text x="60" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Stepwise Diagnosis</text>
+    
+    <rect x="10" y="170" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="190" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Knowledge Graph-based</text>
+    <text x="60" y="205" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Associative Diagnosis</text>
+    
+    <rect x="10" y="235" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Historical Case-based</text>
+    <text x="60" y="270" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">Similarity Diagnosis</text>
+    
+    <!-- Arrow connecting to main process -->
+    <line x1="0" y1="175" x2="-50" y2="175" stroke="#333" stroke-width="1.5" />
+    <polygon points="-50,175 -40,170 -40,180" fill="#333" />
+  </g>
+  
+  <!-- Feature Extraction Detailed Description -->
+  <text x="400" y="145" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Data Cleaning, Anomaly Detection, Feature Calculation</text>
+  
+  <!-- Probability Analysis Detailed Description -->
+  <text x="400" y="225" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Bayesian Networks, Evidence Weight Calculation, Probability Ranking</text>
+  
+  <!-- Multi-dimensional Diagnosis Detailed Description -->
+  <text x="400" y="305" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Multi-dimensional Causal Analysis, Association Rule Mining, Pattern Matching</text>
+  
+  <!-- Diagnostic Results Detailed Description -->
+  <text x="400" y="385" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Multi-factor Probability Distribution, Report Generation, Governance Recommendations</text>
+  
+  <!-- Bottom Supplementary Description -->
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">Note: Continuous iteration and optimization during diagnosis for precise results and continuous learning</text>
+</svg> 

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">线损异常多维诊断方法</text>
+  
+  <!-- 中央诊断流程图 -->
+  <g transform="translate(220, 100)">
+    <!-- 背景矩形 -->
+    <rect x="0" y="0" width="360" height="350" rx="10" ry="10" fill="#f0f2f5" stroke="#d9d9d9" stroke-width="1" />
+    
+    <!-- 诊断步骤 -->
+    <rect x="30" y="30" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="65" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">特征提取</text>
+    
+    <!-- 箭头 -->
+    <line x1="180" y1="90" x2="180" y2="110" stroke="#333" stroke-width="2" />
+    <polygon points="180,110 175,100 185,100" fill="#333" />
+    
+    <rect x="30" y="110" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="145" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">概率分析</text>
+    
+    <!-- 箭头 -->
+    <line x1="180" y1="170" x2="180" y2="190" stroke="#333" stroke-width="2" />
+    <polygon points="180,190 175,180 185,180" fill="#333" />
+    
+    <rect x="30" y="190" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="225" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">多维诊断</text>
+    
+    <!-- 箭头 -->
+    <line x1="180" y1="250" x2="180" y2="270" stroke="#333" stroke-width="2" />
+    <polygon points="180,270 175,260 185,260" fill="#333" />
+    
+    <rect x="30" y="270" width="300" height="60" rx="5" ry="5" fill="#1890ff" opacity="0.2" stroke="#1890ff" />
+    <text x="180" y="305" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">诊断结果</text>
+  </g>
+  
+  <!-- 左侧输入数据 -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="120" height="350" rx="5" ry="5" fill="#e6f7ff" stroke="#1890ff" stroke-width="1" />
+    <text x="60" y="25" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">诊断数据输入</text>
+    
+    <rect x="10" y="40" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="65" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">计量采集数据</text>
+    
+    <rect x="10" y="95" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="120" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">档案基础数据</text>
+    
+    <rect x="10" y="150" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="175" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">运行监测数据</text>
+    
+    <rect x="10" y="205" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">事件记录数据</text>
+    
+    <rect x="10" y="260" width="100" height="45" rx="3" ry="3" fill="#ffffff" stroke="#1890ff" />
+    <text x="60" y="285" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">历史治理数据</text>
+    
+    <!-- 箭头连接到主流程 -->
+    <line x1="120" y1="175" x2="220" y2="175" stroke="#333" stroke-width="1.5" />
+    <polygon points="220,175 210,170 210,180" fill="#333" />
+  </g>
+  
+  <!-- 右侧诊断方法 -->
+  <g transform="translate(630, 100)">
+    <rect x="0" y="0" width="120" height="350" rx="5" ry="5" fill="#f9f0ff" stroke="#722ed1" stroke-width="1" />
+    <text x="60" y="25" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">诊断方法支撑</text>
+    
+    <rect x="10" y="40" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="60" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">基于概率的</text>
+    <text x="60" y="75" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">多因素诊断</text>
+    
+    <rect x="10" y="105" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="125" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">基于证据的</text>
+    <text x="60" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">逐步诊断</text>
+    
+    <rect x="10" y="170" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="190" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">基于知识图谱的</text>
+    <text x="60" y="205" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">关联诊断</text>
+    
+    <rect x="10" y="235" width="100" height="55" rx="3" ry="3" fill="#ffffff" stroke="#722ed1" />
+    <text x="60" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">基于历史案例的</text>
+    <text x="60" y="270" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">相似性诊断</text>
+    
+    <!-- 箭头连接到主流程 -->
+    <line x1="0" y1="175" x2="-50" y2="175" stroke="#333" stroke-width="1.5" />
+    <polygon points="-50,175 -40,170 -40,180" fill="#333" />
+  </g>
+  
+  <!-- 特征提取部分详细说明 -->
+  <text x="400" y="145" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">数据清洗、异常检测、特征计算</text>
+  
+  <!-- 概率分析部分详细说明 -->
+  <text x="400" y="225" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">贝叶斯网络、证据权重计算、概率排序</text>
+  
+  <!-- 多维诊断部分详细说明 -->
+  <text x="400" y="305" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">多维因果分析、关联规则挖掘、模式匹配</text>
+  
+  <!-- 诊断结果部分详细说明 -->
+  <text x="400" y="385" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">多因素概率分布、诊断报告生成、治理建议</text>
+  
+  <!-- 底部补充说明 -->
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">注：诊断过程中不断迭代优化，实现精准诊断和持续学习</text>
+</svg> 

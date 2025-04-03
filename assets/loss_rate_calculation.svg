@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="600" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">线损率计算流程</text>
+  
+  <!-- 主流程图 -->
+  <g transform="translate(50, 80)">
+    <!-- 数据来源 -->
+    <rect x="0" y="0" width="700" height="70" rx="5" ry="5" fill="#eef" stroke="#aad" stroke-width="1" />
+    <text x="350" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">数据来源</text>
+    
+    <rect x="20" y="35" width="130" height="25" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+    <text x="85" y="52" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">配变表计采集数据</text>
+    
+    <rect x="170" y="35" width="130" height="25" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+    <text x="235" y="52" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">用户表计采集数据</text>
+    
+    <rect x="320" y="35" width="130" height="25" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+    <text x="385" y="52" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">气象环境数据</text>
+    
+    <rect x="470" y="35" width="130" height="25" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+    <text x="535" y="52" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">配网拓扑数据</text>
+    
+    <!-- 数据预处理 -->
+    <rect x="0" y="90" width="700" height="70" rx="5" ry="5" fill="#efe" stroke="#ada" stroke-width="1" />
+    <text x="350" y="115" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">数据预处理</text>
+    
+    <rect x="20" y="125" width="150" height="25" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+    <text x="95" y="142" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">数据清洗与异常处理</text>
+    
+    <rect x="190" y="125" width="150" height="25" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+    <text x="265" y="142" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">数据补全与插值估算</text>
+    
+    <rect x="360" y="125" width="150" height="25" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+    <text x="435" y="142" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">时间序列对齐与聚合</text>
+    
+    <rect x="530" y="125" width="150" height="25" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+    <text x="605" y="142" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">数据标准化与归一化</text>
+    
+    <!-- 线损计算 -->
+    <g>
+      <!-- 理论线损计算 -->
+      <rect x="0" y="180" width="220" height="260" rx="5" ry="5" fill="#fee" stroke="#daa" stroke-width="1" />
+      <text x="110" y="205" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">理论线损计算</text>
+      
+      <rect x="20" y="220" width="180" height="30" rx="3" ry="3" fill="#fff0f0" stroke="#daa" />
+      <text x="110" y="240" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">计算方法选择</text>
+      
+      <!-- 箭头 -->
+      <line x1="110" y1="250" x2="110" y2="265" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="20" y="265" width="180" height="30" rx="3" ry="3" fill="#fff0f0" stroke="#daa" />
+      <text x="110" y="277" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">方法一（优先）：</text>
+      <text x="110" y="290" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">技术线损法</text>
+      
+      <!-- 箭头 -->
+      <line x1="110" y1="295" x2="110" y2="310" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="20" y="310" width="180" height="30" rx="3" ry="3" fill="#fff0f0" stroke="#daa" />
+      <text x="110" y="322" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">方法二：</text>
+      <text x="110" y="335" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">压降法</text>
+      
+      <!-- 箭头 -->
+      <line x1="110" y1="340" x2="110" y2="355" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="20" y="355" width="180" height="30" rx="3" ry="3" fill="#fff0f0" stroke="#daa" />
+      <text x="110" y="367" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">方法三：</text>
+      <text x="110" y="380" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">回归分析法</text>
+      
+      <!-- 箭头 -->
+      <line x1="110" y1="385" x2="110" y2="400" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="20" y="400" width="180" height="30" rx="3" ry="3" fill="#fff0f0" stroke="#daa" />
+      <text x="110" y="412" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">方法四：</text>
+      <text x="110" y="425" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">赋值法</text>
+      
+      <!-- 公式框 -->
+      <rect x="5" y="440" width="210" height="25" rx="3" ry="3" fill="none" stroke="#999" stroke-dasharray="3,3" />
+      <text x="110" y="457" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">理论线损率 = 理论线损量 / 供电量</text>
+    </g>
+    
+    <!-- 绝对线损计算 -->
+    <g>
+      <rect x="240" y="180" width="220" height="260" rx="5" ry="5" fill="#eef" stroke="#aad" stroke-width="1" />
+      <text x="350" y="205" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">绝对线损计算</text>
+      
+      <rect x="260" y="220" width="180" height="30" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+      <text x="350" y="240" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">供电量数据收集</text>
+      
+      <!-- 箭头 -->
+      <line x1="350" y1="250" x2="350" y2="265" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="260" y="265" width="180" height="30" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+      <text x="350" y="285" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">售电量数据收集</text>
+      
+      <!-- 箭头 -->
+      <line x1="350" y1="295" x2="350" y2="310" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="260" y="310" width="180" height="30" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+      <text x="350" y="330" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">数据验证与修正</text>
+      
+      <!-- 箭头 -->
+      <line x1="350" y1="340" x2="350" y2="355" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="260" y="355" width="180" height="30" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+      <text x="350" y="375" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">绝对线损量计算</text>
+      
+      <!-- 箭头 -->
+      <line x1="350" y1="385" x2="350" y2="400" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="260" y="400" width="180" height="30" rx="3" ry="3" fill="#f0f0ff" stroke="#aad" />
+      <text x="350" y="420" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">绝对线损率计算</text>
+      
+      <!-- 公式框 -->
+      <rect x="245" y="440" width="210" height="25" rx="3" ry="3" fill="none" stroke="#999" stroke-dasharray="3,3" />
+      <text x="350" y="457" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">绝对线损率 = (供电量-售电量) / 供电量</text>
+    </g>
+    
+    <!-- 相对线损计算 -->
+    <g>
+      <rect x="480" y="180" width="220" height="260" rx="5" ry="5" fill="#efe" stroke="#ada" stroke-width="1" />
+      <text x="590" y="205" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">相对线损计算</text>
+      
+      <rect x="500" y="220" width="180" height="30" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+      <text x="590" y="240" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">绝对线损率获取</text>
+      
+      <!-- 箭头 -->
+      <line x1="590" y1="250" x2="590" y2="265" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="500" y="265" width="180" height="30" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+      <text x="590" y="285" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">历史同期数据获取</text>
+      
+      <!-- 箭头 -->
+      <line x1="590" y1="295" x2="590" y2="310" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="500" y="310" width="180" height="30" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+      <text x="590" y="330" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">负荷特性分析</text>
+      
+      <!-- 箭头 -->
+      <line x1="590" y1="340" x2="590" y2="355" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="500" y="355" width="180" height="30" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+      <text x="590" y="375" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">基准线损率计算</text>
+      
+      <!-- 箭头 -->
+      <line x1="590" y1="385" x2="590" y2="400" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)" />
+      
+      <rect x="500" y="400" width="180" height="30" rx="3" ry="3" fill="#f0fff0" stroke="#ada" />
+      <text x="590" y="420" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">相对线损率计算</text>
+      
+      <!-- 公式框 -->
+      <rect x="485" y="440" width="210" height="25" rx="3" ry="3" fill="none" stroke="#999" stroke-dasharray="3,3" />
+      <text x="590" y="457" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">相对线损率 = 绝对线损率 - 基准线损率</text>
+    </g>
+    
+    <!-- 结果应用 -->
+    <rect x="0" y="460" width="700" height="70" rx="5" ry="5" fill="#fef" stroke="#dad" stroke-width="1" />
+    <text x="350" y="485" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">线损分析应用</text>
+    
+    <rect x="20" y="495" width="150" height="25" rx="3" ry="3" fill="#fff0ff" stroke="#dad" />
+    <text x="95" y="512" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">台区异常识别</text>
+    
+    <rect x="190" y="495" width="150" height="25" rx="3" ry="3" fill="#fff0ff" stroke="#dad" />
+    <text x="265" y="512" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">线损问题分类诊断</text>
+    
+    <rect x="360" y="495" width="150" height="25" rx="3" ry="3" fill="#fff0ff" stroke="#dad" />
+    <text x="435" y="512" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">治理措施建议</text>
+    
+    <rect x="530" y="495" width="150" height="25" rx="3" ry="3" fill="#fff0ff" stroke="#dad" />
+    <text x="605" y="512" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">线损率预测与评估</text>
+  </g>
+  
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666" />
+    </marker>
+  </defs>
+</svg> 

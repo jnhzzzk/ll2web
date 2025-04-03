@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="350" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="350" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">Line Loss Analysis and Diagnosis Process</text>
+  
+  <!-- Process boxes and arrows -->
+  <g transform="translate(50, 80)">
+    <!-- Step 1: Data Collection and Preprocessing -->
+    <rect x="0" y="0" width="120" height="80" rx="8" ry="8" fill="#309C9F" opacity="0.8" />
+    <text x="60" y="35" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Data Collection</text>
+    <text x="60" y="55" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">& Preprocessing</text>
+    
+    <!-- Arrow 1 -->
+    <line x1="120" y1="40" x2="150" y2="40" stroke="#666" stroke-width="2" />
+    <polygon points="150,35 160,40 150,45" fill="#666" />
+    
+    <!-- Step 2: Line Loss Rate Calculation -->
+    <rect x="160" y="0" width="120" height="80" rx="8" ry="8" fill="#309C9F" opacity="0.8" />
+    <text x="220" y="35" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Line Loss Rate</text>
+    <text x="220" y="55" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Calculation</text>
+    
+    <!-- Arrow 2 -->
+    <line x1="280" y1="40" x2="310" y2="40" stroke="#666" stroke-width="2" />
+    <polygon points="310,35 320,40 310,45" fill="#666" />
+    
+    <!-- Step 3: Anomaly Area Identification -->
+    <rect x="320" y="0" width="120" height="80" rx="8" ry="8" fill="#309C9F" opacity="0.8" />
+    <text x="380" y="35" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Anomaly Area</text>
+    <text x="380" y="55" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Identification</text>
+    
+    <!-- Arrow 3 -->
+    <line x1="440" y1="40" x2="470" y2="40" stroke="#666" stroke-width="2" />
+    <polygon points="470,35 480,40 470,45" fill="#666" />
+    
+    <!-- Step 4: Classification and Diagnosis -->
+    <rect x="480" y="0" width="120" height="80" rx="8" ry="8" fill="#309C9F" opacity="0.8" />
+    <text x="540" y="35" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Classification &</text>
+    <text x="540" y="55" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Diagnosis</text>
+    
+    <!-- Arrow 4 -->
+    <line x1="600" y1="40" x2="630" y2="40" stroke="#666" stroke-width="2" />
+    <polygon points="630,35 640,40 630,45" fill="#666" />
+    
+    <!-- Step 5: Governance Recommendations -->
+    <rect x="640" y="0" width="120" height="80" rx="8" ry="8" fill="#309C9F" opacity="0.8" />
+    <text x="700" y="35" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Governance</text>
+    <text x="700" y="55" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">Recommendations</text>
+  </g>
+  
+  <!-- Detailed descriptions -->
+  <g transform="translate(50, 180)">
+    <text x="60" y="0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Multi-source Integration</text>
+    <text x="60" y="20" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Data Standardization</text>
+    
+    <text x="220" y="0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Absolute Loss Rate</text>
+    <text x="220" y="20" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Theoretical Loss Rate</text>
+    <text x="220" y="40" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Relative Loss Rate</text>
+    
+    <text x="380" y="0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Anomaly Classification</text>
+    <text x="380" y="20" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Priority Assessment</text>
+    
+    <text x="540" y="0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Multi-dimensional Analysis</text>
+    <text x="540" y="20" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Root Cause Probability</text>
+    
+    <text x="700" y="0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Solution Recommendations</text>
+    <text x="700" y="20" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Effect Tracking & Evaluation</text>
+  </g>
+  
+  <!-- Data Flow -->
+  <g transform="translate(50, 240)">
+    <rect x="0" y="0" width="120" height="60" rx="5" ry="5" fill="#eee" stroke="#ddd" />
+    <text x="60" y="25" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Metering Data</text>
+    <text x="60" y="45" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Area Archives</text>
+    
+    <rect x="160" y="0" width="120" height="60" rx="5" ry="5" fill="#eee" stroke="#ddd" />
+    <text x="220" y="25" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Absolute Loss Calculation</text>
+    <text x="220" y="45" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Theoretical Loss Models</text>
+    
+    <rect x="320" y="0" width="120" height="60" rx="5" ry="5" fill="#eee" stroke="#ddd" />
+    <text x="380" y="25" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Scanning Algorithms</text>
+    <text x="380" y="45" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Threshold Models</text>
+    
+    <rect x="480" y="0" width="120" height="60" rx="5" ry="5" fill="#eee" stroke="#ddd" />
+    <text x="540" y="25" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Intelligent Diagnostic Engine</text>
+    <text x="540" y="45" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Knowledge Graph</text>
+    
+    <rect x="640" y="0" width="120" height="60" rx="5" ry="5" fill="#eee" stroke="#ddd" />
+    <text x="700" y="25" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Work Order Generation</text>
+    <text x="700" y="45" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">Effect Evaluation</text>
+  </g>
+</svg> 

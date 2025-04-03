@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#333">Periodic Line Loss Anomaly Scanning Process</text>
+  
+  <!-- Process Main Body -->
+  <g transform="translate(100, 60)">
+    <!-- Data Preparation Phase -->
+    <rect x="0" y="0" width="600" height="80" rx="5" ry="5" fill="#e6f7ff" stroke="#1890ff" stroke-width="1" />
+    <text x="300" y="25" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Data Preparation Phase</text>
+    
+    <!-- Data Preparation Steps -->
+    <rect x="30" y="35" width="120" height="35" rx="3" ry="3" fill="#1890ff" fill-opacity="0.2" stroke="#1890ff" />
+    <text x="90" y="57" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Metering Data Collection</text>
+    
+    <rect x="170" y="35" width="120" height="35" rx="3" ry="3" fill="#1890ff" fill-opacity="0.2" stroke="#1890ff" />
+    <text x="230" y="57" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Loss Rate Calculation</text>
+    
+    <rect x="310" y="35" width="120" height="35" rx="3" ry="3" fill="#1890ff" fill-opacity="0.2" stroke="#1890ff" />
+    <text x="370" y="57" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Historical Comparison</text>
+    
+    <rect x="450" y="35" width="120" height="35" rx="3" ry="3" fill="#1890ff" fill-opacity="0.2" stroke="#1890ff" />
+    <text x="510" y="57" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Data Quality Check</text>
+    
+    <!-- Connection Arrow -->
+    <line x1="300" y1="80" x2="300" y2="100" stroke="#666" stroke-width="2" />
+    <polygon points="300,100 295,90 305,90" fill="#666" />
+    
+    <!-- Anomaly Identification Phase -->
+    <rect x="0" y="100" width="600" height="200" rx="5" ry="5" fill="#fff7e6" stroke="#fa8c16" stroke-width="1" />
+    <text x="300" y="125" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Anomaly Identification Phase</text>
+    
+    <!-- Anomaly Type Identification -->
+    <rect x="30" y="140" width="540" height="25" rx="3" ry="3" fill="#fa8c16" fill-opacity="0.1" stroke="#fa8c16" />
+    <text x="300" y="157" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Area Anomaly Classification Based on Relative Line Loss Rate</text>
+    
+    <!-- Six Anomaly Types -->
+    <rect x="30" y="175" width="170" height="35" rx="3" ry="3" fill="#F44336" fill-opacity="0.1" stroke="#F44336" />
+    <text x="115" y="197" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Sudden High Loss Areas</text>
+    
+    <rect x="215" y="175" width="170" height="35" rx="3" ry="3" fill="#FF5722" fill-opacity="0.1" stroke="#FF5722" />
+    <text x="300" y="197" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Long-term High Loss Areas</text>
+    
+    <rect x="400" y="175" width="170" height="35" rx="3" ry="3" fill="#4CAF50" fill-opacity="0.1" stroke="#4CAF50" />
+    <text x="485" y="197" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Normal Areas</text>
+    
+    <rect x="30" y="220" width="170" height="35" rx="3" ry="3" fill="#3F51B5" fill-opacity="0.1" stroke="#3F51B5" />
+    <text x="115" y="242" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Sudden Negative Loss Areas</text>
+    
+    <rect x="215" y="220" width="170" height="35" rx="3" ry="3" fill="#2196F3" fill-opacity="0.1" stroke="#2196F3" />
+    <text x="300" y="242" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Long-term Negative Loss Areas</text>
+    
+    <rect x="400" y="220" width="170" height="35" rx="3" ry="3" fill="#03A9F4" fill-opacity="0.1" stroke="#03A9F4" />
+    <text x="485" y="242" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Small Negative Loss Areas</text>
+    
+    <!-- Scanning Frequency -->
+    <rect x="30" y="265" width="540" height="25" rx="3" ry="3" fill="#fa8c16" fill-opacity="0.1" stroke="#fa8c16" />
+    <text x="80" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Daily</text>
+    <text x="225" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Daily</text>
+    <text x="400" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Monthly</text>
+    <text x="485" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Weekly</text>
+    <text x="300" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Weekly</text>
+    <text x="570" y="282" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Monthly</text>
+    
+    <!-- Connection Arrow -->
+    <line x1="300" y1="300" x2="300" y2="320" stroke="#666" stroke-width="2" />
+    <polygon points="300,320 295,310 305,310" fill="#666" />
+    
+    <!-- Priority Assessment Phase -->
+    <rect x="0" y="320" width="600" height="80" rx="5" ry="5" fill="#f6ffed" stroke="#52c41a" stroke-width="1" />
+    <text x="300" y="345" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">Priority Assessment and Handling Phase</text>
+    
+    <!-- Assessment Steps -->
+    <rect x="30" y="355" width="100" height="35" rx="3" ry="3" fill="#52c41a" fill-opacity="0.2" stroke="#52c41a" />
+    <text x="80" y="377" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Severity Level</text>
+    
+    <rect x="140" y="355" width="100" height="35" rx="3" ry="3" fill="#52c41a" fill-opacity="0.2" stroke="#52c41a" />
+    <text x="190" y="377" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Area Scale</text>
+    
+    <rect x="250" y="355" width="100" height="35" rx="3" ry="3" fill="#52c41a" fill-opacity="0.2" stroke="#52c41a" />
+    <text x="300" y="377" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Duration</text>
+    
+    <rect x="360" y="355" width="100" height="35" rx="3" ry="3" fill="#52c41a" fill-opacity="0.2" stroke="#52c41a" />
+    <text x="410" y="377" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Historical Records</text>
+    
+    <rect x="470" y="355" width="100" height="35" rx="3" ry="3" fill="#52c41a" fill-opacity="0.2" stroke="#52c41a" />
+    <text x="520" y="377" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Priority Scoring</text>
+  </g>
+  
+  <!-- Result Output -->
+  <g transform="translate(100, 450)">
+    <rect x="0" y="0" width="600" height="40" rx="5" ry="5" fill="#722ed1" fill-opacity="0.1" stroke="#722ed1" stroke-width="1" />
+    <text x="300" y="25" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">Anomalous Area Classification List Generation and Distribution</text>
+    
+    <!-- Upper Arrow -->
+    <line x1="300" y1="-10" x2="300" y2="0" stroke="#666" stroke-width="2" />
+    <polygon points="300,0 295,-10 305,-10" fill="#666" />
+  </g>
+  
+  <!-- Description Text -->
+  <text x="400" y="495" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">Automatically generate work orders based on priority and distribute to responsible staff via SMS, system messages, etc.</text>
+</svg> 

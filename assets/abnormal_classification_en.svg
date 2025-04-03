@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Distribution Area Line Loss Anomaly Classification</text>
+  
+  <!-- Relative Line Loss Rate Coordinate System -->
+  <g transform="translate(100, 100)">
+    <!-- Y-axis -->
+    <line x1="300" y1="0" x2="300" y2="350" stroke="#333" stroke-width="2" />
+    <polygon points="300,0 295,10 305,10" fill="#333" />
+    
+    <!-- X-axis -->
+    <line x1="0" y1="175" x2="600" y2="175" stroke="#333" stroke-width="2" />
+    <polygon points="600,175 590,170 590,180" fill="#333" />
+    
+    <!-- Coordinate axis labels -->
+    <text x="300" y="370" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Time Duration</text>
+    <text x="620" y="175" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">Relative Loss Rate</text>
+    <text x="460" y="195" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Positive (High Loss)</text>
+    <text x="140" y="195" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Negative (Negative Loss)</text>
+    <text x="320" y="30" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Sudden</text>
+    <text x="320" y="330" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Long-term</text>
+    
+    <!-- Zero point -->
+    <circle cx="300" cy="175" r="5" fill="#333" />
+    
+    <!-- Anomaly type areas -->
+    <!-- Long-term qualified areas (center) -->
+    <rect x="250" y="125" width="100" height="100" rx="10" ry="10" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2" />
+    <text x="300" y="175" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Normal Areas</text>
+    
+    <!-- Long-term high loss areas (bottom right) -->
+    <rect x="400" y="225" width="150" height="100" rx="10" ry="10" fill="#FF5722" fill-opacity="0.2" stroke="#FF5722" stroke-width="2" />
+    <text x="475" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Long-term High Loss</text>
+    
+    <!-- Sudden high loss areas (top right) -->
+    <rect x="400" y="25" width="150" height="100" rx="10" ry="10" fill="#F44336" fill-opacity="0.2" stroke="#F44336" stroke-width="2" />
+    <text x="475" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Sudden High Loss</text>
+    
+    <!-- Long-term negative loss areas (bottom left) -->
+    <rect x="50" y="225" width="150" height="100" rx="10" ry="10" fill="#2196F3" fill-opacity="0.2" stroke="#2196F3" stroke-width="2" />
+    <text x="125" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Long-term Negative Loss</text>
+    
+    <!-- Small negative loss areas (bottom left-center) -->
+    <rect x="150" y="175" width="100" height="100" rx="10" ry="10" fill="#03A9F4" fill-opacity="0.2" stroke="#03A9F4" stroke-width="2" />
+    <text x="200" y="225" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Small Negative Loss</text>
+    
+    <!-- Sudden negative loss areas (top left) -->
+    <rect x="50" y="25" width="150" height="100" rx="10" ry="10" fill="#3F51B5" fill-opacity="0.2" stroke="#3F51B5" stroke-width="2" />
+    <text x="125" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Sudden Negative Loss</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(150, 465)">
+    <!-- Color legend -->
+    <rect x="0" y="0" width="15" height="15" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2" />
+    <text x="25" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Normal</text>
+    
+    <rect x="80" y="0" width="15" height="15" fill="#FF5722" fill-opacity="0.2" stroke="#FF5722" stroke-width="2" />
+    <text x="105" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Long-term High Loss</text>
+    
+    <rect x="180" y="0" width="15" height="15" fill="#F44336" fill-opacity="0.2" stroke="#F44336" stroke-width="2" />
+    <text x="205" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Sudden High Loss</text>
+    
+    <rect x="280" y="0" width="15" height="15" fill="#2196F3" fill-opacity="0.2" stroke="#2196F3" stroke-width="2" />
+    <text x="305" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Long-term Negative Loss</text>
+    
+    <rect x="380" y="0" width="15" height="15" fill="#03A9F4" fill-opacity="0.2" stroke="#03A9F4" stroke-width="2" />
+    <text x="405" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Small Negative Loss</text>
+    
+    <rect x="480" y="0" width="15" height="15" fill="#3F51B5" fill-opacity="0.2" stroke="#3F51B5" stroke-width="2" />
+    <text x="505" y="12" font-family="Arial, sans-serif" font-size="12" fill="#333">Sudden Negative Loss</text>
+  </g>
+</svg> 

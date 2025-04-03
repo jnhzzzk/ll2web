@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="800" height="600" fill="#f9f9f9" />
+    
+    <!-- Title -->
+    <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Intelligent Diagnostic Engine Architecture for Line Loss Anomalies</text>
+    
+    <!-- Central Engine Framework -->
+    <rect x="200" y="100" width="400" height="300" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" />
+    
+    <!-- Engine Components -->
+    <rect x="220" y="130" width="360" height="50" rx="5" ry="5" fill="#b3e5fc" stroke="#0288d1" stroke-width="1" />
+    <text x="400" y="160" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Feature Engineering Module</text>
+    
+    <rect x="220" y="190" width="360" height="50" rx="5" ry="5" fill="#b3e5fc" stroke="#0288d1" stroke-width="1" />
+    <text x="400" y="220" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Knowledge Graph Engine</text>
+    
+    <rect x="220" y="250" width="360" height="50" rx="5" ry="5" fill="#b3e5fc" stroke="#0288d1" stroke-width="1" />
+    <text x="400" y="280" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Probabilistic Reasoning Module</text>
+    
+    <rect x="220" y="310" width="360" height="50" rx="5" ry="5" fill="#b3e5fc" stroke="#0288d1" stroke-width="1" />
+    <text x="400" y="340" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Case Matching Module</text>
+    
+    <!-- Input Data -->
+    <rect x="50" y="200" width="120" height="100" rx="5" ry="5" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" />
+    <text x="110" y="225" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Input Data</text>
+    <text x="110" y="245" font-family="Arial" font-size="12" text-anchor="middle">Measurement Data</text>
+    <text x="110" y="265" font-family="Arial" font-size="12" text-anchor="middle">Basic Archival Data</text>
+    <text x="110" y="285" font-family="Arial" font-size="12" text-anchor="middle">Operational Data</text>
+    
+    <!-- Input Data Connection Line -->
+    <line x1="170" y1="250" x2="200" y2="250" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,3" />
+    <polygon points="200,250 190,245 190,255" fill="#4caf50" />
+    
+    <!-- Diagnostic Fusion Module -->
+    <rect x="300" y="440" width="200" height="60" rx="5" ry="5" fill="#f0f4c3" stroke="#cddc39" stroke-width="2" />
+    <text x="400" y="475" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Diagnostic Fusion Module</text>
+    
+    <!-- Connection Line to Diagnostic Fusion Module -->
+    <line x1="400" y1="400" x2="400" y2="440" stroke="#cddc39" stroke-width="2" />
+    <polygon points="400,440 395,430 405,430" fill="#cddc39" />
+    
+    <!-- Diagnostic Results -->
+    <rect x="630" y="200" width="120" height="100" rx="5" ry="5" fill="#fff3e0" stroke="#ff9800" stroke-width="2" />
+    <text x="690" y="225" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Diagnostic Results</text>
+    <text x="690" y="245" font-family="Arial" font-size="12" text-anchor="middle">Anomaly Type</text>
+    <text x="690" y="265" font-family="Arial" font-size="12" text-anchor="middle">Cause Probability Distribution</text>
+    <text x="690" y="285" font-family="Arial" font-size="12" text-anchor="middle">Governance Recommendations</text>
+    
+    <!-- Diagnostic Results Connection Line -->
+    <line x1="600" y1="250" x2="630" y2="250" stroke="#ff9800" stroke-width="2" />
+    <polygon points="630,250 620,245 620,255" fill="#ff9800" />
+    
+    <!-- Connection Line from Fusion Module to Results -->
+    <path d="M 500 470 C 550 470 600 350 630 250" fill="none" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,3" />
+    <polygon points="630,250 622,257 618,247" fill="#ff9800" />
+    
+    <!-- Self-learning Optimization Loop -->
+    <path d="M 690 300 C 720 350 650 520 400 520 C 150 520 80 350 110 250" fill="none" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,3" />
+    <polygon points="110,250 105,260 115,260" fill="#9c27b0" />
+    <text x="400" y="540" font-family="Arial" font-size="14" font-style="italic" text-anchor="middle" fill="#9c27b0">Self-learning Optimization Loop</text>
+    
+    <!-- Bottom Description -->
+    <text x="400" y="570" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">
+        The diagnostic engine enables precise diagnosis of line loss anomalies through multi-dimensional analysis and continuous model optimization
+    </text>
+</svg> 
