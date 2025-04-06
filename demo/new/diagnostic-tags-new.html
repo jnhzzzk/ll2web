@@ -949,7 +949,7 @@
                                     <!-- 时序数据可视化 -->
                                     <div class="mt-3">
                                         <div class="flex justify-between items-center mb-1">
-                                            <span class="text-gray-600 font-medium">电量/线损率日维度变化</span>
+                                            <span class="text-gray-600 font-medium">电流/功率因数日维度变化</span>
                                         </div>
                                         <div class="h-40">
                                             <canvas id="mainMeterTimeSeriesChart"></canvas>
@@ -1097,7 +1097,7 @@
                                     <!-- 时序数据可视化 -->
                                     <div class="mt-3">
                                         <div class="flex justify-between items-center mb-1">
-                                            <span class="text-gray-600 font-medium">用户用电负荷日维度变化</span>
+                                            <span class="text-gray-600 font-medium">三相电流不平衡度变化</span>
                                         </div>
                                         <div class="h-40">
                                             <canvas id="subMeterTimeSeriesChart"></canvas>
@@ -1684,6 +1684,178 @@
                         </tfoot>
                     </table>
                 `;
+            } else if (tagTitle === '低压设备故障') {
+                // 低压设备故障的图表配置
+                const chartData = {
+                    labels: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                    voltageData: [220, 218, 215, 208, 205, 202, 200, 198, 195, 192],
+                    currentData: [150, 155, 160, 165, 170, 175, 180, 185, 190, 195]
+                };
+                
+                // 特定标签数据覆盖
+                if (tagData.details && tagData.details.mainMeterChartData) {
+                    chartData.labels = tagData.details.mainMeterChartData.dates;
+                }
+                
+                // 更新图表标题
+                document.querySelector('.text-gray-600.font-medium').textContent = '电压/电流日维度变化';
+                
+                new Chart(mainMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '三相平均电压 (V)',
+                                data: chartData.voltageData,
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: '三相平均电流 (A)',
+                                data: chartData.currentData,
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '电压 (V)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '电流 (A)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 更新子表图表标题
+                document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '三相电压不平衡度变化';
+                
+                new Chart(subMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '三相电压不平衡度 (%)',
+                                data: [1.2, 1.5, 2.0, 2.8, 3.5, 4.2, 5.0, 5.8, 6.5, 7.2],
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '不平衡度 (%)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             } else {
                 // 默认低压设备故障
                 probabilityHtml = `
@@ -1736,9 +1908,545 @@
             
             // 初始化图表
             setTimeout(() => {
-                // 总表时序图表
+                // 获取标签类型
+                const tagType = tagData.title;
                 const mainMeterCtx = document.getElementById('mainMeterTimeSeriesChart').getContext('2d');
+                const subMeterCtx = document.getElementById('subMeterTimeSeriesChart').getContext('2d');
                 
+                // 根据标签类型初始化对应的图表
+                if (tagType === 'CT互感器倍率错误') {
+                    // CT互感器倍率错误的图表配置
+                    const chartData = {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        currentData: [150, 152, 151, 153, 155, 152, 150, 165, 172, 183],
+                        powerFactorData: [0.92, 0.91, 0.92, 0.90, 0.89, 0.88, 0.87, 0.85, 0.84, 0.82]
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '电流/功率因数日维度变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '三相平均电流 (A)',
+                                    data: chartData.currentData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '功率因数',
+                                    data: chartData.powerFactorData,
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    borderDash: [5, 5],
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '电流 (A)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '功率因数',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '三相电流不平衡度变化';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '三相电流不平衡度 (%)',
+                                    data: [2.5, 2.8, 2.6, 2.9, 3.2, 3.0, 2.8, 3.5, 3.8, 4.2],
+                                    borderColor: '#16a34a',
+                                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '不平衡度 (%)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (tagType === '台区户表关系错误') {
+                    // 台区户表关系错误的图表配置
+                    const chartData = {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        voltageCorrelationData: [0.95, 0.94, 0.92, 0.85, 0.78, 0.76, 0.72, 0.68, 0.65, 0.60],
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '电压相关性日维度变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '总表-用户表电压相关性',
+                                    data: chartData.voltageCorrelationData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: false,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '相关性',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    min: 0,
+                                    max: 1
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '户表距离总表距离分布';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['0-100m', '100-200m', '200-300m', '300-400m', '400-500m', '500-600m', '600-700m', '700-800m', '800-900m', '900m+'],
+                            datasets: [
+                                {
+                                    label: '户表距离分布 (米)',
+                                    data: [5, 12, 15, 20, 8, 3, 1, 0, 0, 2],
+                                    backgroundColor: 'rgba(22, 163, 74, 0.6)',
+                                    borderColor: '#16a34a',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: '距离区间',
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '户表数量',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (tagType === '用电负荷突增') {
+                    // 用电负荷突增的图表配置
+                    const chartData = {
+                        labels: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                        maxPowerData: [80, 83, 85, 110, 155, 170, 190, 195, 198, 200],
+                        avgPowerData: [65, 67, 68, 75, 95, 110, 125, 130, 135, 140]
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '最大负荷与平均负荷对比变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '最大负荷 (kW)',
+                                    data: chartData.maxPowerData,
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '平均负荷 (kW)',
+                                    data: chartData.avgPowerData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '环比增长率 (%)',
+                                    data: [0, 3.8, 2.4, 29.4, 40.9, 9.7, 11.8, 2.6, 1.5, 1.0], // 计算最大负荷的环比增长率
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    fill: false,
+                                    borderDash: [5, 5],
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '负荷 (kW)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '增长率 (%)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '负荷突增用户分布';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['<10%', '10-30%', '30-50%', '50-80%', '80-100%', '>100%'],
+                            datasets: [
+                                {
+                                    label: '用户数量',
+                                    data: [12, 18, 8, 5, 3, 3],
+                                    backgroundColor: [
+                                        'rgba(59, 130, 246, 0.6)', // 蓝色
+                                        'rgba(16, 185, 129, 0.6)', // 绿色
+                                        'rgba(245, 158, 11, 0.6)', // 黄色
+                                        'rgba(249, 115, 22, 0.6)', // 橙色
+                                        'rgba(239, 68, 68, 0.6)',  // 红色
+                                        'rgba(139, 92, 246, 0.6)'  // 紫色
+                                    ],
+                                    borderColor: [
+                                        '#3b82f6',
+                                        '#10b981',
+                                        '#f59e0b',
+                                        '#f97316',
+                                        '#ef4444',
+                                        '#8b5cf6'
+                                    ],
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            const item = tooltipItems[0];
+                                            return `负荷增长: ${item.label}`;
+                                        },
+                                        label: function(context) {
+                                            return `用户数: ${context.parsed.y}户`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '负荷增长率区间',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '用户数量 (户)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    // 其他标签的默认图表配置
                 let chartData = {
                     labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
                     usageData: [1485, 1510, 1498, 1522, 1540, 1502, 1485, 1650, 1720, 1835],
@@ -1846,8 +2554,6 @@
                     }
                 });
                 
-                // 子表时序图表
-                const subMeterCtx = document.getElementById('subMeterTimeSeriesChart').getContext('2d');
                 new Chart(subMeterCtx, {
                     type: 'line',
                     data: {
@@ -1917,6 +2623,7 @@
                         }
                     }
                 });
+                }
             }, 100);
         }
         
