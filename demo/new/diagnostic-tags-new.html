@@ -1216,33 +1216,49 @@
                                 <i class="fas fa-percentage text-primary mr-1"></i> 匹配概率
                             </h3>
                             <div class="text-xs text-gray-600">
-                                <!-- 匹配概率计算内容 - 供电半径过长 -->
-                                <ul class="list-none space-y-2">
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">末端用户电压偏低告警</span>
-                                        <span class="text-orange-600">+15%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">负荷增长导致线损率上升</span>
-                                        <span class="text-orange-600">+10%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">用户距离与电压降相关性</span>
-                                        <span class="text-orange-600">+8%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">功率因数低告警</span>
-                                        <span class="text-orange-600">+4%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">线路分布地理特征</span>
-                                        <span class="text-orange-600">+3%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center mt-2">
-                                        <span class="font-medium text-base">综合匹配概率</span>
-                                        <span class="text-orange-600 font-medium text-base">40%</span>
-                                    </li>
-                                </ul>
+                                <!-- 匹配概率计算内容 - 电表正反向设置错误 -->
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="text-left py-1 px-2 font-medium">特征</th>
+                                            <th class="text-center py-1 px-2 font-medium">权重</th>
+                                            <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b">
+                                            <td class="py-1 px-2">电流反向事件频发</td>
+                                            <td class="text-center py-1 px-2">30%</td>
+                                            <td class="text-right py-1 px-2 text-orange-600">18%</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="py-1 px-2">反向电量异常增加</td>
+                                            <td class="text-center py-1 px-2">25%</td>
+                                            <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="py-1 px-2">电表参数批量修改记录</td>
+                                            <td class="text-center py-1 px-2">20%</td>
+                                            <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="py-1 px-2">电表更换后异常</td>
+                                            <td class="text-center py-1 px-2">15%</td>
+                                            <td class="text-right py-1 px-2 text-orange-600">6%</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="py-1 px-2">线损率持续异常</td>
+                                            <td class="text-center py-1 px-2">10%</td>
+                                            <td class="text-right py-1 px-2 text-orange-600">4%</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="font-medium text-base">
+                                            <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                            <td class="py-2 px-2 text-right text-orange-600">55%</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
