@@ -74,14 +74,6 @@
                             "倍率变更发生在2023-02-22期间，与线损率开始上升时间吻合",
                             "总表与子表电量反差显著，总表记录电量被倍率错误缩小了一半"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 立即校验总表CT倍率，确认实际电流变比是否为300/5",
-                            "2. 修改系统档案中的CT倍率参数，将150/5恢复为300/5",
-                            "3. 对系统中的历史数据进行更正，补录正确用电量",
-                            "4. 加强计量设备维护和档案管理，防止倍率错误问题再次发生",
-                            "5. 对维护人员进行培训，规范CT互感器更换和校验流程"
-                        ],
                         // 时序图数据 - 修正为真实相关的业务数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -91,21 +83,27 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "计量装置校验",
-                                eventCode: "M001",
-                                date: "2023-02-22",
-                                relatedUser: "总表"
-                            },
-                            {
-                                eventType: "CT设备更换",
-                                eventCode: "M002",
-                                date: "2023-02-22",
-                                relatedUser: "总表"
-                            },
-                            {
-                                eventType: "设备参数变更",
+                                eventType: "PP-CT Short/Bypass occurrence",
                                 eventCode: "Event-269",
                                 date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "PP-CT Short/Bypass restoration",
+                                eventCode: "Event-270",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance occurrence",
+                                eventCode: "Event-281",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance restoration",
+                                eventCode: "Event-282",
+                                date: "2023-02-24",
                                 relatedUser: "总表"
                             }
                         ],
@@ -116,6 +114,11 @@
                                 date: "2023-02-22",
                                 relatedUser: "总表",
                                 details: "300/5 → 150/5"
+                            },
+                            {
+                                eventType: "计量装置检修",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
                             }
                         ]
                     }
@@ -697,6 +700,46 @@
                                 <div class="bg-gray-50 rounded p-2 text-xs">
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
+                                            <span class="text-gray-500">测量点ID:</span>
+                                            <span class="font-medium">PNT2023051</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">所属区域:</span>
+                                            <span class="font-medium">西湖供电区</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">测量点状态:</span>
+                                            <span class="font-medium">正常</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电表安装位置:</span>
+                                            <span class="font-medium">变压器出线柜</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电表类型:</span>
+                                            <span class="font-medium">三相电表</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">通信类型:</span>
+                                            <span class="font-medium">GPRS</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电流CT变比:</span>
+                                            <span class="font-medium text-red-600">150/5</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电压PT变比:</span>
+                                            <span class="font-medium">1/1</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">表号:</span>
+                                            <span class="font-medium">21056782</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">是否总表:</span>
+                                            <span class="font-medium">是</span>
+                                        </div>
+                                        <div>
                                             <span class="text-gray-500">台区编号:</span>
                                             <span class="font-medium">T2023051</span>
                                         </div>
@@ -731,6 +774,14 @@
                                         <div>
                                             <span class="text-gray-500">最大负荷:</span>
                                             <span class="font-medium">238 kW</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">日正向有功累计:</span>
+                                            <span class="font-medium">1,540 kWh/天</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">日反向有功累计:</span>
+                                            <span class="font-medium">0 kWh/天</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">采集成功率:</span>
@@ -869,6 +920,14 @@
                                             <span class="font-medium">1.45 kW/户</span>
                                         </div>
                                         <div>
+                                            <span class="text-gray-500">日正向有功累计:</span>
+                                            <span class="font-medium">1,330 kWh/天</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">普通表数量:</span>
+                                            <span class="font-medium">165台</span>
+                                        </div>
+                                        <div>
                                             <span class="text-gray-500">平均采集成功率:</span>
                                             <span class="font-medium text-green-600">96.3%</span>
                                         </div>
@@ -973,7 +1032,33 @@
                                 <i class="fas fa-percentage text-primary mr-1"></i> 匹配概率
                             </h3>
                             <div class="text-xs text-gray-600">
-                                <!-- 匹配概率计算内容先空着 -->
+                                <!-- 匹配概率计算内容 -->
+                                <ul class="list-none space-y-2">
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">线损率异常特征</span>
+                                        <span class="text-red-600">+45%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">CT倍率变更记录</span>
+                                        <span class="text-red-600">+25%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">总表用电量突变</span>
+                                        <span class="text-red-600">+15%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">电流不平衡事件</span>
+                                        <span class="text-red-600">+7%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">计量装置事件关联</span>
+                                        <span class="text-red-600">+5%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center mt-2">
+                                        <span class="font-medium text-base">综合匹配概率</span>
+                                        <span class="text-red-600 font-medium text-base">92%</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
