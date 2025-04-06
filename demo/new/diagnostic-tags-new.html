@@ -391,14 +391,6 @@
                             "多个相邻台区同时出现类似线损特征，呈区域性分布",
                             "设备湿度传感器数据异常，显示设备环境潮湿"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 对易受天气影响的线路设备进行防水防潮处理",
-                            "2. 加强雷雨季节前的线路巡检和隐患排查",
-                            "3. 优化配电设备防水设计，提高防护等级",
-                            "4. 在易受影响地区加装避雷和防浪涌装置",
-                            "5. 建立天气预警与线路巡检联动机制，提前预防"
-                        ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -408,21 +400,27 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "停电记录",
+                                eventType: "Power off (short)",
                                 eventCode: "Event-7",
                                 date: "2023-02-22",
                                 relatedUser: "多户用户"
                             },
                             {
-                                eventType: "上电恢复",
+                                eventType: "Power on (short)",
                                 eventCode: "Event-8",
                                 date: "2023-02-22",
                                 relatedUser: "多户用户"
                             },
                             {
-                                eventType: "通信中断",
+                                eventType: "Offline (GPRS)",
                                 eventCode: "Event-91",
                                 date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "L1 Under voltage occurrence",
+                                eventCode: "Event-5633",
+                                date: "2023-02-23",
                                 relatedUser: "多户用户"
                             }
                         ],
@@ -432,6 +430,16 @@
                                 eventType: "线路检修",
                                 date: "2023-02-24",
                                 relatedUser: "台区配电线路"
+                            },
+                            {
+                                eventType: "设备维护",
+                                date: "2023-02-24",
+                                relatedUser: "台区设备"
+                            },
+                            {
+                                eventType: "防雷装置检查",
+                                date: "2023-02-25",
+                                relatedUser: "台区设备"
                             }
                         ]
                     }
@@ -444,43 +452,41 @@
                     details: {
                         // 分析结论内容
                         analysis: [
-                            "台区总表电能计量值异常低，而测量的电流值正常",
-                            "发现总表二次侧接线存在交叉，导致部分功率未被正确计量",
-                            "维护记录显示近期进行过计量装置改造，时间与异常开始吻合",
-                            "功率因数计算异常，显示与真实负载类型不符",
-                            "三相电流不平衡度正常，但计量电能显著低于预期值"
-                        ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 立即检查总表接线正确性，尤其关注相序和极性",
-                            "2. 对照标准接线图，重新进行二次回路接线确认",
-                            "3. 使用标准电能表进行对比测试，验证接线正确性",
-                            "4. 更正接线问题后，评估未计量电能的损失情况",
-                            "5. 加强计量装置安装和改造的管理，确保按标准接线"
+                            "台区总表电能计量值突然异常下降，线损率持续为负值",
+                            "总表二次侧接线相序错误，导致部分功率未被正确计量",
+                            "功率因数计算结果异常，与实际负载特性不符",
+                            "三相电流不平衡度正常，但计量电能显著低于预期",
+                            "维护记录显示近期进行过计量装置改造，时间与异常开始吻合"
                         ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
-                            usage: [1485, 1510, 1520, 1000, 980, 960, 990, 980, 970, 985],
-                            lossRate: [5.2, 5.3, 5.2, -25.5, -28.3, -29.5, -27.8, -28.5, -29.2, -28.6]
+                            usage: [1485, 1510, 1520, 980, 960, 940, 920, 910, 900, 885],
+                            lossRate: [5.2, 5.3, 5.2, -25.5, -28.3, -29.5, -30.8, -31.5, -32.2, -33.6]
                         },
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "计量装置改造",
-                                eventCode: "Event-779",
+                                eventType: "Phase sequence reversal occurrence",
+                                eventCode: "Event-299",
                                 date: "2023-02-22",
                                 relatedUser: "总表"
                             },
                             {
-                                eventType: "三相不平衡",
-                                eventCode: "Event-283",
+                                eventType: "Phase sequence reversal restoration",
+                                eventCode: "Event-300",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance occurrence",
+                                eventCode: "Event-281",
                                 date: "2023-02-23",
                                 relatedUser: "总表"
                             },
                             {
-                                eventType: "相序异常",
-                                eventCode: "Event-299",
+                                eventType: "Low power factor occurrence",
+                                eventCode: "Event-301",
                                 date: "2023-02-23",
                                 relatedUser: "总表"
                             }
@@ -488,8 +494,18 @@
                         // 档案变更记录
                         archiveChanges: [
                             {
-                                eventType: "计量装置检修",
-                                date: "2023-02-25",
+                                eventType: "计量装置改造",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "电表检修",
+                                date: "2023-02-23",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "接线检查",
+                                date: "2023-02-24",
                                 relatedUser: "总表"
                             }
                         ]
@@ -509,14 +525,6 @@
                             "多个测量点在同一时间段发生类似问题，可能源于批量参数设置错误",
                             "电表运行状态正常，但正反向电能累积与实际用电情况不符"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 检查所有报告电流反向事件的测量点，确认安装方向",
-                            "2. 核对电表参数设置，确保正反向定义符合实际接线方式",
-                            "3. 对批量设置的电表进行统一校验，避免参数下发错误",
-                            "4. 修正反向记录的电能数据，重新计算实际用电量",
-                            "5. 增强电表安装调试流程，重点验证电流方向正确性"
-                        ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -526,20 +534,26 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "电流反向",
+                                eventType: "Current reverse occurrence",
                                 eventCode: "Event-249",
                                 date: "2023-02-22",
                                 relatedUser: "多户用户"
                             },
                             {
-                                eventType: "L1电流反向",
+                                eventType: "L1 Current reverse occurrence",
                                 eventCode: "Event-257",
                                 date: "2023-02-22",
                                 relatedUser: "用户U20230186"
                             },
                             {
-                                eventType: "反向计量",
-                                eventCode: "Event-250",
+                                eventType: "L2 Current reverse occurrence",
+                                eventCode: "Event-259",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230112"
+                            },
+                            {
+                                eventType: "L3 Current reverse occurrence",
+                                eventCode: "Event-261",
                                 date: "2023-02-23",
                                 relatedUser: "用户U20230112"
                             }
@@ -550,6 +564,16 @@
                                 eventType: "电表参数修正",
                                 date: "2023-02-25",
                                 relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "电表更换",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230186"
+                            },
+                            {
+                                eventType: "参数配置检查",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230112"
                             }
                         ]
                     }
@@ -568,14 +592,6 @@
                             "光伏并网点电压偏高，但反向功率记录不足，计量数据不合理",
                             "台区内分布式能源用户与普通用户电量统计混乱，影响线损计算"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 全面核查台区内分布式能源用户的计量装置配置",
-                            "2. 确保所有光伏用户电表正确设置双向计量功能",
-                            "3. 调整分布式能源并网点的电压参数，确保安全可靠并网",
-                            "4. 建立分布式能源发电用户的专项统计，准确计算线损",
-                            "5. 加强分布式能源并网管理，规范计量装置配置与管理"
-                        ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -585,14 +601,26 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "电流反向",
+                                eventType: "Current reverse occurrence",
                                 eventCode: "Event-249",
                                 date: "2023-02-23",
                                 relatedUser: "光伏用户U20230532"
                             },
                             {
-                                eventType: "功率反向",
+                                eventType: "Power over restoration",
                                 eventCode: "Event-1024",
+                                date: "2023-02-24",
+                                relatedUser: "光伏用户U20230546"
+                            },
+                            {
+                                eventType: "L1 Current reverse occurrence",
+                                eventCode: "Event-257",
+                                date: "2023-02-24",
+                                relatedUser: "光伏用户U20230532"
+                            },
+                            {
+                                eventType: "L2 Current reverse occurrence",
+                                eventCode: "Event-259",
                                 date: "2023-02-24",
                                 relatedUser: "光伏用户U20230546"
                             }
@@ -608,6 +636,11 @@
                                 eventType: "电表参数配置",
                                 date: "2023-02-21",
                                 relatedUser: "光伏用户电表"
+                            },
+                            {
+                                eventType: "计量装置检查",
+                                date: "2023-02-22",
+                                relatedUser: "光伏用户"
                             }
                         ]
                     }
@@ -616,7 +649,68 @@
                     title: '时钟同步偏差',
                     probability: '45%',
                     icon: 'clock',
-                    color: 'blue'
+                    color: 'blue',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区内多台电表时钟漂移异常，导致采集数据时间错位",
+                            "时间记录与实际用电时序不匹配，造成计量统计误差",
+                            "电表内部时钟漂移超过阈值，触发时钟同步告警",
+                            "部分电表时钟偏差超过30分钟，远超正常误差范围",
+                            "远程时钟同步操作后，线损波动恢复正常范围"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1490, 1350, 1320, 1360, 1420, 1470, 1510, 1500],
+                            lossRate: [5.2, 5.3, 5.8, 9.3, 10.2, 9.5, 7.2, 6.5, 5.4, 5.3]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Clock synchronization over threshold",
+                                eventCode: "Event-1538",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230412,U20230425"
+                            },
+                            {
+                                eventType: "Clock drift over threshold",
+                                eventCode: "Event-12803",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230438"
+                            },
+                            {
+                                eventType: "Meter alarm status word is set",
+                                eventCode: "Event-12804",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230412"
+                            },
+                            {
+                                eventType: "Offline (GPRS-Time out)",
+                                eventCode: "Event-92",
+                                date: "2023-02-24",
+                                relatedUser: "多户用户"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "电表时钟校准",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230412,U20230425,U20230438"
+                            },
+                            {
+                                eventType: "时钟同步参数修改",
+                                date: "2023-02-25",
+                                relatedUser: "台区计量终端"
+                            },
+                            {
+                                eventType: "通信模块维护",
+                                date: "2023-02-26",
+                                relatedUser: "台区多户用户"
+                            }
+                        ]
+                    }
                 },
                 {
                     title: '供电半径过长',
@@ -632,14 +726,6 @@
                             "台区导线截面偏小，不足以支撑远距离低损耗供电",
                             "高峰负荷期间线损率偏高，远端户电压质量差"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 评估台区重新规划方案，考虑增设变压器分割供电区域",
-                            "2. 对长距离供电线路实施改造，增大导线截面",
-                            "3. 在末端安装无功补偿装置，提高电压质量",
-                            "4. 对负荷较大的远端用户考虑专变供电",
-                            "5. 合理调整分接头，优化供电电压"
-                        ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -649,16 +735,28 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "欠压告警",
+                                eventType: "L1 Under voltage occurrence",
                                 eventCode: "Event-5633",
                                 date: "2023-02-25",
                                 relatedUser: "远端用户U20230621"
                             },
                             {
-                                eventType: "功率因数低",
+                                eventType: "L2 Under voltage occurrence",
+                                eventCode: "Event-5635",
+                                date: "2023-02-25",
+                                relatedUser: "远端用户U20230622"
+                            },
+                            {
+                                eventType: "Low power factor occurrence",
                                 eventCode: "Event-301",
                                 date: "2023-02-25",
                                 relatedUser: "用户U20230614"
+                            },
+                            {
+                                eventType: "L1 Under voltage restoration",
+                                eventCode: "Event-5634",
+                                date: "2023-02-26",
+                                relatedUser: "远端用户U20230621"
                             }
                         ],
                         // 档案变更记录
@@ -666,6 +764,16 @@
                             {
                                 eventType: "供电方案评估",
                                 date: "2023-02-27",
+                                relatedUser: "台区供电系统"
+                            },
+                            {
+                                eventType: "线路检测",
+                                date: "2023-02-26",
+                                relatedUser: "远端用户线路"
+                            },
+                            {
+                                eventType: "电压质量分析",
+                                date: "2023-02-25",
                                 relatedUser: "台区供电系统"
                             }
                         ]
@@ -738,11 +846,11 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">测量点ID:</span>
-                                            <span class="font-medium">PNT2023061</span>
+                                            <span class="font-medium">PNT2023063</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">所属区域:</span>
-                                            <span class="font-medium">市北供电所</span>
+                                            <span class="font-medium">郊区东供电所</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">测量点状态:</span>
@@ -750,7 +858,7 @@
                                         </div>
                                         <div>
                                             <span class="text-gray-500">测量点编号:</span>
-                                            <span class="font-medium">MP2023061</span>
+                                            <span class="font-medium">MP2023063</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">电表类型:</span>
@@ -762,11 +870,11 @@
                                         </div>
                                         <div>
                                             <span class="text-gray-500">用电类型:</span>
-                                            <span class="font-medium">居民生活用电</span>
+                                            <span class="font-medium">农村用电</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">电流CT变比:</span>
-                                            <span class="font-medium">150/5</span>
+                                            <span class="font-medium">100/5</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">是否总表:</span>
@@ -774,23 +882,23 @@
                                         </div>
                                         <div>
                                             <span class="text-gray-500">台区编号:</span>
-                                            <span class="font-medium">T2023061</span>
+                                            <span class="font-medium">T2023063</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">用户数量:</span>
-                                            <span class="font-medium">86户</span>
+                                            <span class="font-medium">63户</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">变压器容量:</span>
-                                            <span class="font-medium">315kVA</span>
+                                            <span class="font-medium">160kVA</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">经度:</span>
-                                            <span class="font-medium">120.1892</span>
+                                            <span class="font-medium">120.3456</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">纬度:</span>
-                                            <span class="font-medium">30.2273</span>
+                                            <span class="font-medium">30.3278</span>
                                         </div>
                                     </div>
                                 </div>
@@ -806,11 +914,11 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">月用电量:</span>
-                                            <span class="font-medium">48,350 kWh</span>
+                                            <span class="font-medium">49,500 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">最大负荷:</span>
-                                            <span class="font-medium">240 kW</span>
+                                            <span class="font-medium">170 kW</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">日正向有功累计:</span>
@@ -822,19 +930,19 @@
                                         </div>
                                         <div>
                                             <span class="text-gray-500">台区供电量:</span>
-                                            <span class="font-medium">48,350 kWh</span>
+                                            <span class="font-medium">49,500 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">台区用电量:</span>
-                                            <span class="font-medium text-red-600">40,034 kWh</span>
+                                            <span class="font-medium">45,441 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">采集成功率:</span>
-                                            <span class="font-medium">98.8%</span>
+                                            <span class="font-medium">100%</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">线损率:</span>
-                                            <span class="font-medium text-red-600">17.2%</span>
+                                            <span class="font-medium text-orange-600">8.2%</span>
                                         </div>
                                     </div>
                                     
@@ -962,27 +1070,27 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">月用电量:</span>
-                                            <span class="font-medium text-red-600">40,034 kWh</span>
+                                            <span class="font-medium">45,441 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">平均负荷:</span>
-                                            <span class="font-medium">1.94 kW/户</span>
+                                            <span class="font-medium">3.02 kW/户</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">日正向有功累计:</span>
-                                            <span class="font-medium">1,367 kWh/天</span>
+                                            <span class="font-medium">1,515 kWh/天</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">普通表数量:</span>
-                                            <span class="font-medium">86台</span>
+                                            <span class="font-medium">63台</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">普通表采集数量:</span>
-                                            <span class="font-medium">85台</span>
+                                            <span class="font-medium">63台</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">平均采集成功率:</span>
-                                            <span class="font-medium">98.8%</span>
+                                            <span class="font-medium">100%</span>
                                         </div>
                                     </div>
                                     
@@ -1108,31 +1216,31 @@
                                 <i class="fas fa-percentage text-primary mr-1"></i> 匹配概率
                             </h3>
                             <div class="text-xs text-gray-600">
-                                <!-- 匹配概率计算内容 - 窃电行为突增 -->
+                                <!-- 匹配概率计算内容 - 供电半径过长 -->
                                 <ul class="list-none space-y-2">
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">线损率持续异常高</span>
-                                        <span class="text-orange-600">+22%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">电表开盖/端子盖开启事件</span>
-                                        <span class="text-orange-600">+18%</span>
-                                    </li>
-                                    <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">强磁场干扰事件记录</span>
+                                        <span class="font-medium">末端用户电压偏低告警</span>
                                         <span class="text-orange-600">+15%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">电流反向事件</span>
+                                        <span class="font-medium">负荷增长导致线损率上升</span>
+                                        <span class="text-orange-600">+10%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">用户距离与电压降相关性</span>
                                         <span class="text-orange-600">+8%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">线损与负荷变化不符</span>
-                                        <span class="text-orange-600">+5%</span>
+                                        <span class="font-medium">功率因数低告警</span>
+                                        <span class="text-orange-600">+4%</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b pb-1">
+                                        <span class="font-medium">线路分布地理特征</span>
+                                        <span class="text-orange-600">+3%</span>
                                     </li>
                                     <li class="flex justify-between items-center mt-2">
                                         <span class="font-medium text-base">综合匹配概率</span>
-                                        <span class="text-orange-600 font-medium text-base">68%</span>
+                                        <span class="text-orange-600 font-medium text-base">40%</span>
                                     </li>
                                 </ul>
                             </div>
