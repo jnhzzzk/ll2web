@@ -1,0 +1,30 @@
+﻿台区坐标  C_AR_AREA_COORDINATE,Unnamed: 1
+变压器负荷  M_REPORT_TR_LOAD_PROFILE,
+字段名,字段描述
+FREEZE_DATE,freeze   date
+TR_ID,tr   id
+TR_NAME,tr   name
+FEEDER_NAME,feeder   name
+SUBSTATION_NAME,substation   name
+ESP_NAME,esp   name
+FULL_AREA_ID,full area  id
+RESIDENTIAL_COUNT,residential   count
+INDUSTRIAL_COUNT,industrial   count
+TR_POWER,tr   power
+CT_RATIO,ct   ratio
+BALANCE_METER_NO,balance meter  no
+TOTAL_POWER,total   power
+TOTAL_POWER_A,total power  a
+TOTAL_POWER_B,total power  b
+TOTAL_POWER_C,total power  c
+POWER_FACTORY,power   factory
+POWER_FACTORY_A,power factory  a
+POWER_FACTORY_B,power factory  b
+POWER_FACTORY_C,power factory  c
+TR_LOAD_PROFILE,tr load  profile
+PT_RATIO,pt   ratio
+PRE_MONTH_USAGE,pre month  usage
+CREATE_TIME,create   time
+PRE_MONTH_TOTAL_POWER,pre month total power
+AVG_CURRENT_L1,L1平均电流
+AVG_VOLTAGE_L1,L1平均电压

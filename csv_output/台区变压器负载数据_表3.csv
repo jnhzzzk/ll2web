@@ -1,0 +1,13 @@
+﻿台区坐标  C_AR_AREA_COORDINATE,Unnamed: 1
+变压器负载  M_DATA_BALANCE_METER_LOAD,
+字段名,字段描述
+METER_NO,Meter number
+STATIS_DATE,Summary date
+METER_PNT_ID,Measuring point ID
+AREA_ID,Area ID
+L1_ENERGY,L1 phase dosage
+L2_ENERGY,L2 phase dosage
+L3_ENERGY,L3 phase dosage
+TOTAL_ENERGY,Total dosage
+CREATE_TIME,Creation time
+DATA_NUMBER,Data points

@@ -1,0 +1,12 @@
+﻿测量点台区变更记录  C_AR_PNT_AREA_CHANGE_LOG,Unnamed: 1
+字段名,字段描述
+LOG_ID,Log primary key
+PNT_ID,Primary key of measurement and communication point
+PNT_TYPE,Type of measuring point and communication point
+AREA_ID,Region PK
+REASON,Reason for change
+OPERATOR_NAME,Operator Name
+OPERATOR,operator
+CREATE_TIME,Creation time
+CHANGE_TIME,Change time
+OLD_AREA_ID,Area PK before modification

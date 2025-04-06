@@ -1,0 +1,163 @@
+﻿字段,字段编码,字段类型,是否必须字段,数据范围,数据来源,数据来源表,来源字段,字段说明
+日期,FreezeDay,Date,是,2022年~2030年,CAS,M_Data_View_Daily,FreezeDate,用电日期
+Meter No.,MeterNo,String,是,21000001~21999999,CAS,M_Data_View_Daily,MeterNo,电表号
+测量点,MeterPointNo,String,是,,CAS,C_AR_Meter_PNT,Meter_Pnt_no,测量点编号
+客户名称,CustomerName,String,是,,Billing,待定,待定,待定
+电流CT变比描述,CT,String,是,,CAS,,,默认1/1
+电流CT变比值,CTValue,Double,是,,CAS,"C_AR_Meter_PNT
+C_AR_CT_PT_CHANGE_LOG","Rate_Current
+NEW_Rate",默认1
+电压VT变比描述,VT,String,是,,CAS,,,默认1/1
+电压VT变比值,VTValue,Double,是,,CAS,"C_AR_Meter_PNT
+C_AR_CT_PT_CHANGE_LOG","Rate_Power
+New_rate",默认1
+用电类型,ConsumeType,Int,是,1~10,CAS,,,用电类型
+用电性质,ConsumeCategory,Int,否,,客户Billing系统,,,主要工业，商业，农业，渔业，制造业，电子，公共事业单位，加工能目录明细，需要来源于
+日正向有功累计用电量,ImportACumulative,Double,是,,,,,
+日反向有功累计用电量,ExportACumulative,Double,是,,,,,
+日正反向合计用电量增量,Usage,Double,是,1~1000,,,,日用电量
+台区编号,AreaId,String,是,1800000~1888888,,,,台区编号
+挂载的台区相位,LoadPhaseActual,Int,否,"1,2,3",,,,档案记录台区相位，可以为空
+台区天气,Weather,Int,否,"1,2,3",,,,台区天气
+台区气温,Temperature,Double,否,‘-20~50’,,,,台区气温
+台区供电量,Supplied,Double,是,100~1000,,,,台区供电量
+台区用电量,Consumed,Double,是,1~100,,,,台区用电量
+台区线损量,LossUsage,Double,是,100~1000,,,,台区线损量
+台区线损率,LossRate,Double,是,‘-100%~100%’,,,,台区线损率
+普通表数量,MeterQty,Double,是,0~300,,,,普通表数量
+普通表采集数量,MeterQtyColled,Double,是,0~300,,,,普通表采集数量
+总表数量,GMMeterQty,Double,是,0~1,,,,总表数量
+总表采集数量,GMMeterQtyColled,Double,是,0~1,,,,总表采集数量
+测量点经度,LONGITUDE,Double,是,,,,,测量点经度
+测量点经度,LATITUDE,Double,是,,,,,测量点经度
+Distance(米),Distance,Double,是,,,,,距离总表距离
+是否总表,IsGM,Int,是,,,,,1表示是，0表示否
+L1平均相关性,L1VolRal,Double,否,,,,,"相位识别用,最大电压与总表最大电压相关性，最小电压与总表最小电压相关性,求平均值"
+L2平均相关性,L2VolRal,Double,否,,,,,"相位识别用,最大电压与总表最大电压相关性，最小电压与总表最小电压相关性,求平均值"
+L3平均相关性,L3VolRal,Double,否,,,,,"相位识别用,最大电压与总表最大电压相关性，最小电压与总表最小电压相关性,求平均值"
+相关性最大值,VolRalMax,Double,否,,,,,"相位识别用,最大值，用来判断挂载的相位"
+最有可能相位,LoadPhasePredict,String,否,,,,,相位识别用预测出来的相位
+L1平均电压降,L1VolDecreaseRate,Double,是,,,,,最大电压降与最小电压降的平均值
+L2平均电压降,L2VolDecreaseRate,Double,是,,,,,最大电压降与最小电压降的平均值
+L3平均电压降,L3VolDecreaseRate,Double,是,,,,,最大电压降与最小电压降的平均值
+日最小电压最大值,MinVolMax,Double,否,,,,,
+日最小电压最小值,MinVolMin,Double,否,,,,,
+日最小电压均值,MinVolAvg,Double,否,,,,,
+日最小电压中位数,MinVolMid,Double,否,,,,,
+日最小电压方差,MinVolVar,Double,否,,,,,
+日最小电标准差,MinVolStd,Double,否,,,,,
+日最大电压最大值,MaxVolMax,Double,否,,,,,
+日最大电压最小值,MaxVolMin,Double,否,,,,,
+日最大电压均值,MaxVolAvg,Double,否,,,,,
+日最大电压中位数,MaxVolMid,Double,否,,,,,
+日最大电压方差,MaxVolVar,Double,否,,,,,
+日最大电标准差,MaxVolStd,Double,否,,,,,
+日负荷最大值,PowerMax,Double,否,,,,,
+日负荷最小值,PowerMin,Double,否,,,,,
+日负荷平均值,PowerAvg,Double,否,,,,,
+日负荷中位值,PowerMid,Double,否,,,,,
+日负荷方差,PowerVar,Double,否,,,,,
+日负标准差,PowerStd,Double,否,,,,,
+事件-257,Event-257,Int,是,,,,,L1 Current reverse occurrence
+事件-258,Event-258,Int,否,,,,,L1 Current reverse restoration
+事件-259,Event-259,Int,是,,,,,L2 Current reverse occurrence
+事件-260,Event-260,Int,否,,,,,L2 Current reverse restoration
+事件-261,Event-261,Int,是,,,,,L3 Current reverse occurrence
+事件-262,Event-262,Int,否,,,,,L3 Current reverse restoration
+事件-269,Event-269,Int,是,,,,,PP-CT Short/Bypass occurrence
+事件-270,Event-270,Int,否,,,,,PP-CT Short/Bypass restoration
+事件-279,Event-279,Int,是,,,,,Current unbalance occurrence
+事件-280,Event-280,Int,否,,,,,Current unbalance restoration
+事件-287,Event-287,Int,是,,,,,Main cover opened
+事件-288,Event-288,Int,否,,,,,Main cover closed 
+事件-289,Event-289,Int,是,,,,,Terminal cover opened
+事件-290,Event-290,Int,否,,,,,Terminal cover closed
+事件-293,Event-293,Int,是,,,,,Communication module removed/abnormal occurrence
+事件-294,Event-294,Int,否,,,,,Communication module removed/abnormal restoration
+事件-295,Event-295,Int,是,,,,,Meter dismantle/removal
+事件-297,Event-297,Int,是,,,,,Strong DC magnetic field detected 
+事件-298,Event-298,Int,否,,,,,Strong DC magnetic field removed
+事件-299,Event-299,Int,是,,,,,Phase sequence reversal occurrence
+事件-300,Event-300,Int,否,,,,,Phase sequence reversal restoration
+事件-307,Event-307,Int,是,,,,,L1 Current without voltage occurrence
+事件-308,Event-308,Int,否,,,,,L1 Current without voltage restoration
+事件-309,Event-309,Int,是,,,,,L2 Current without voltage occurrence
+事件-310,Event-310,Int,否,,,,,L2 Current without voltage restoration
+事件-311,Event-311,Int,是,,,,,L3 Current without voltage occurrence
+事件-312,Event-312,Int,否,,,,,L3 Current without voltage restoration
+事件-514,Event-514,Int,是,,,,,Remote connected
+事件-523,Event-523,Int,否,,,,,Disconnect by push button
+事件-524,Event-524,Int,否,,,,,Connected by push button
+事件-526,Event-526,Int,是,,,,,Disconnected due to tamper
+事件-542,Event-542,Int,是,,,,,Disconnected due to current reverse L1
+事件-558,Event-558,Int,是,,,,,Disconnected due to current reverse L2
+事件-5633,Event-5633,Int,是,,,,,L1 Under voltage occurrence
+事件-5634,Event-5634,Int,否,,,,,L1 Under voltage restoration
+事件-5635,Event-5635,Int,是,,,,,L2 Under voltage occurrence
+事件-5636,Event-5636,Int,否,,,,,L2 Under voltage restoration
+事件-5637,Event-5637,Int,是,,,,,L3 Under voltage occurrence
+事件-5638,Event-5638,Int,否,,,,,L3 Under voltage restoration
+事件-574,Event-574,Int,否,,,,,Disconnected due to current reverse L3
+事件-590,Event-590,Int,否,,,,,Disconnected due to current unbalance
+事件-622,Event-622,Int,否,,,,,Disconnected due to terminal cover opened
+事件-638,Event-638,Int,否,,,,,Disconnected due to communication module removed
+事件-654,Event-654,Int,否,,,,,Disconnected due to meter dismantle/removal
+事件-670,Event-670,Int,否,,,,,Disconnected due to strong DC magnetic field detected
+事件-686,Event-686,Int,否,,,,,Disconnected due to phase sequence reversal
+事件-7,Event-7,Int,否,,,,,Power off (short)
+事件-702,Event-702,Int,否,,,,,Disconnected due to L1 current without voltage
+事件-718,Event-718,Int,否,,,,,Disconnected due to L2 current without voltage
+事件-734,Event-734,Int,否,,,,,Disconnected due to L3 current without voltage
+事件-750,Event-750,Int,否,,,,,Disconnected due to high temperature 
+事件-769,Event-769,Int,否,,,,,Firmware upgrade success
+事件-8,Event-8,Int,否,,,,,Power on (short)
+事件-90,Event-90,Int,否,,,,,Online (GPRS)
+事件-91,Event-91,Int,否,,,,,Offline (GPRS)
+事件-92,Event-92,Int,否,,,,,Offline (GPRS-Time out)
+事件-518,Event-518,Int,否,,,,,Connected due to high voltage
+事件-15,Event-15,Int,否,,,,,Ram error
+事件-12,Event-12,Int,否,,,,,External store error
+事件-285,Event-285,Int,否,,,,,Module cover opened
+事件-286,Event-286,Int,否,,,,,Module cover closed
+事件-291,Event-291,Int,否,,,,,Meter box opened
+事件-292,Event-292,Int,否,,,,,Meter box closed
+事件-249,Event-249,Int,否,,,,,Current reverse occurrence
+事件-250,Event-250,Int,否,,,,,Current reverse restoration
+事件-251,Event-251,Int,否,,,,,L1 current over occurrence
+事件-252,Event-252,Int,否,,,,,L1 current over restoration
+事件-253,Event-253,Int,否,,,,,L2 current over occurrence
+事件-254,Event-254,Int,否,,,,,L2 current over restoration
+事件-255,Event-255,Int,否,,,,,L3 current over occurrence
+事件-256,Event-256,Int,否,,,,,L3 current over restoration
+事件-1023,Event-1023,Int,否,,,,,Power over occurrence
+事件-1024,Event-1024,Int,否,,,,,Power over restoration
+事件-267,Event-267,Int,否,,,,,Bypass
+事件-277,Event-277,Int,否,,,,,Neutral loss occurrence
+事件-278,Event-278,Int,否,,,,,Neutral loss restoration
+事件-202,Event-202,Int,否,,,,,Absence of A Phases occurrence
+事件-203,Event-203,Int,否,,,,,Absence of A Phases restoration
+事件-204,Event-204,Int,否,,,,,Absence of B Phases occurrence
+事件-205,Event-205,Int,否,,,,,Absence of B Phases restoration
+事件-206,Event-206,Int,否,,,,,Absence of C Phases occurrence
+事件-207,Event-207,Int,否,,,,,Absence of C Phases restoration
+事件-281,Event-281,Int,否,,,,,Power unbalance occurrence
+事件-282,Event-282,Int,否,,,,,Power unbalance restoration
+事件-283,Event-283,Int,否,,,,,Voltage unbalance occurrence
+事件-284,Event-284,Int,否,,,,,Voltage unbalance restoration
+事件-301,Event-301,Int,否,,,,,Low power factor occurrence
+事件-302,Event-302,Int,否,,,,,Low power factor restoration
+事件-1538,Event-1538,Int,否,,,,,Clock synchronization over threshold
+事件-779,Event-779,Int,否,,,,,Communication module firmware upgrade
+事件-1299,Event-1299,Int,否,,,,, Change module
+事件-606,Event-606,Int,否,,,,,Disconnected due to main cover opened  
+事件-303,Event-303,Int,否,,,,,The incoming phase and neutral interchanged occurrence
+事件-304,Event-304,Int,否,,,,,The incoming phase and neutral interchanged restoration
+事件-1025,Event-1025,Int,否,,,,,L1 Power failure occurrence
+事件-1026,Event-1026,Int,否,,,,,L1 Power failure restoration
+事件-1027,Event-1027,Int,否,,,,,L2 Power failure occurrence
+事件-1028,Event-1028,Int,否,,,,,L2 Power failure restoration
+事件-1029,Event-1029,Int,否,,,,,L3 Power failure occurrence
+事件-1030,Event-1030,Int,否,,,,,L3 Power failure restoration
+事件-12803,Event-12803,Int,否,,,,,Clock drift over threshold
+事件-12804,Event-12804,Int,否,,,,,Meter alarm status word is set
+事件-12805,Event-12805,Int,否,,,,,The incoming phase and neutral interchanged

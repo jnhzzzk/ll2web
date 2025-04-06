@@ -1,0 +1,23 @@
+﻿区域管理员  C_AR_AREA_MANAGER,Unnamed: 1
+字段名,字段描述
+MANAGER_ID,Area administrator ID
+MANAGER_NAME,Area administrator name
+MOBILE,Mobile phone
+EMAIL,E-mail
+ADMIN_AREA_ID,Management area ID (Department)
+FULL_AREA_ID,Full name of the region PK， including this node: 7 / 367 / 409/
+DESCRIPTION,describe
+CREATE_TIME,create   time
+CREATE_OPERATOR_ID,create operator  id
+CREATE_OPERATOR_NAME,create operator  name
+JOB_POSITION,ְλ
+,
+,
+区域管理员管理清单  C_AR_RESPONSIBLE_AREA,
+字段名,字段描述
+MANAGER_ID,Area administrator ID
+AREA_ID,Area ID primary key
+FULL_AREA_ID,Full name of responsible area ID
+CREATE_TIME,Creation time
+CREATE_OPERATOR_ID,Creator ID
+CREATE_OPERATOR_NAME,Creator name

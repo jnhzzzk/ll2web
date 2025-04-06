@@ -1,0 +1,36 @@
+﻿ CTVT变更记录 C_AR_CT_PT_CHANGE_LOG,Unnamed: 1
+字段名,字段描述
+LOG_ID,Change log PK
+METER_PNT_ID,Epitope ID
+NEW_RATE,Later magnification ID
+OLD_RATE,Magnification ID before change
+CHANGE_TIME,Change time
+CT_PT_TYPE,Transformer type  CT \ PT
+OPERATOR,Change operator
+CREATE_TIME,Creation time
+REASON,Reason for change
+OPERATOR_NAME,Name of operator
+,
+ CT 字典表 C_AR_CT,
+字段名,字段描述
+CT_ID, CT_ID 
+CT_MULT, CT倍率 
+CT_DESC, CT倍率描述，如300/5
+CREATE_TIME, 创建时间
+CREATE_OPERATOR_ID, 操作人员
+CREATE_OPERATOR_NAME, 创建人员
+UPDATE_TIME, 更新时间
+CT_NUMERATOR, CT分子
+CT_DENOMINATOR, CT分母
+,
+ CT 字典表 C_AR_CT,
+字段名,字段描述
+PT_ID, 电压互感器ID
+PT_MULT, 电压互感器倍率
+PT_DESC, 电压互感器描述 
+CREATE_TIME, 电压互感器创建时间
+CREATE_OPERATOR_ID, 电压互感器创建人员
+CREATE_OPERATOR_NAME, 电压互感器创建人员
+UPDATE_TIME, 电压互感器更新时间
+PT_NUMERATOR , 电压互感器分子
+PT_DENOMINATOR, 电压互感器分母

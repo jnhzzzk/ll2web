@@ -1,0 +1,12 @@
+﻿台区坐标  C_AR_AREA_COORDINATE,Unnamed: 1
+变压器容量  C_AR_AREA_DT,
+字段名,字段描述
+AREA_ID,Consistent with the corresponding region PK
+CAPACITY,Transformer capacity (kVA)
+PRIMARY_VOLTAGE,The primary side voltage level comes from the data dictionary voltage level
+SECONDARY_VOLTAGE,The secondary side voltage level comes from the data dictionary voltage level
+ADDRESS,Device address
+ADMIN_AREA_ID,Management area
+FACTORY_NUMBER,factory   number
+INSTALLATION_DATE,installation   date
+LAST_RECONSTRUCTION_DATE,last reconstruction  date

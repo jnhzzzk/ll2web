@@ -1,0 +1,22 @@
+﻿区域层级表 C_AR_AREA_HIS,,,
+字段名,字段描述,,
+AREA_ID,Area ID primary key,,
+AREA_NO,Area number,,
+AREA_NAME,Area name,,
+AREA_PARENT,Parent node primary key,,
+AREA_TYPE_ID,10.ESP 11. TR 12. Substation 13. Feeder,14 Transmission Line, 15:Power Plant
+AREA_DESC,describe,,
+FULL_AREA_ID,Full name of the region PK, including this node: 7 / 367 / 409/,
+FULL_NAME,The full name of the region includes the name of this node, for example: ABC / CDE / FGE,
+AREA_CLASS,Area classification: 0 administrative area, 1 power grid area (added in 20181112tiger),
+PHYSICAL_AREA_NO,Physical area number (new in 20190107),,
+ADMIN_AREA_ID,(new in 20190606) management area: if it is a power grid area, it is the direct management area of the current power grid area; If it is an administrative region, it is its superior region;
+COMPANY_ID,Company ID,,
+COMPANY_TYPE_ID,Company type (1 PP, 2 PTEs, 3 MES)
+CREATE_TIME,Creation time,,
+UPDATE_TIME,Modification time,,
+OPERATOR_ID,Creator ID (new in 20190917),,
+OPERATOR_NAME,Creator name (new in 20190917),,
+DEL_TIME,Delete time,,
+DEL_OPERATOR_ID,Delete person Id,,
+DEL_OPERATOR_NAME,Deleted by name,,

@@ -1,0 +1,14 @@
+﻿测量点安装记录  C_AR_METER_PNT_INSTALL_HIS,Unnamed: 1
+字段名,字段描述
+INSTLL_HIS_ID,Device installation history ID
+METER_PNT_ID,Epitope ID
+METER_ID,Meter ID (replaced meter ID)
+METER_NO,Meter number (replaced meter number)
+OPERATOR_ID,Installer
+OPERATOR_NAME,Installer
+REGISTER_DATE,Date of registration
+CREATE_TIME,Creation time
+REASON,Reason for removal
+METER_PNT_NO,meter pnt  no
+OPERATION_TYPE,Operation type: Install / remove
+METER_INS_LOC,meter ins  loc

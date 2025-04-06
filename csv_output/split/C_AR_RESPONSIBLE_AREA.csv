@@ -1,0 +1,8 @@
+﻿区域管理员管理清单  C_AR_RESPONSIBLE_AREA,
+字段名,字段描述
+MANAGER_ID,Area administrator ID
+AREA_ID,Area ID primary key
+FULL_AREA_ID,Full name of responsible area ID
+CREATE_TIME,Creation time
+CREATE_OPERATOR_ID,Creator ID
+CREATE_OPERATOR_NAME,Creator name

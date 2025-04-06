@@ -1,0 +1,13 @@
+﻿CTVT变更记录 C_AR_CT_PT_CHANGE_LOG,Unnamed: 1
+字段名,字段描述
+LOG_ID,Change log PK
+METER_PNT_ID,Epitope ID
+NEW_RATE,Later magnification ID
+OLD_RATE,Magnification ID before change
+CHANGE_TIME,Change time
+CT_PT_TYPE,Transformer type  CT \ PT
+OPERATOR,Change operator
+CREATE_TIME,Creation time
+REASON,Reason for change
+OPERATOR_NAME,Name of operator
+,

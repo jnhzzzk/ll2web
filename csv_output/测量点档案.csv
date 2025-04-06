@@ -1,0 +1,59 @@
+﻿测量点 C_AR_METER_PNT,Unnamed: 1
+字段名,字段描述
+METER_PNT_ID           ,
+AREA_ID                ,Power facility area to which the meter belongs (power plant  substation  feeder)
+METER_PNT_NO           ,
+METER_PNT_STATUS       ,Status 0 stop 1 OK
+PNT_COMMODITY          ,1 electricity 7 gas 0 all
+CRTD_TSTMP             ,created timestamp'
+UPDTD_TSTMP            ,updated timestamp'
+LONGITUDE              ,longitude
+LATITUDE               ,latitude
+METER_INS_LOC          ,Table installation address
+METER_TYPE             ,Type of pre installed equipment -- 10 Single phase electricity meter 11 Three phase electricity meter
+COMMUNICATION_TYPE     ,Pre installed communication type -- - 0: undetermined 2: GPRS 6: G3 PLC 7: RF
+CONSUME_TYPE           ,consume   type'
+RATE_CURRENT           ,CT'
+RATE_POWER             ,PT'
+INSTALL_STATUS         ,Status 0 is not installed'
+OLDCUST_ID             ,the last custom id'
+FDR_CD                 ,feeder id'
+POLE_CD                ,poler id'
+OLD_METER_NO           ,Old table number (ivy is currently in use) (20180625 is not used for the time being)
+IS_DRIVE_BY            ,Is it a table 20170510 of drive by? Add: 0 means no  1 means yes and the default is 0
+INSTALLATION_SITE      ,Installation location: 01: pole; 02：Sheath； 03：Entrance； 04：Building facade；  (20170428ivy newly added handheld terminal fill in the installation point and send it to CRM)'
+TR_POWER               ,Transformer capacity (kVA) (New Ivy temporary solution in 201707)'
+MAX_POWER              ,Maximum rated power of measuring point kW (20170806 prepayment added)'
+SUPPLY_VOLTAGE         ,The supply voltage comes from the data dictionary: C_ POWER_ SUPPLY_ The voltage data dictionary code represents the voltage  for example 230 represents AC230V; 400 represents AC400V (newly added in 20170807 tiger)'
+PARENT_PNT_ID          ,Communication point ID of parent node (added in 20180625)'
+PARENT_DEVICE_TYPE     ,0: server \ 1: meter \ 10: DCU \ repeater (new in 20180625)'
+IS_GM                  ,1 general table 0 general table'
+INSTALL_METER_NO       ,Installed table No. (new in 20180710)'
+INSTALL_OPERATOR       ,Installer  used to record the installer who installed the meter (new in 20180724)'
+INSTALL_DATE           ,Installation date  used to record the installation date of the installed electricity meter (added in 20180724)'
+SOURCE                 ,Data source: 0: newly added by AMI system 0 by default'
+LINE_ID                ,Transmission line; feeder to which the meter belongs (newly added at HV end in 20190517)'
+BILL_MODE              ,bill   mode'
+CUSTOMER_NAME          ,(2.0.13.0-20191231 performance optimization new) redundant field) customer name'
+ADMIN_AREA_ID          ,(2.0.13.0-20191231 performance optimization new) management area: if it is a power grid area  it is the direct management area of the current power g
+FULL_AREA_ID           ,(2.0.13.0-20191231 performance optimization new) full name of regional primary key  including this node: 7 / 367 / 409/'
+FULL_PARENT_DEVICE_NO  ,(2.0.13.0-20191231 performance optimization added) full name of communication equipment number division is used between multiple equipment numbers;'
+FULL_PARENT_DEVICE_TYPE,(2.0.13.0-20191231 performance optimization added) full name of communication equipment type'
+FULL_PARENT_PNT_ID     ,full parent pnt id'
+CUST_ID                ,Customer ID'
+METER_ID               ,meter   id'
+RELAY_STATUS           ,relay   status'
+NETWORK_STATUS         ,network   status'
+NETWORK_UPDATE_TIME    ,network update  time'
+DEV_STATUS             ,dev   status'
+RELAY_REASON           ,relay   reason'
+MODEL_CODE             ,model   code'
+SUB_CUSTOMER_CODE      ,Subhe No. (ivy01 Ivy 02 added 20200515)'
+SUB_CUSTOMER_NAME      ,Sub customer name (ivy01 Ivy 02 added 20200515)'
+APP_VERSION            ,Version number of equipment application software (3.2.0.0-20200722 new) (redundant field)'
+RELAY_UPDATE_TIME      ,Opening and closing update time (3.2.0.0-20200723 new) (redundant field)'
+PAYMENT_MODE           ,payment   mode'
+RENEWABLE_ENERGY       ,可再生能源 0:SOLA 1:WIND'
+SOURCE_ID              ,Third-party application identification'
+SOURCE_NAME            ,Third-party application name'
+EV                     ,是否给充电桩计量0:否 1:是'

@@ -1,0 +1,11 @@
+﻿CT 字典表 C_AR_CT,
+字段名,字段描述
+PT_ID, 电压互感器ID
+PT_MULT, 电压互感器倍率
+PT_DESC, 电压互感器描述
+CREATE_TIME, 电压互感器创建时间
+CREATE_OPERATOR_ID, 电压互感器创建人员
+CREATE_OPERATOR_NAME, 电压互感器创建人员
+UPDATE_TIME, 电压互感器更新时间
+PT_NUMERATOR , 电压互感器分子
+PT_DENOMINATOR, 电压互感器分母

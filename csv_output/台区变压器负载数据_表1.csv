@@ -1,0 +1,6 @@
+﻿台区坐标  C_AR_AREA_COORDINATE,Unnamed: 1
+字段名,字段描述
+AREA_ID,Consistent with the corresponding region PK
+SEQ_NO,The coordinate order defaults to 0
+LONGITUDE,longitude
+LATITUDE,latitude
