@@ -137,14 +137,6 @@
                             "区域档案中未完整记录所有实际接入用户信息",
                             "台区改造后未及时更新户表关系"
                         ],
-                        // 治理建议内容  
-                        suggestions: [
-                            "1. 开展台区接线核查，确认实际供电范围内的所有用户",
-                            "2. 更新系统中的户表关系档案，将遗漏用户正确挂接",
-                            "3. 对台区线路进行全面普查，核对每户对应的表计",
-                            "4. 建立台区改造后户表关系巡检机制，确保档案同步更新",
-                            "5. 对历史线损数据进行更正，恢复准确的统计结果"
-                        ],
                         // 时序图数据
                         mainMeterChartData: {
                             dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
@@ -154,10 +146,28 @@
                         // 档案记录 - 电表事件
                         meterEvents: [
                             {
-                                eventType: "新增用户",
-                                eventCode: "E002",
+                                eventType: "Remote connected",
+                                eventCode: "Event-514",
+                                date: "2023-02-18",
+                                relatedUser: "用户U20230102"
+                            },
+                            {
+                                eventType: "Phase sequence reversal occurrence",
+                                eventCode: "Event-299",
+                                date: "2023-02-20",
+                                relatedUser: "用户U20230108"
+                            },
+                            {
+                                eventType: "Online (GPRS)",
+                                eventCode: "Event-90",
                                 date: "2023-02-25",
-                                relatedUser: "U2023102... (共3户)"
+                                relatedUser: "U2023102 (共3户)"
+                            },
+                            {
+                                eventType: "Absence of A Phases occurrence",
+                                eventCode: "Event-202",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230105"
                             }
                         ],
                         // 档案变更记录
@@ -171,6 +181,11 @@
                                 eventType: "用户迁移",
                                 date: "2023-02-18",
                                 relatedUser: "U2023055... (共5户)"
+                            },
+                            {
+                                eventType: "户表关系变更",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230102, U20230105, U20230108"
                             }
                         ]
                     }
@@ -701,19 +716,19 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">测量点ID:</span>
-                                            <span class="font-medium">PNT2023051</span>
+                                            <span class="font-medium">PNT2023084</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">所属区域:</span>
-                                            <span class="font-medium">西湖供电区</span>
+                                            <span class="font-medium">滨江供电区</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">测量点状态:</span>
                                             <span class="font-medium">正常</span>
                                         </div>
                                         <div>
-                                            <span class="text-gray-500">电表安装位置:</span>
-                                            <span class="font-medium">变压器出线柜</span>
+                                            <span class="text-gray-500">测量点编号:</span>
+                                            <span class="font-medium">MP2023084</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">电表类型:</span>
@@ -724,16 +739,12 @@
                                             <span class="font-medium">GPRS</span>
                                         </div>
                                         <div>
+                                            <span class="text-gray-500">用电类型:</span>
+                                            <span class="font-medium">居民生活用电</span>
+                                        </div>
+                                        <div>
                                             <span class="text-gray-500">电流CT变比:</span>
-                                            <span class="font-medium text-red-600">150/5</span>
-                                        </div>
-                                        <div>
-                                            <span class="text-gray-500">电压PT变比:</span>
-                                            <span class="font-medium">1/1</span>
-                                        </div>
-                                        <div>
-                                            <span class="text-gray-500">表号:</span>
-                                            <span class="font-medium">21056782</span>
+                                            <span class="font-medium">200/5</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">是否总表:</span>
@@ -741,19 +752,23 @@
                                         </div>
                                         <div>
                                             <span class="text-gray-500">台区编号:</span>
-                                            <span class="font-medium">T2023051</span>
+                                            <span class="font-medium">T2023084</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">用户数量:</span>
-                                            <span class="font-medium">165户</span>
+                                            <span class="font-medium text-orange-600">142户(实际)/139户(系统)</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">变压器容量:</span>
-                                            <span class="font-medium">315kVA</span>
+                                            <span class="font-medium">400kVA</span>
                                         </div>
                                         <div>
-                                            <span class="text-gray-500">投运日期:</span>
-                                            <span class="font-medium">2020-07-15</span>
+                                            <span class="text-gray-500">经度:</span>
+                                            <span class="font-medium">120.1983</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">纬度:</span>
+                                            <span class="font-medium">30.2118</span>
                                         </div>
                                     </div>
                                 </div>
@@ -769,27 +784,35 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">月用电量:</span>
-                                            <span class="font-medium">45,621 kWh</span>
+                                            <span class="font-medium">52,850 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">最大负荷:</span>
-                                            <span class="font-medium">238 kW</span>
+                                            <span class="font-medium">260 kW</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">日正向有功累计:</span>
-                                            <span class="font-medium">1,540 kWh/天</span>
+                                            <span class="font-medium">1,720 kWh/天</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">日反向有功累计:</span>
                                             <span class="font-medium">0 kWh/天</span>
                                         </div>
                                         <div>
+                                            <span class="text-gray-500">台区供电量:</span>
+                                            <span class="font-medium">52,850 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">台区用电量:</span>
+                                            <span class="font-medium">45,510 kWh</span>
+                                        </div>
+                                        <div>
                                             <span class="text-gray-500">采集成功率:</span>
-                                            <span class="font-medium text-green-600">98.5%</span>
+                                            <span class="font-medium text-green-600">99.2%</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">线损率:</span>
-                                            <span class="font-medium text-red-600">12.76%</span>
+                                            <span class="font-medium text-orange-600">13.8%</span>
                                         </div>
                                     </div>
                                     
@@ -889,15 +912,19 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">单相表数量:</span>
-                                            <span class="font-medium">142台</span>
+                                            <span class="font-medium">118台</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">三相表数量:</span>
-                                            <span class="font-medium">23台</span>
+                                            <span class="font-medium">21台</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">最新接入日期:</span>
                                             <span class="font-medium">2023-02-25</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">漏挂接表计:</span>
+                                            <span class="font-medium text-orange-600">3台</span>
                                         </div>
                                     </div>
                                 </div>
@@ -913,23 +940,27 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <span class="text-gray-500">月用电量:</span>
-                                            <span class="font-medium">39,825 kWh</span>
+                                            <span class="font-medium text-orange-600">45,510 kWh</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">平均负荷:</span>
-                                            <span class="font-medium">1.45 kW/户</span>
+                                            <span class="font-medium">1.55 kW/户</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">日正向有功累计:</span>
-                                            <span class="font-medium">1,330 kWh/天</span>
+                                            <span class="font-medium">1,485 kWh/天</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">普通表数量:</span>
-                                            <span class="font-medium">165台</span>
+                                            <span class="font-medium">139台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">普通表采集数量:</span>
+                                            <span class="font-medium">137台</span>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">平均采集成功率:</span>
-                                            <span class="font-medium text-green-600">96.3%</span>
+                                            <span class="font-medium text-green-600">98.6%</span>
                                         </div>
                                     </div>
                                     
@@ -968,14 +999,27 @@
                                                     <td class="py-1 px-2">
                                                         <div class="flex items-center">
                                                             <i class="fas fa-tools text-blue-500 mr-1"></i>
-                                                            <span class="font-medium">设备更换</span>
+                                                            <span class="font-medium">Current unbalance occurrence</span>
                                                         </div>
                                                     </td>
                                                     <td class="py-1 px-2">
-                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">E003</span>
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">Event-279</span>
                                                     </td>
-                                                    <td class="py-1 px-2 text-gray-500">2023-03-02</td>
-                                                    <td class="py-1 px-2 text-gray-500">U2023055 (表号: 21041253)</td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-23</td>
+                                                    <td class="py-1 px-2 text-gray-500">用户U20230195</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">Current unbalance restoration</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">Event-280</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-24</td>
+                                                    <td class="py-1 px-2 text-gray-500">用户U20230195</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -996,11 +1040,21 @@
                                                     <td class="py-1 px-2">
                                                         <div class="flex items-center">
                                                             <i class="fas fa-user-plus text-green-500 mr-1"></i>
-                                                            <span class="font-medium">新增用户</span>
+                                                            <span class="font-medium">用户添加</span>
                                                         </div>
                                                     </td>
-                                                    <td class="py-1 px-2 text-gray-500">2023-03-15</td>
-                                                    <td class="py-1 px-2 text-gray-500">U2023102... (共3户)</td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-25</td>
+                                                    <td class="py-1 px-2 text-gray-500">U20230102, U20230105, U20230108</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-project-diagram text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">台区拓扑结构变更</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-20</td>
+                                                    <td class="py-1 px-2 text-gray-500">T2023084台区</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1032,31 +1086,31 @@
                                 <i class="fas fa-percentage text-primary mr-1"></i> 匹配概率
                             </h3>
                             <div class="text-xs text-gray-600">
-                                <!-- 匹配概率计算内容 -->
+                                <!-- 匹配概率计算内容 - 台区户表关系错误 -->
                                 <ul class="list-none space-y-2">
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">线损率异常特征</span>
-                                        <span class="text-red-600">+45%</span>
+                                        <span class="font-medium">台区线损率持续异常</span>
+                                        <span class="text-orange-600">+35%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">CT倍率变更记录</span>
-                                        <span class="text-red-600">+25%</span>
+                                        <span class="font-medium">子表用电量合计偏低</span>
+                                        <span class="text-orange-600">+22%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">总表用电量突变</span>
-                                        <span class="text-red-600">+15%</span>
+                                        <span class="font-medium">台区改造后户表关系变更</span>
+                                        <span class="text-orange-600">+15%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">电流不平衡事件</span>
-                                        <span class="text-red-600">+7%</span>
+                                        <span class="font-medium">用户上线通信事件记录</span>
+                                        <span class="text-orange-600">+8%</span>
                                     </li>
                                     <li class="flex justify-between items-center border-b pb-1">
-                                        <span class="font-medium">计量装置事件关联</span>
-                                        <span class="text-red-600">+5%</span>
+                                        <span class="font-medium">相位关系异常</span>
+                                        <span class="text-orange-600">+4%</span>
                                     </li>
                                     <li class="flex justify-between items-center mt-2">
                                         <span class="font-medium text-base">综合匹配概率</span>
-                                        <span class="text-red-600 font-medium text-base">92%</span>
+                                        <span class="text-orange-600 font-medium text-base">84%</span>
                                     </li>
                                 </ul>
                             </div>
