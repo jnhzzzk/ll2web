@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能诊断标签卡片弹窗示例</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">智能诊断标签卡片弹窗示例</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">智能诊断标签</h2>
+            <div class="flex flex-col space-y-3" id="diagnosticTags">
+                <!-- 诊断标签会通过JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 返回按钮 -->
+        <div class="mt-6">
+            <a href="/cn/diagnostic.html" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-1"></i> 返回诊断分析页面
+            </a>
+        </div>
+    </div>
+    
+    <!-- 诊断标签详情弹窗 -->
+    <div id="tagDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-3xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+                <h2 id="tagModalTitle" class="text-lg font-medium text-gray-900">标签详情</h2>
+                <button id="closeTagModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="tagModalContent" class="p-5">
+                <!-- 弹窗内容将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 诊断标签数据
+        const diagnosticTags = {
+            // 标签库
+            'tag-library': [
+                {
+                    title: 'CT互感器倍率错误',
+                    probability: '92%',
+                    icon: 'exclamation-triangle',
+                    color: 'red'
+                },
+                {
+                    title: '台区户表关系错误',
+                    probability: '84%',
+                    icon: 'file-alt',
+                    color: 'orange'
+                },
+                {
+                    title: '用电负荷突增',
+                    probability: '78%',
+                    icon: 'bolt',
+                    color: 'yellow'
+                },
+                {
+                    title: '低压设备故障',
+                    probability: '75%',
+                    icon: 'exclamation-triangle',
+                    color: 'orange'
+                },
+                {
+                    title: '窃电行为突增',
+                    probability: '68%',
+                    icon: 'user-secret',
+                    color: 'red'
+                },
+                {
+                    title: '恶劣天气影响',
+                    probability: '62%',
+                    icon: 'cloud-rain',
+                    color: 'blue'
+                },
+                {
+                    title: '计量装置接线错误',
+                    probability: '58%',
+                    icon: 'plug',
+                    color: 'red'
+                },
+                {
+                    title: '电表正反向设置错误',
+                    probability: '55%',
+                    icon: 'exchange-alt',
+                    color: 'orange'
+                },
+                {
+                    title: '分布式能源反向计量异常',
+                    probability: '50%',
+                    icon: 'solar-panel',
+                    color: 'green'
+                },
+                {
+                    title: '时钟同步偏差',
+                    probability: '45%',
+                    icon: 'clock',
+                    color: 'blue'
+                },
+                {
+                    title: '供电半径过长',
+                    probability: '40%',
+                    icon: 'ruler',
+                    color: 'green'
+                }
+            ]
+        };
+        
+        // 当前显示的异常类型
+        let currentType = 'tag-library';
+        
+        // 显示标签
+        function renderTags(type) {
+            currentType = type;
+            const tagContainer = document.getElementById('diagnosticTags');
+            tagContainer.innerHTML = '';
+            
+            // 添加标题
+            const titleMap = {
+                'tag-library': '诊断标签库'
+            };
+            
+            const titleElement = document.createElement('h2');
+            titleElement.className = 'text-lg font-medium text-gray-900 mb-4';
+            titleElement.textContent = titleMap[type];
+            tagContainer.appendChild(titleElement);
+            
+            // 添加标签
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'flex flex-col space-y-3';
+            
+            diagnosticTags[type].forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg cursor-pointer hover:shadow-md transition-shadow`;
+                tagElement.innerHTML = `
+                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
+                        <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
+                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
+                    </div>
+                `;
+                tagElement.addEventListener('click', () => showTagDetail(type, index));
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            tagContainer.appendChild(tagsContainer);
+        }
+        
+        // 显示标签详情弹窗
+        function showTagDetail(type, tagIndex) {
+            const tagData = diagnosticTags[type][tagIndex];
+            const modal = document.getElementById('tagDetailModal');
+            const modalTitle = document.getElementById('tagModalTitle');
+            const modalContent = document.getElementById('tagModalContent');
+            
+            // 设置标题
+            modalTitle.textContent = tagData.title;
+            
+            // 设置弹窗内容
+            modalContent.innerHTML = '';
+            
+            // 统一的UI框架
+            modalContent.innerHTML = `
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <!-- 左侧：总表信息 -->
+                        <div class="flex-1 bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-chart-line text-primary mr-1"></i> 总表信息
+                            </h3>
+                            
+                            <!-- 档案信息 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-folder text-gray-500 mr-1"></i> 档案信息
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">台区编号:</span>
+                                            <span class="font-medium">T2023051</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">用户数量:</span>
+                                            <span class="font-medium">165户</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">变压器容量:</span>
+                                            <span class="font-medium">315kVA</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">投运日期:</span>
+                                            <span class="font-medium">2020-07-15</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 采集数据 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-database text-gray-500 mr-1"></i> 采集数据
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="text-xs font-medium text-gray-700 mb-2">上月冻结主要数据</div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">月用电量:</span>
+                                            <span class="font-medium">45,621 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">最大负荷:</span>
+                                            <span class="font-medium">238 kW</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">采集完整率:</span>
+                                            <span class="font-medium text-green-600">98.5%</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">线损率:</span>
+                                            <span class="font-medium text-red-600">12.76%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 时序数据可视化 -->
+                                    <div class="mt-3">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="text-gray-600 font-medium">电量/线损率日维度变化</span>
+                                        </div>
+                                        <div class="h-40">
+                                            <canvas id="mainMeterTimeSeriesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 档案记录 -->
+                            <div>
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-file-alt text-gray-500 mr-1"></i> 档案记录
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs space-y-3">
+                                    <!-- 电表事件记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">电表事件记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">计量装置校验</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">M001</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-04-15</td>
+                                                    <td class="py-1 px-2 text-gray-500">总表</td>
+                                                </tr>
+                                                <tr class="bg-gray-50">
+                                                     <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-exclamation-circle text-orange-500 mr-1"></i>
+                                                            <span class="font-medium">故障维修</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-orange-100 text-orange-800 text-xs rounded">M002</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-22</td>
+                                                    <td class="py-1 px-2 text-gray-500">总表</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 档案变更记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">档案变更记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-route text-purple-500 mr-1"></i>
+                                                            <span class="font-medium">线路改造</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-purple-100 text-purple-800 text-xs rounded">A001</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-03-10</td>
+                                                    <td class="py-1 px-2 text-gray-500">总表</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：子表信息 -->
+                        <div class="flex-1 bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-table text-primary mr-1"></i> 子表信息
+                                <span class="text-xs font-normal text-gray-500">(165户)</span>
+                            </h3>
+                            
+                            <!-- 档案信息 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-folder text-gray-500 mr-1"></i> 档案信息
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">单相表数量:</span>
+                                            <span class="font-medium">142台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">三相表数量:</span>
+                                            <span class="font-medium">23台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">最新接入日期:</span>
+                                            <span class="font-medium">2020-09-01</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 采集数据 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-database text-gray-500 mr-1"></i> 采集数据
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="text-xs font-medium text-gray-700 mb-2">上月冻结主要数据</div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">月用电量:</span>
+                                            <span class="font-medium">39,825 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">平均负荷:</span>
+                                            <span class="font-medium">1.45 kW/户</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">采集成功率:</span>
+                                            <span class="font-medium text-green-600">96.3%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 时序数据可视化 -->
+                                    <div class="mt-3">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="text-gray-600 font-medium">用户用电负荷日维度变化</span>
+                                        </div>
+                                        <div class="h-40">
+                                            <canvas id="subMeterTimeSeriesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 档案记录 -->
+                            <div>
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-file-alt text-gray-500 mr-1"></i> 档案记录
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs space-y-3">
+                                    <!-- 电表事件记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">电表事件记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-bolt text-red-500 mr-1"></i>
+                                                            <span class="font-medium">停电告警</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-red-100 text-red-800 text-xs rounded">E001</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-04-20</td>
+                                                    <td class="py-1 px-2 text-gray-500">U2023042... (共5户)</td>
+                                                </tr>
+                                                <tr class="bg-gray-50">
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">设备更换</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">E003</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-03-02</td>
+                                                    <td class="py-1 px-2 text-gray-500">U2023055 (表号: 21041253)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 档案变更记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">档案变更记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-user-plus text-green-500 mr-1"></i>
+                                                            <span class="font-medium">新增用户</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-green-100 text-green-800 text-xs rounded">E002</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-03-15</td>
+                                                    <td class="py-1 px-2 text-gray-500">U2023102... (共3户)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 错误分析与治理建议 -->
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 左侧：分析结论 -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-chart-pie text-primary mr-1"></i> 分析结论
+                            </h3>
+                            <div class="text-xs text-gray-600">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>此处将根据具体标签显示相应的分析结论</li>
+                                    <li>包含问题定位、原因分析等内容</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：治理建议 -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-lightbulb text-primary mr-1"></i> 治理建议
+                            </h3>
+                            <div class="text-xs text-gray-600">
+                                <ol class="list-decimal pl-5 space-y-1">
+                                    <li>此处将根据具体标签显示相应的治理建议</li>
+                                    <li>包含处理流程、解决方案等内容</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 特定标签可以在这里添加额外的内容或修改默认内容
+            if (tagData.title === 'CT互感器倍率错误') {
+                // 可以在这里添加特定的内容
+            }
+            
+            // 显示弹窗
+            modal.classList.remove('hidden');
+            
+            // 初始化图表
+            setTimeout(() => {
+                // 总表时序图表
+                const mainMeterCtx = document.getElementById('mainMeterTimeSeriesChart').getContext('2d');
+                new Chart(mainMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        datasets: [
+                            {
+                                label: '日用电量 (kWh)',
+                                data: [1485, 1510, 1498, 1522, 1540, 1502, 1485, 1650, 1720, 1835],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: '线损率 (%)',
+                                data: [6.1, 6.2, 6.3, 6.1, 6.4, 6.5, 6.3, 9.8, 11.5, 12.8],
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                borderDash: [5, 5],
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '电量 (kWh)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '线损率 (%)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 子表时序图表
+                const subMeterCtx = document.getElementById('subMeterTimeSeriesChart').getContext('2d');
+                new Chart(subMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        datasets: [
+                            {
+                                label: '平均日负荷 (kW/户)',
+                                data: [1.2, 1.25, 1.23, 1.27, 1.3, 1.26, 1.22, 1.35, 1.42, 1.5],
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            },
+                            {
+                                label: '最大日负荷 (kW/户)',
+                                data: [2.3, 2.4, 2.2, 2.5, 2.6, 2.4, 2.3, 2.8, 3.2, 3.5],
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0.3,
+                                borderDash: [5, 5]
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: '负荷 (kW/户)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 渲染标签
+            renderTags(currentType);
+            
+            // 关闭弹窗
+            document.getElementById('closeTagModal').addEventListener('click', () => {
+                document.getElementById('tagDetailModal').classList.add('hidden');
+            });
+            
+            // 点击弹窗外部关闭弹窗
+            document.getElementById('tagDetailModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('tagDetailModal')) {
+                    document.getElementById('tagDetailModal').classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
