@@ -576,49 +576,49 @@
                 datasets: [
                     {
                         label: '华东区',
-                        data: [{ x: 2.7, y: 12 }],
+                        data: [{ x: 2.7, y: 12, r: 850 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.9)',
                         pointRadius: 15,
                         pointHoverRadius: 18
                     },
                     {
                         label: '华南区',
-                        data: [{ x: 1.8, y: 8 }],
+                        data: [{ x: 1.8, y: 8, r: 620 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.8)',
                         pointRadius: 12,
                         pointHoverRadius: 15
                     },
                     {
                         label: '华北区',
-                        data: [{ x: 2.4, y: 15 }],
+                        data: [{ x: 2.4, y: 15, r: 920 }],
                         backgroundColor: 'rgba(48, 156, 159, 1)',
                         pointRadius: 18,
                         pointHoverRadius: 20
                     },
                     {
                         label: '东北区',
-                        data: [{ x: 1.5, y: 10 }],
+                        data: [{ x: 1.5, y: 10, r: 680 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.85)',
                         pointRadius: 14,
                         pointHoverRadius: 16
                     },
                     {
                         label: '西北区',
-                        data: [{ x: 0.6, y: 6 }],
+                        data: [{ x: 0.6, y: 6, r: 450 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.65)',
                         pointRadius: 10,
                         pointHoverRadius: 12
                     },
                     {
                         label: '西南区',
-                        data: [{ x: 0.3, y: 3 }],
+                        data: [{ x: 0.3, y: 3, r: 320 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.5)',
                         pointRadius: 8,
                         pointHoverRadius: 10
                     },
                     {
                         label: '华中区',
-                        data: [{ x: 0.5, y: 5 }],
+                        data: [{ x: 0.5, y: 5, r: 380 }],
                         backgroundColor: 'rgba(48, 156, 159, 0.6)',
                         pointRadius: 9,
                         pointHoverRadius: 11
@@ -638,7 +638,8 @@
                                 const label = context.dataset.label;
                                 const x = context.parsed.x.toFixed(1);
                                 const y = context.parsed.y;
-                                return `${label}: 相对线损差值 ${x}%, 异常台区数量 ${y}个`;
+                                const r = context.raw.r;
+                                return `${label}: 相对线损差值 ${x}%, 异常台区数量 ${y}个, 损失电量 ${r} kWh`;
                             }
                         }
                     }
@@ -713,6 +714,9 @@
             modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
             modal.id = 'regionDetailModal';
             
+            // 获取区域数据
+            const regionData = getRegionData(region);
+            
             // 弹窗内容
             modal.innerHTML = `
                 <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
@@ -728,11 +732,15 @@
                         <div class="mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-sm text-gray-500">相对线损差值</span>
-                                <span class="text-sm font-medium">${getRegionData(region).x.toFixed(1)}%</span>
+                                <span class="text-sm font-medium">${regionData.x.toFixed(1)}%</span>
                             </div>
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-sm text-gray-500">异常台区数量</span>
-                                <span class="text-sm font-medium">${getRegionData(region).y}个</span>
+                                <span class="text-sm font-medium">${regionData.y}个</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-500">损失电量</span>
+                                <span class="text-sm font-medium">${regionData.r} kWh</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-500">总台区数</span>
@@ -774,7 +782,7 @@
                     return datasets[i].data[0];
                 }
             }
-            return { x: 0, y: 0 };
+            return { x: 0, y: 0, r: 0 };
         }
         
         // 获取区域台区总数（模拟数据）
