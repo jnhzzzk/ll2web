@@ -35,10 +35,10 @@
                         </span>
                         <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
                             <a href="/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
-                                Overview Statistics
+                                Statistical Overview
                             </a>
                             <a href="/en/filter" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
-                                Filter Configuration
+                                Area Filtering
                             </a>
                             <a href="/en/diagnostic" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
                                 Diagnostic Analysis
@@ -67,11 +67,11 @@
                 <div class="flex items-center space-x-3">
                     <div class="relative w-64">
                         <select id="area-selector" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
-                            <option value="long-high" selected>Hexi Substation 1324 Area (+6.44%, Long-term High Loss)</option>
-                            <option value="sudden-high">Chengnan 532 Area (+5.55%, Sudden High Loss)</option>
-                            <option value="long-neg">Donghu 785 Area (-4.69%, Long-term Negative Loss)</option>
-                            <option value="small-neg">Beijiao 198 Area (-0.84%, Slight Negative Loss)</option>
-                            <option value="sudden-neg">Development Zone 672 Area (-3.76%, Sudden Negative Loss)</option>
+                            <option value="long-high" selected>Hexi Transformer 1324 (+6.44%, Long-term High Loss)</option>
+                            <option value="sudden-high">Chengnan 532 (+5.55%, Sudden High Loss)</option>
+                            <option value="long-neg">Donghu 785 (-4.69%, Long-term Negative Loss)</option>
+                            <option value="small-neg">Beijiao 198 (-0.84%, Small Negative Loss)</option>
+                            <option value="sudden-neg">Development Zone 672 (-3.76%, Sudden Negative Loss)</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,8 +93,8 @@
                             <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
                         </div>
                         <div class="ml-4">
-                            <h2 class="text-lg font-medium text-gray-900">Hexi Substation 1324 Area - Line Loss Anomaly Governance Suggestions</h2>
-                            <p class="text-sm text-gray-500 mt-1">Diagnosis Result: CT Transformer Ratio Error (Match Probability: 92%)</p>
+                            <h2 class="text-lg font-medium text-gray-900">Hexi Transformer 1324 Area - Line Loss Anomaly Governance Suggestions</h2>
+                            <p class="text-sm text-gray-500 mt-1">Diagnostic Result: CT Transformer Ratio Error (Match Probability: 92%)</p>
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                                 <p class="text-2xl font-bold text-blue-500">-4.69%</p>
                                 <p class="text-xs text-gray-500 mt-1">Theoretical Loss: 6.51% / Actual Loss: 1.82%</p>
                             </div>
-                            <!-- Slight Negative Loss -->
+                            <!-- Small Negative Loss -->
                             <div id="loss-diff-small-neg" class="hidden">
                                 <p class="text-2xl font-bold text-sky-500">-0.84%</p>
                                 <p class="text-xs text-gray-500 mt-1">Theoretical Loss: 6.32% / Actual Loss: 5.48%</p>
@@ -133,27 +133,27 @@
                             <!-- Long-term High Loss -->
                             <div id="power-impact-long-high">
                                 <p class="text-2xl font-bold text-gray-900">8,576 kWh</p>
-                                <p class="text-xs text-gray-500 mt-1">Approx. ¥6,861 monthly economic loss</p>
+                                <p class="text-xs text-gray-500 mt-1">Monthly Economic Loss: ¥6,861 </p>
                             </div>
                             <!-- Sudden High Loss -->
                             <div id="power-impact-sudden-high" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">5,240 kWh</p>
-                                <p class="text-xs text-gray-500 mt-1">Approx. ¥4,192 monthly economic loss</p>
+                                <p class="text-xs text-gray-500 mt-1">Monthly Economic Loss: ¥4,192</p>
                             </div>
                             <!-- Long-term Negative Loss -->
                             <div id="power-impact-long-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">4,980 kWh</p>
-                                <p class="text-xs text-gray-500 mt-1">Approx. ¥3,984 monthly economic loss</p>
+                                <p class="text-xs text-gray-500 mt-1">Monthly Economic Loss: ¥3,984</p>
                             </div>
-                            <!-- Slight Negative Loss -->
+                            <!-- Small Negative Loss -->
                             <div id="power-impact-small-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">1,250 kWh</p>
-                                <p class="text-xs text-gray-500 mt-1">Approx. ¥1,000 monthly economic loss</p>
+                                <p class="text-xs text-gray-500 mt-1">Monthly Economic Loss: ¥1,000</p>
                             </div>
                             <!-- Sudden Negative Loss -->
                             <div id="power-impact-sudden-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">3,860 kWh</p>
-                                <p class="text-xs text-gray-500 mt-1">Approx. ¥3,088 monthly economic loss</p>
+                                <p class="text-xs text-gray-500 mt-1">Monthly Economic Loss: ¥3,088</p>
                             </div>
                         </div>
                         <div class="col-span-1 bg-primary-light rounded-lg p-4">
@@ -161,27 +161,27 @@
                             <!-- Long-term High Loss -->
                             <div id="duration-long-high">
                                 <p class="text-2xl font-bold text-gray-900">28 days</p>
-                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Time: 2023-04-06</p>
+                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Date: 2023-04-06</p>
                             </div>
                             <!-- Sudden High Loss -->
                             <div id="duration-sudden-high" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">5 days</p>
-                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Time: 2023-05-07</p>
+                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Date: 2023-05-07</p>
                             </div>
                             <!-- Long-term Negative Loss -->
                             <div id="duration-long-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">32 days</p>
-                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Time: 2023-04-02</p>
+                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Date: 2023-04-02</p>
                             </div>
-                            <!-- Slight Negative Loss -->
+                            <!-- Small Negative Loss -->
                             <div id="duration-small-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">14 days</p>
-                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Time: 2023-04-28</p>
+                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Date: 2023-04-28</p>
                             </div>
                             <!-- Sudden Negative Loss -->
                             <div id="duration-sudden-neg" class="hidden">
                                 <p class="text-2xl font-bold text-gray-900">4 days</p>
-                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Time: 2023-05-08</p>
+                                <p class="text-xs text-gray-500 mt-1">Anomaly Start Date: 2023-05-08</p>
                             </div>
                         </div>
                         <div class="col-span-1 bg-primary-light rounded-lg p-4">
@@ -208,10 +208,10 @@
                                     </span>
                                 </div>
                                 
-                                <!-- Slight Negative Loss Badge -->
+                                <!-- Small Negative Loss Badge -->
                                 <div id="badge-small-neg" class="flex items-center hidden">
                                     <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
-                                        Slight Negative Loss
+                                        Small Negative Loss
                                     </span>
                                 </div>
                                 
@@ -222,18 +222,18 @@
                                     </span>
                                 </div>
                             </div>
-                            <p id="anomaly-description-long-high" class="text-xs text-gray-500 mt-1">Line loss rate higher than theoretical value by >5% for ≥20 days within 30 consecutive days</p>
-                            <p id="anomaly-description-sudden-high" class="text-xs text-gray-500 mt-1 hidden">Line loss rate suddenly increases by >5% and persists for >3 days</p>
-                            <p id="anomaly-description-long-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate <0% for >7 consecutive days</p>
-                            <p id="anomaly-description-small-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate between -1% and 0% for >7 consecutive days</p>
-                            <p id="anomaly-description-sudden-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate suddenly drops below 0% and persists for >3 days</p>
+                            <p id="anomaly-description-long-high" class="text-xs text-gray-500 mt-1">Line loss rate exceeds theoretical value by more than 5% for 30 consecutive days, with abnormal days ≥20 days</p>
+                            <p id="anomaly-description-sudden-high" class="text-xs text-gray-500 mt-1 hidden">Line loss rate suddenly increases by more than 5% and continues for more than 3 days</p>
+                            <p id="anomaly-description-long-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate less than 0% for more than 7 consecutive days</p>
+                            <p id="anomaly-description-small-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate between -1% and 0% for more than 7 consecutive days</p>
+                            <p id="anomaly-description-sudden-neg" class="text-xs text-gray-500 mt-1 hidden">Line loss rate suddenly drops below 0% and continues for more than 3 days</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left: Standardized Governance Process -->
+                <!-- Left Side: Standardized Governance Process -->
                 <div class="col-span-1 lg:col-span-2">
                     <!-- Standardized Governance Process -->
                     <div class="bg-white rounded-lg shadow-sm mb-6">
@@ -247,275 +247,34 @@
                                 
                                 <!-- Long-term High Loss Governance Process -->
                                 <div id="process-long-high">
-                                    <!-- Process Item 1: Diagnosis Analysis Phase -->
+                                    <!-- Process Item 1: Diagnostic Analysis Phase -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">01</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Diagnosis Analysis Phase</h3>
-                                            <p class="text-sm text-gray-500">Based on the intelligent diagnostic tag system, Hexi Substation 1324 area anomaly type is identified as long-term high loss, mainly due to CT transformer ratio error (Match Probability: 92%).</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Diagnostic Analysis Phase</h3>
+                                            <p class="text-sm text-gray-500">Based on the intelligent diagnostic tag system, Hexi Transformer 1324 Area's anomaly type has been identified as long-term high loss, with the main cause being CT transformer ratio error (match probability: 92%).</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3">
                                                 <h4 class="text-sm font-medium text-gray-700">Detailed Analysis:</h4>
                                                 <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
                                                     <li>Diagnostic Tag: CT Transformer Ratio Error</li>
-                                                    <li>Abnormal Indicator: Line loss rate consistently high by 6.44%, sustained for 28 days</li>
-                                                    <li>Current Archive Ratio: 300/5, Recommended Diagnostic Ratio: 250/5</li>
-                                                    <li>Event Record: No CT short circuit/bypass event, but high line loss rate stability</li>
+                                                    <li>Anomaly Indicators: Line loss rate consistently 6.44% higher than normal, continuing for 28 days</li>
+                                                    <li>Current Documented Ratio: 300/5, Recommended Ratio: 250/5</li>
+                                                    <li>Event Records: No CT short circuit/bypass events, but line loss rate shows high stability</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- Process Item 2: On-site Verification Phase -->
+                                    <!-- Process Item 2: Key Inspection Phase -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">02</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">On-site Verification Phase</h3>
-                                            <p class="text-sm text-gray-500">Dispatch professionals to the site for verification according to the standardized process.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">Verification Checklist:</h4>
-                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">CT Transformer Nameplate Information Check</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">System Ratio Record Check</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Transformer Secondary Circuit Check</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Metering Device Wiring Check</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="mt-3 text-sm">
-                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> Required Tools: Transformer Tester, Multimeter, Safety Tools</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 3: Problem Disposal Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">03</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Problem Disposal Phase</h3>
-                                            <p class="text-sm text-gray-500">Take corresponding disposal measures based on diagnostic tags and on-site verification results.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
-                                                <div class="space-y-3">
-                                                    <div>
-                                                        <h4 class="font-medium text-gray-700">CT Transformer Ratio Correction:</h4>
-                                                        <p>After verifying the ratio, update the correct CT transformer ratio (250/5) to the following systems:</p>
-                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                            <li>Metering Device Management System</li>
-                                                            <li>Transformer Parameter Configuration in Acquisition System</li>
-                                                            <li>Area Archive in Line Loss Management System</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div>
-                                                        <h4 class="font-medium text-gray-700">System Configuration Validation:</h4>
-                                                        <p>After modifying system parameters, perform data comparison to confirm consistency across systems.</p>
-                                                    </div>
-                                                    <div>
-                                                        <h4 class="font-medium text-gray-700">Expected Effect:</h4>
-                                                        <p class="text-primary">After system parameter correction, the expected line loss rate is 6.51%, with a deviation from theoretical loss of +0.19%, which is within a reasonable range.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 4: Effect Evaluation Phase -->
-                                    <div class="flex items-start relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">04</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Effect Evaluation Phase</h3>
-                                            <p class="text-sm text-gray-500">After parameter correction, continuously monitor the area's line loss to confirm if the issue is resolved.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Sudden High Loss Governance Process -->
-                                <div id="process-sudden-high" class="hidden">
-                                    <!-- Process Item 1: Rapid Response Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">01</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Rapid Response Phase</h3>
-                                            <p class="text-sm text-gray-500">Chengnan 532 area line loss monitoring system triggered a sudden high loss alarm, line loss rate surged by 5.55% in a short period.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">Emergency Measures:</h4>
-                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
-                                                    <li>Complete preliminary diagnostic analysis within 24 hours</li>
-                                                    <li>Diagnostic Tag: Sudden Increase in Power Load (Match Probability: 87%)</li>
-                                                    <li>Abnormal Indicator: Line loss rate surged by 5.55%, sustained for 5 days</li>
-                                                    <li>Generate emergency disposal suggestions</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 2: Cause Investigation Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">02</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Cause Investigation Phase</h3>
-                                            <p class="text-sm text-gray-500">Prioritize checking factors corresponding to the diagnostic tag.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">Investigation Checklist:</h4>
-                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Equipment Fault Status Check</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">New Load Situation Investigation</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Weather Impact Assessment</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex items-start">
-                                                        <div class="flex items-center h-5">
-                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                                                        </div>
-                                                        <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Leakage Point Investigation</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="mt-3 text-sm">
-                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> Required Tools: Infrared Thermometer, Load Recorder, Leakage Detector</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 3: Emergency Disposal Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">03</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Emergency Disposal Phase</h3>
-                                            <p class="text-sm text-gray-500">Take corresponding emergency disposal measures based on investigation results.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
-                                                <div class="space-y-3">
-                                                    <div>
-                                                        <h4 class="font-medium text-gray-700">Load Surge Disposal:</h4>
-                                                        <p>Investigation revealed a new large commercial user started operation in the area, causing a load surge. Recommend the following measures:</p>
-                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                            <li>Assess need for capacity increase or supply plan adjustment</li>
-                                                            <li>Check if the new user's metering device is normal</li>
-                                                            <li>Update system area archive information</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div>
-                                                        <h4 class="font-medium text-gray-700">Expected Effect:</h4>
-                                                        <p class="text-primary">After disposal, the expected line loss rate will return to 6.10%, with a deviation from theoretical loss of +0.55%, within a reasonable range.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 4: Recovery Monitoring Phase -->
-                                    <div class="flex items-start relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">04</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Recovery Monitoring Phase</h3>
-                                            <p class="text-sm text-gray-500">Continuously monitor within 48 hours after disposal to confirm the line loss rate returns to normal.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
-                                                <div>
-                                                    <h4 class="font-medium text-gray-700">Follow-up Measures:</h4>
-                                                    <p>Develop a preventive maintenance plan to prevent similar issues:</p>
-                                                    <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                        <li>Establish an area load change early warning mechanism</li>
-                                                        <li>Improve the new user connection process</li>
-                                                        <li>Regularly check the operating status of area equipment</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Long-term Negative Loss Governance Process -->
-                                <div id="process-long-neg" class="hidden">
-                                    <!-- Process Item 1: Systematic Analysis Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">01</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Systematic Analysis Phase</h3>
-                                            <p class="text-sm text-gray-500">Donghu 785 area exhibits long-term negative loss, with the line loss rate consistently negative for 32 days.</p>
-                                            <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">Detailed Analysis:</h4>
-                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
-                                                    <li>Diagnostic Tag: Metering Device Wiring Error (Match Probability: 89%)</li>
-                                                    <li>Abnormal Indicator: Line loss rate consistently negative at -4.69%, sustained for 32 days</li>
-                                                    <li>Collect comprehensive area data, including metering device parameters, wiring methods</li>
-                                                    <li>Run specialized negative loss diagnostic algorithm to analyze systemic issues</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Process Item 2: Focused Inspection Phase -->
-                                    <div class="flex items-start mb-8 relative">
-                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
-                                            <span class="text-primary text-lg font-bold">02</span>
-                                        </div>
-                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Focused Inspection Phase</h3>
-                                            <p class="text-sm text-gray-500">Prioritize inspecting key factors potentially causing negative loss, sorted by diagnostic tag probability.</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Key Inspection Phase</h3>
+                                            <p class="text-sm text-gray-500">Prioritize inspecting key factors that may cause negative loss, sorted by diagnostic tag probability.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3">
                                                 <h4 class="text-sm font-medium text-gray-700">Inspection Checklist:</h4>
                                                 <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -524,7 +283,7 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Electricity Meter Wiring Correctness</label>
+                                                            <label class="text-sm text-gray-700">Electric Meter Wiring Correctness</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-start">
@@ -540,7 +299,7 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">System Household-Transformer Relationship Integrity</label>
+                                                            <label class="text-sm text-gray-700">System User-Area Relationship Completeness</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-start">
@@ -548,7 +307,7 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">Solar Power User Configuration Correctness</label>
+                                                            <label class="text-sm text-gray-700">Photovoltaic Generation User Configuration Correctness</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -566,12 +325,12 @@
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
                                             <h3 class="text-base font-medium text-gray-900 mb-1">System Correction Phase</h3>
-                                            <p class="text-sm text-gray-500">Take corresponding corrective measures based on inspection results.</p>
+                                            <p class="text-sm text-gray-500">Take appropriate corrective measures based on inspection results.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div class="space-y-3">
                                                     <div>
                                                         <h4 class="font-medium text-gray-700">Metering Device Wiring Correction:</h4>
-                                                        <p>Inspection found incorrect meter wiring, with the current transformer secondary circuit reversed. Recommend the following measures:</p>
+                                                        <p>Inspection found incorrect electric meter wiring, with current transformer secondary circuit wiring reversed. Recommended measures:</p>
                                                         <ul class="list-disc pl-5 mt-1 space-y-1">
                                                             <li>Correct metering device wiring issues</li>
                                                             <li>Update system archive information</li>
@@ -579,31 +338,144 @@
                                                         </ul>
                                                     </div>
                                                     <div>
-                                                        <h4 class="font-medium text-gray-700">Expected Effect:</h4>
-                                                        <p class="text-primary">After wiring correction, the expected line loss rate will return to 6.20%, with a deviation from theoretical loss of -0.31%, within a reasonable range.</p>
+                                                        <h4 class="font-medium text-gray-700">Expected Results:</h4>
+                                                        <p class="text-primary">After wiring correction, the expected line loss rate will recover to 6.20%, with a theoretical line loss deviation of -0.31%, within reasonable range.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- Process Item 4: Long-term Monitoring Phase -->
+                                    <!-- Process Item 4: Effect Evaluation Phase -->
                                     <div class="flex items-start relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">04</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">Long-term Monitoring Phase</h3>
-                                            <p class="text-sm text-gray-500">Establish a specialized monitoring mechanism for area negative loss to ensure the issue does not recur.</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Effect Evaluation Phase</h3>
+                                            <p class="text-sm text-gray-500">After parameter correction, the area's line loss needs to be continuously monitored to confirm if the problem has been resolved.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sudden High Loss Governance Process -->
+                                <!-- 突发高损治理流程 -->
+                                <div id="process-sudden-high" class="hidden">
+                                    <!-- Process Item 1: Rapid Response Phase -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Rapid Response Phase</h3>
+                                            <p class="text-sm text-gray-500">Chengnan 532 area's line loss monitoring system triggered a sudden high loss alarm, with line loss rate suddenly increasing by 5.55%.</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">Emergency Measures:</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>Complete preliminary diagnostic analysis within 24 hours</li>
+                                                    <li>Diagnostic Tag: Sudden Load Increase (Match Probability: 87%)</li>
+                                                    <li>Anomaly Indicators: Line loss rate suddenly increased by 5.55%, continuing for 5 days</li>
+                                                    <li>Generate emergency response recommendations</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Process Item 2: Cause Investigation Phase -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Cause Investigation Phase</h3>
+                                            <p class="text-sm text-gray-500">Prioritize checking potential factors corresponding to the diagnostic tag.</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">Investigation Checklist:</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Equipment Fault Status Check</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">New Load Investigation</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Weather Impact Assessment</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Power Leakage Point Detection</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> Required Tools: Infrared Thermometer, Load Recorder, Leakage Detector</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 流程项目3：应急处置阶段 -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">03</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">应急处置阶段</h3>
+                                            <p class="text-sm text-gray-500">根据排查结果，采取相应的应急处置措施。</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">Sudden Load Increase Response:</h4>
+                                                        <p>Investigation revealed a new large commercial user began operations in the area, causing a sudden load increase. Recommended measures:</p>
+                                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                                            <li>Assess whether capacity increase or power supply plan adjustment is needed</li>
+                                                            <li>Check if the new user's metering device is functioning properly</li>
+                                                            <li>Update system area archive information</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-700">Expected Results:</h4>
+                                                        <p class="text-primary">After processing, the line loss rate is expected to recover to 6.10%, with a theoretical line loss deviation of +0.55%, within reasonable range.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Process Item 4: Recovery Monitoring Phase -->
+                                    <div class="flex items-start relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">04</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Follow-up Tracking Phase</h3>
+                                            <p class="text-sm text-gray-500">Continuous monitoring within 48 hours after processing to confirm whether the problem is completely resolved.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div>
                                                     <h4 class="font-medium text-gray-700">Follow-up Measures:</h4>
-                                                    <p>Establish a long-term monitoring mechanism to prevent similar issues:</p>
+                                                    <p>Develop preventive measures to avoid similar problems from occurring again:</p>
                                                     <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                        <li>Perform monthly data consistency checks</li>
-                                                        <li>每月进行数据一致性核查</li>
-                                                        <li>定期检查计量装置运行状态</li>
-                                                        <li>形成长期负损治理经验库</li>
+                                                        <li>Analyze the root cause of sudden negative loss</li>
+                                                        <li>Develop regular inspection plan for metering equipment</li>
+                                                        <li>Establish early warning mechanism to prevent recurrence</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -611,45 +483,45 @@
                                     </div>
                                 </div>
                                 
-                                <!-- 小负损治理流程 -->
-                                <div id="process-small-neg" class="hidden">
-                                    <!-- 流程项目1：模型评估阶段 -->
+                                <!-- 长期负损治理流程 -->
+                                <div id="process-long-neg" class="hidden">
+                                    <!-- 流程项目1：系统性分析阶段 -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">01</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">模型评估阶段</h3>
-                                            <p class="text-sm text-gray-500">北郊198台区出现小负损现象，线损率在-1%~0%之间，持续14天。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Systematic Analysis Phase</h3>
+                                            <p class="text-sm text-gray-500">Donghu 785 area has experienced long-term negative loss, with line loss rate remaining negative for 32 days.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">详细分析：</h4>
+                                                <h4 class="text-sm font-medium text-gray-700">Detailed Analysis:</h4>
                                                 <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
-                                                    <li>诊断标签：理论模型计算偏差（匹配概率：91%）</li>
-                                                    <li>异常指标：线损率为-0.84%，已持续14天</li>
-                                                    <li>评估理论线损计算模型适用性</li>
-                                                    <li>检查模型参数与实际台区参数的匹配度</li>
+                                                    <li>Diagnostic Tag: Metering Device Wiring Error (Match Probability: 89%)</li>
+                                                    <li>Anomaly Indicators: Line loss rate consistently negative at -4.69%, continuing for 32 days</li>
+                                                    <li>Collect comprehensive area data, including metering device parameters and wiring methods</li>
+                                                    <li>Run specialized negative loss diagnostic algorithms to analyze systemic issues causing negative loss</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- 流程项目2：精细化核查阶段 -->
+                                    <!-- 流程项目2：重点检查阶段 -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">02</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">精细化核查阶段</h3>
-                                            <p class="text-sm text-gray-500">对台区进行精细化核查，找出导致小负损的具体原因。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">重点检查阶段</h3>
+                                            <p class="text-sm text-gray-500">按诊断标签概率排序，重点检查可能导致负损的关键因素。</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">核查清单：</h4>
+                                                <h4 class="text-sm font-medium text-gray-700">检查清单：</h4>
                                                 <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
                                                     <div class="flex items-start">
                                                         <div class="flex items-center h-5">
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">互感器配置合理性</label>
+                                                            <label class="text-sm text-gray-700">电能表接线正确性</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-start">
@@ -657,7 +529,7 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">电表时钟同步状态</label>
+                                                            <label class="text-sm text-gray-700">互感器极性及接线正确性</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-start">
@@ -665,7 +537,7 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">供电半径对线损计算的影响</label>
+                                                            <label class="text-sm text-gray-700">系统台户关系完整性</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-start">
@@ -673,63 +545,136 @@
                                                             <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
                                                         </div>
                                                         <div class="ml-2">
-                                                            <label class="text-sm text-gray-700">数据采集质量</label>
+                                                            <label class="text-sm text-gray-700">光伏发电用户配置正确性</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3 text-sm">
-                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 时钟同步检测仪，数据采集质量分析工具，线损模型参数表</p>
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 万用表，相序表，接线图纸，计量装置检测仪</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- 流程项目3：优化调整阶段 -->
+                                    <!-- 流程项目3：系统纠正阶段 -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">03</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">优化调整阶段</h3>
-                                            <p class="text-sm text-gray-500">根据核查结果，对系统进行优化调整。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">系统纠正阶段</h3>
+                                            <p class="text-sm text-gray-500">根据检查结果，采取相应的纠正措施。</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div class="space-y-3">
                                                     <div>
-                                                        <h4 class="font-medium text-gray-700">模型参数优化：</h4>
-                                                        <p>经检查发现理论线损计算模型参数与实际台区参数不匹配，建议采取以下措施：</p>
+                                                        <h4 class="font-medium text-gray-700">计量装置接线修正：</h4>
+                                                        <p>经检查发现电能表接线错误，电流互感器二次回路接线反向。建议采取以下措施：</p>
                                                         <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                            <li>优化理论线损计算模型参数</li>
-                                                            <li>调整互感器配置，提高计量精度</li>
-                                                            <li>实施电表时钟同步</li>
-                                                            <li>改善数据采集质量</li>
+                                                            <li>修正计量装置接线问题</li>
+                                                            <li>更新系统档案信息</li>
+                                                            <li>调整不合理的计量点配置</li>
                                                         </ul>
                                                     </div>
                                                     <div>
-                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
-                                                        <p class="text-primary">参数优化后预计线损率将恢复至5.80%，与理论线损偏差为-0.52%，在合理范围内。</p>
+                                                        <h4 class="font-medium text-gray-700">Expected Results:</h4>
+                                                        <p class="text-primary">接线修正后预计线损率将恢复至6.20%，与理论线损偏差为-0.31%，在合理范围内。</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- 流程项目4：模型验证阶段 -->
+                                    <!-- 流程项目4：长效监测阶段 -->
                                     <div class="flex items-start relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">04</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">模型验证阶段</h3>
-                                            <p class="text-sm text-gray-500">应用优化后的模型重新计算理论线损，验证线损率是否回归合理范围。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Long-term Monitoring Phase</h3>
+                                            <p class="text-sm text-gray-500">Establish a specialized negative loss monitoring mechanism for the area to ensure the problem does not recur.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div>
-                                                    <h4 class="font-medium text-gray-700">验证方法：</h4>
-                                                    <p>通过以下方式验证优化效果：</p>
+                                                    <h4 class="font-medium text-gray-700">Follow-up Measures:</h4>
+                                                    <p>Establish a long-term monitoring mechanism to prevent similar problems from recurring:</p>
                                                     <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                        <li>应用优化后的模型重新计算理论线损</li>
-                                                        <li>验证线损率是否回归合理范围</li>
-                                                        <li>形成小负损台区治理经验</li>
+                                                        <li>Conduct monthly data consistency checks</li>
+                                                        <li>Regularly inspect metering device operational status</li>
+                                                        <li>Develop experience database for long-term negative loss governance</li>
                                                     </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Small Negative Loss Governance Process -->
+                                <div id="process-small-neg" class="hidden">
+                                    <!-- Process Item 1: Model Assessment Phase -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">01</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Model Assessment Phase</h3>
+                                            <p class="text-sm text-gray-500">North Suburb 198 Area has shown small negative loss, with line loss rate between -1% and 0%, continuing for 14 days.</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">Detailed Analysis:</h4>
+                                                <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                                    <li>Diagnostic Tag: Theoretical Model Calculation Bias (Match Probability: 91%)</li>
+                                                    <li>Anomaly Indicators: Line loss rate at -0.84%, continuing for 14 days</li>
+                                                    <li>Assess the applicability of theoretical line loss calculation model</li>
+                                                    <li>Check the match between model parameters and actual area parameters</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Process Item 2: Detailed Verification Phase -->
+                                    <div class="flex items-start mb-8 relative">
+                                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
+                                            <span class="text-primary text-lg font-bold">02</span>
+                                        </div>
+                                        <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Detailed Verification Phase</h3>
+                                            <p class="text-sm text-gray-500">Conduct detailed verification of the area to identify specific causes of small negative loss.</p>
+                                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                                <h4 class="text-sm font-medium text-gray-700">Verification Checklist:</h4>
+                                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Transformer Configuration Rationality</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Electric Meter Clock Synchronization Status</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Impact of Power Supply Radius on Line Loss Calculation</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start">
+                                                        <div class="flex items-center h-5">
+                                                            <input type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <label class="text-sm text-gray-700">Data Collection Quality</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-sm">
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> Required Tools: Clock Synchronization Detector, Data Collection Quality Analysis Tools, Line Loss Model Parameter Table</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -744,15 +689,15 @@
                                             <span class="text-primary text-lg font-bold">01</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">紧急诊断阶段</h3>
-                                            <p class="text-sm text-gray-500">开发区672台区线损监测系统发出突发负损告警，线损率突然降至-3.76%。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Emergency Diagnosis Phase</h3>
+                                            <p class="text-sm text-gray-500">Development Zone 672 Area line loss monitoring system issued a sudden negative loss alarm, with line loss rate suddenly dropping to -3.76%.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3">
-                                                <h4 class="text-sm font-medium text-gray-700">应急措施：</h4>
+                                                <h4 class="text-sm font-medium text-gray-700">Emergency Measures:</h4>
                                                 <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc pl-5">
-                                                    <li>监测系统发出突发负损告警后12小时内响应</li>
-                                                    <li>诊断标签：电表计量故障（匹配概率：88%）</li>
-                                                    <li>异常指标：线损率突降至-3.76%，已持续4天</li>
-                                                    <li>进行远程诊断，安排现场检查计划</li>
+                                                    <li>Respond within 12 hours after monitoring system issues sudden negative loss alarm</li>
+                                                    <li>Diagnostic Tag: Electric Meter Measurement Fault (Match Probability: 88%)</li>
+                                                    <li>Anomaly Indicators: Line loss rate suddenly dropped to -3.76%, continuing for 4 days</li>
+                                                    <li>Conduct remote diagnosis, arrange on-site inspection plan</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -803,56 +748,56 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-3 text-sm">
-                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> 所需工具: 电能表校验仪，互感器测试仪，功率因数测量仪</p>
+                                                    <p class="text-gray-700"><i class="fas fa-tools mr-1 text-primary"></i> Required Tools: Electric Meter Calibrator, Transformer Tester, Power Factor Meter</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- 流程项目3：快速纠正阶段 -->
+                                    <!-- Process Item 3: Emergency Response Phase -->
                                     <div class="flex items-start mb-8 relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">03</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">快速纠正阶段</h3>
-                                            <p class="text-sm text-gray-500">根据检查结果，采取相应的快速纠正措施。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Emergency Response Phase</h3>
+                                            <p class="text-sm text-gray-500">Take appropriate rapid correction measures based on inspection results.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div class="space-y-3">
                                                     <div>
-                                                        <h4 class="font-medium text-gray-700">电表故障处置：</h4>
-                                                        <p>经检查发现台区总表电能表计量芯片故障，导致计量数据异常。建议采取以下措施：</p>
+                                                        <h4 class="font-medium text-gray-700">Electric Meter Fault Handling:</h4>
+                                                        <p>Inspection found that the area main meter had a measurement chip failure, causing abnormal measurement data. Recommended measures:</p>
                                                         <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                            <li>更换故障计量设备</li>
-                                                            <li>校验新安装电能表计量准确性</li>
-                                                            <li>更新系统档案信息</li>
+                                                            <li>Replace the faulty metering equipment</li>
+                                                            <li>Verify measurement accuracy of newly installed electric meters</li>
+                                                            <li>Update system archive information</li>
                                                         </ul>
                                                     </div>
                                                     <div>
-                                                        <h4 class="font-medium text-gray-700">预期效果：</h4>
-                                                        <p class="text-primary">设备更换后预计线损率将恢复至5.50%，与理论线损偏差为-0.26%，在合理范围内。</p>
+                                                        <h4 class="font-medium text-gray-700">Expected Results:</h4>
+                                                        <p class="text-primary">After equipment replacement, the line loss rate is expected to recover to 5.50%, with a theoretical line loss deviation of -0.26%, within reasonable range.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- 流程项目4：后续跟踪阶段 -->
+                                    <!-- Process Item 4: Follow-up Tracking Phase -->
                                     <div class="flex items-start relative">
                                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-primary-light flex-shrink-0 z-10">
                                             <span class="text-primary text-lg font-bold">04</span>
                                         </div>
                                         <div class="ml-6 bg-white p-4 rounded-lg border border-gray-200 flex-1">
-                                            <h3 class="text-base font-medium text-gray-900 mb-1">后续跟踪阶段</h3>
-                                            <p class="text-sm text-gray-500">处置后48小时内持续监测，确认问题是否彻底解决。</p>
+                                            <h3 class="text-base font-medium text-gray-900 mb-1">Follow-up Tracking Phase</h3>
+                                            <p class="text-sm text-gray-500">Continuous monitoring within 48 hours after processing to confirm whether the problem is completely resolved.</p>
                                             <div class="mt-3 border-t border-gray-100 pt-3 text-sm text-gray-600">
                                                 <div>
-                                                    <h4 class="font-medium text-gray-700">后续措施：</h4>
-                                                    <p>制定预防措施，避免类似问题再次发生：</p>
+                                                    <h4 class="font-medium text-gray-700">Follow-up Measures:</h4>
+                                                    <p>Develop preventive measures to avoid similar problems from occurring again:</p>
                                                     <ul class="list-disc pl-5 mt-1 space-y-1">
-                                                        <li>分析突发负损根本原因</li>
-                                                        <li>制定计量设备定期检查计划</li>
-                                                        <li>建立预警机制，避免再次发生</li>
+                                                        <li>Analyze the root cause of sudden negative loss</li>
+                                                        <li>Develop regular inspection plan for metering equipment</li>
+                                                        <li>Establish early warning mechanism to prevent recurrence</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -863,125 +808,125 @@
                             
                             <!-- 长期高损效果评估 -->
                             <div id="effect-evaluation-long-high" class="mt-3 border-t border-gray-100 pt-3">
-                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <h4 class="text-sm font-medium text-gray-700">Monitoring Indicators:</h4>
                                 <div class="mt-2 space-y-2">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">线损率目标范围</span>
-                                        <span class="text-primary font-medium">理论值±3% (3.32% ~ 9.32%)</span>
+                                        <span class="text-gray-600">Line Loss Rate Target Range</span>
+                                        <span class="text-primary font-medium">Theoretical Value ±3% (3.32% ~ 9.32%)</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">监测天数要求</span>
-                                        <span class="text-primary font-medium">连续7天</span>
+                                        <span class="text-gray-600">Monitoring Days Requirement</span>
+                                        <span class="text-primary font-medium">Consecutive 7 days</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">验收标准</span>
-                                        <span class="text-primary font-medium">线损率稳定在合理范围内</span>
+                                        <span class="text-gray-600">Acceptance Criteria</span>
+                                        <span class="text-primary font-medium">Line loss rate stable within reasonable range</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 bg-yellow-50 p-3 rounded-md">
                                     <p class="text-sm text-yellow-800">
                                         <i class="fas fa-exclamation-circle mr-1"></i>
-                                        若修正后线损仍异常，需根据《智能诊断标签与标准化治理流程》文档回到诊断分析阶段，重新评估其他可能原因。
+                                        If line loss is still abnormal after correction, return to the diagnostic analysis phase according to the "Intelligent Diagnostic Tags and Standardized Governance Process" document to reassess other possible causes.
                                     </p>
                                 </div>
                             </div>
                             
                             <!-- 突发高损效果评估 -->
                             <div id="effect-evaluation-sudden-high" class="mt-3 border-t border-gray-100 pt-3 hidden">
-                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <h4 class="text-sm font-medium text-gray-700">Monitoring Indicators:</h4>
                                 <div class="mt-2 space-y-2">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">线损率目标范围</span>
-                                        <span class="text-primary font-medium">理论值±3% (2.55% ~ 8.55%)</span>
+                                        <span class="text-gray-600">Line Loss Rate Target Range</span>
+                                        <span class="text-primary font-medium">Theoretical Value ±3% (2.55% ~ 8.55%)</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">监测时间要求</span>
-                                        <span class="text-primary font-medium">处置完成后48小时内</span>
+                                        <span class="text-gray-600">Monitoring Time Requirement</span>
+                                        <span class="text-primary font-medium">Within 48 hours after processing</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">验收标准</span>
-                                        <span class="text-primary font-medium">线损率恢复到突变前水平</span>
+                                        <span class="text-gray-600">Acceptance Criteria</span>
+                                        <span class="text-primary font-medium">Line loss rate returns to pre-anomaly level</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 bg-yellow-50 p-3 rounded-md">
                                     <p class="text-sm text-yellow-800">
                                         <i class="fas fa-exclamation-circle mr-1"></i>
-                                        处置后需制定预防性维护计划，防止类似问题再次发生。
+                                        After processing, a preventive maintenance plan needs to be developed to prevent similar problems from recurring.
                                     </p>
                                 </div>
                             </div>
                             
                             <!-- 长期负损效果评估 -->
                             <div id="effect-evaluation-long-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
-                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <h4 class="text-sm font-medium text-gray-700">Monitoring Indicators:</h4>
                                 <div class="mt-2 space-y-2">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">线损率目标范围</span>
-                                        <span class="text-primary font-medium">理论值-3%以上 (>3.32%)</span>
+                                        <span class="text-gray-600">Line Loss Rate Target Range</span>
+                                        <span class="text-primary font-medium">Above Theoretical Value -3% (>3.32%)</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">监测天数要求</span>
-                                        <span class="text-primary font-medium">连续14天</span>
+                                        <span class="text-gray-600">Monitoring Days Requirement</span>
+                                        <span class="text-primary font-medium">Consecutive 14 days</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">验收标准</span>
-                                        <span class="text-primary font-medium">线损率为正值且稳定</span>
+                                        <span class="text-gray-600">Acceptance Criteria</span>
+                                        <span class="text-primary font-medium">Line loss rate is positive and stable</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 bg-yellow-50 p-3 rounded-md">
                                     <p class="text-sm text-yellow-800">
                                         <i class="fas fa-exclamation-circle mr-1"></i>
-                                        治理后需建立台区负损专项监测机制，每月进行数据一致性核查。
+                                        After governance, a special monitoring mechanism for area negative loss needs to be established, with monthly data consistency verification.
                                     </p>
                                 </div>
                             </div>
                             
                             <!-- 小负损效果评估 -->
                             <div id="effect-evaluation-small-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
-                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <h4 class="text-sm font-medium text-gray-700">Monitoring Indicators:</h4>
                                 <div class="mt-2 space-y-2">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">线损率目标范围</span>
-                                        <span class="text-primary font-medium">理论值-2%以上 (>4.32%)</span>
+                                        <span class="text-gray-600">Line Loss Rate Target Range</span>
+                                        <span class="text-primary font-medium">Above Theoretical Value -2% (>4.32%)</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">监测天数要求</span>
-                                        <span class="text-primary font-medium">连续14天</span>
+                                        <span class="text-gray-600">Monitoring Days Requirement</span>
+                                        <span class="text-primary font-medium">Consecutive 14 days</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">验收标准</span>
-                                        <span class="text-primary font-medium">线损率稳定在合理或轻微小负损范围</span>
+                                        <span class="text-gray-600">Acceptance Criteria</span>
+                                        <span class="text-primary font-medium">Line loss rate stable within reasonable or slightly negative range</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 bg-yellow-50 p-3 rounded-md">
                                     <p class="text-sm text-yellow-800">
                                         <i class="fas fa-exclamation-circle mr-1"></i>
-                                        对于理论模型偏差类问题，可考虑调整模型参数以更符合实际情况。
+                                        For theoretical model deviation issues, consider adjusting model parameters to better match actual conditions.
                                     </p>
                                 </div>
                             </div>
                             
                             <!-- 突发负损效果评估 -->
                             <div id="effect-evaluation-sudden-neg" class="mt-3 border-t border-gray-100 pt-3 hidden">
-                                <h4 class="text-sm font-medium text-gray-700">监测指标：</h4>
+                                <h4 class="text-sm font-medium text-gray-700">Monitoring Indicators:</h4>
                                 <div class="mt-2 space-y-2">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">线损率目标范围</span>
-                                        <span class="text-primary font-medium">理论值-3%以上 (>2.76%)</span>
+                                        <span class="text-gray-600">Line Loss Rate Target Range</span>
+                                        <span class="text-primary font-medium">Above Theoretical Value -3% (>2.76%)</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">监测时间要求</span>
-                                        <span class="text-primary font-medium">处置完成后48小时内</span>
+                                        <span class="text-gray-600">Monitoring Time Requirement</span>
+                                        <span class="text-primary font-medium">Within 48 hours after processing</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">验收标准</span>
-                                        <span class="text-primary font-medium">线损率恢复到突变前水平</span>
+                                        <span class="text-gray-600">Acceptance Criteria</span>
+                                        <span class="text-primary font-medium">Line loss rate returns to pre-anomaly level</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 bg-yellow-50 p-3 rounded-md">
                                     <p class="text-sm text-yellow-800">
                                         <i class="fas fa-exclamation-circle mr-1"></i>
-                                        处置后需分析突发负损根本原因，制定预防措施避免再次发生。
+                                        After processing, analyze the root cause of sudden negative loss and develop preventive measures to avoid recurrence.
                                     </p>
                                 </div>
                             </div>
@@ -991,133 +936,162 @@
 
                 <!-- 右侧: 案例库匹配、工单生成及跟踪 -->
                 <div class="col-span-1">
-                    <!-- 工单生成 -->
+                    <!-- Case Library Matching -->
                     <div class="bg-white rounded-lg shadow-sm mb-6">
                         <div class="px-5 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">工单生成</h2>
+                            <h2 class="text-lg font-medium text-gray-900">Case Library Matching</h2>
                         </div>
                         <div class="p-5">
-                            <!-- 添加入口按钮 -->
-                            <div class="flex justify-between mb-5">
-                                <button id="case-library-btn" class="bg-blue-50 hover:bg-blue-100 text-blue-600 py-2 px-4 rounded-md text-sm transition-colors duration-200 flex items-center">
-                                    <i class="fas fa-book-open mr-1"></i> 案例库匹配
-                                </button>
-                                <button id="governance-tracking-btn" class="bg-green-50 hover:bg-green-100 text-green-600 py-2 px-4 rounded-md text-sm transition-colors duration-200 flex items-center">
-                                    <i class="fas fa-tasks mr-1"></i> 治理跟踪
-                                </button>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
+                                            <i class="fas fa-book-open text-blue-600"></i>
+                                        </span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-base font-medium text-gray-900">East Area 768 CT Ratio Error Case</h3>
+                                        <p class="text-sm text-gray-500 mt-1">In February 2023, East Area 768 had a line loss anomaly (6.2% higher than normal). Diagnosis found CT ratio setting error (actual should be 200/5, incorrectly set to 300/5). After correcting system parameters, line loss rate dropped from 12.3% to 6.1%, matching the theoretical line loss.</p>
+                                        <div class="mt-3">
+                                            <details class="text-sm">
+                                                <summary class="text-primary cursor-pointer">View Detailed Governance Process</summary>
+                                                <div class="mt-2 pl-2 border-l-2 border-primary-light">
+                                                    <p class="text-gray-600">2023-02-15: Discovered line loss anomaly</p>
+                                                    <p class="text-gray-600">2023-02-16: Field testing of transformer parameters</p>
+                                                    <p class="text-gray-600">2023-02-17: Corrected system configuration parameters</p>
+                                                    <p class="text-gray-600">2023-02-24: Confirmed line loss returned to normal</p>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
+                            <div class="flex justify-center mt-4">
+                                <button class="text-primary hover:text-primary-dark text-sm flex items-center">
+                                    <i class="fas fa-search mr-1"></i> View More Similar Cases
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work Order Generation -->
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">Work Order Generation</h2>
+                        </div>
+                        <div class="p-5">
                             <form>
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单类型</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Work Order Type</label>
                                         <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                            <option selected>计量参数核查工单</option>
-                                            <option>计量装置异常工单</option>
-                                            <option>台区档案核查工单</option>
-                                            <option>线损异常治理工单</option>
-                                            <option>低压窃电排查工单</option>
+                                            <option selected>Metering Parameter Verification Work Order</option>
+                                            <option>Metering Device Anomaly Work Order</option>
+                                            <option>Area Records Verification Work Order</option>
+                                            <option>Line Loss Anomaly Governance Work Order</option>
+                                            <option>Low Voltage Power Theft Investigation Work Order</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">异常类型</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Anomaly Type</label>
                                         <select id="anomaly-type-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                            <option value="long-high" selected>长期高损</option>
-                                            <option value="sudden-high">突发高损</option>
-                                            <option value="long-neg">长期负损</option>
-                                            <option value="small-neg">小负损</option>
-                                            <option value="sudden-neg">突发负损</option>
+                                            <option value="long-high" selected>Long-term High Loss</option>
+                                            <option value="sudden-high">Sudden High Loss</option>
+                                            <option value="long-neg">Long-term Negative Loss</option>
+                                            <option value="small-neg">Small Negative Loss</option>
+                                            <option value="sudden-neg">Sudden Negative Loss</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">诊断标签</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Diagnostic Tag</label>
                                         <select id="diagnosis-tag-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                            <!-- 长期高损标签 -->
-                                            <option value="ct-error" class="long-high-tag" selected>CT互感器倍率错误 (92%)</option>
-                                            <option value="archive-error" class="long-high-tag">档案户变关系异常 (68%)</option>
-                                            <option value="theft" class="long-high-tag">疑似低压窃电 (45%)</option>
-                                            <option value="collection-failure" class="long-high-tag">采集设备故障 (38%)</option>
-                                            <option value="overload" class="long-high-tag">电能表超容量运行 (22%)</option>
-                                            <option value="unbalance" class="long-high-tag">三相不平衡度高 (15%)</option>
+                                            <!-- Long-term High Loss Tags -->
+                                            <option value="ct-error" class="long-high-tag" selected>CT Transformer Ratio Error (92%)</option>
+                                            <option value="archive-error" class="long-high-tag">Abnormal User-Transformer Relationship Records (68%)</option>
+                                            <option value="theft" class="long-high-tag">Suspected Low-Voltage Power Theft (45%)</option>
+                                            <option value="collection-failure" class="long-high-tag">Collection Equipment Failure (38%)</option>
+                                            <option value="overload" class="long-high-tag">Electric Meter Overcapacity Operation (22%)</option>
+                                            <option value="unbalance" class="long-high-tag">High Three-phase Imbalance (15%)</option>
                                             
-                                            <!-- 突发高损标签 -->
-                                            <option value="load-surge" class="sudden-high-tag hidden">用电负荷突增 (87%)</option>
-                                            <option value="equipment-failure" class="sudden-high-tag hidden">低压设备故障 (75%)</option>
-                                            <option value="new-user-issue" class="sudden-high-tag hidden">新增用户接入异常 (63%)</option>
-                                            <option value="weather-issue" class="sudden-high-tag hidden">恶劣天气引发问题 (52%)</option>
-                                            <option value="leakage" class="sudden-high-tag hidden">短时漏电故障 (45%)</option>
+                                            <!-- Sudden High Loss Tags -->
+                                            <option value="load-surge" class="sudden-high-tag hidden">Sudden Power Load Increase (87%)</option>
+                                            <option value="equipment-failure" class="sudden-high-tag hidden">Low Voltage Equipment Failure (75%)</option>
+                                            <option value="new-user-issue" class="sudden-high-tag hidden">New User Connection Anomaly (63%)</option>
+                                            <option value="weather-issue" class="sudden-high-tag hidden">Severe Weather Caused Issue (52%)</option>
+                                            <option value="leakage" class="sudden-high-tag hidden">Short-term Leakage Fault (45%)</option>
                                             
-                                            <!-- 长期负损标签 -->
-                                            <option value="wiring-error" class="long-neg-tag hidden">计量装置接线错误 (89%)</option>
-                                            <option value="direction-error" class="long-neg-tag hidden">电表正反向接错 (78%)</option>
-                                            <option value="user-mismatch" class="long-neg-tag hidden">台户关系不一致 (65%)</option>
-                                            <option value="pv-error" class="long-neg-tag hidden">光伏发电档案错误 (58%)</option>
-                                            <option value="pre-meter" class="long-neg-tag hidden">台区总表前接电 (47%)</option>
+                                            <!-- Long-term Negative Loss Tags -->
+                                            <option value="wiring-error" class="long-neg-tag hidden">Metering Device Wiring Error (89%)</option>
+                                            <option value="direction-error" class="long-neg-tag hidden">Electric Meter Forward/Reverse Error (78%)</option>
+                                            <option value="user-mismatch" class="long-neg-tag hidden">User-Area Relationship Inconsistency (65%)</option>
+                                            <option value="pv-error" class="long-neg-tag hidden">Photovoltaic Generation Records Error (58%)</option>
+                                            <option value="pre-meter" class="long-neg-tag hidden">Connection Before Area Main Meter (47%)</option>
                                             
-                                            <!-- 小负损标签 -->
-                                            <option value="model-bias" class="small-neg-tag hidden">理论模型计算偏差 (91%)</option>
-                                            <option value="data-bias" class="small-neg-tag hidden">采集数据偏差 (82%)</option>
-                                            <option value="ct-configuration" class="small-neg-tag hidden">互感器配置不合理 (73%)</option>
-                                            <option value="clock-error" class="small-neg-tag hidden">电表时钟超差 (65%)</option>
-                                            <option value="long-radius" class="small-neg-tag hidden">供电半径过长 (57%)</option>
+                                            <!-- Small Negative Loss Tags -->
+                                            <option value="model-bias" class="small-neg-tag hidden">Theoretical Model Calculation Bias (91%)</option>
+                                            <option value="data-bias" class="small-neg-tag hidden">Collection Data Bias (82%)</option>
+                                            <option value="ct-configuration" class="small-neg-tag hidden">Unreasonable Transformer Configuration (73%)</option>
+                                            <option value="clock-error" class="small-neg-tag hidden">Electric Meter Clock Excess Error (65%)</option>
+                                            <option value="long-radius" class="small-neg-tag hidden">Excessive Power Supply Radius (57%)</option>
                                             
-                                            <!-- 突发负损标签 -->
-                                            <option value="meter-failure" class="sudden-neg-tag hidden">电表计量故障 (88%)</option>
-                                            <option value="power-factor" class="sudden-neg-tag hidden">功率因数补偿设备异常 (77%)</option>
-                                            <option value="phase-issue" class="sudden-neg-tag hidden">台区总表某相异常 (68%)</option>
-                                            <option value="ratio-change" class="sudden-neg-tag hidden">倍率变更未同步 (56%)</option>
-                                            <option value="terminal-box" class="sudden-neg-tag hidden">联合接线盒故障 (45%)</option>
+                                            <!-- Sudden Negative Loss Tags -->
+                                            <option value="meter-failure" class="sudden-neg-tag hidden">Electric Meter Measurement Fault (88%)</option>
+                                            <option value="power-factor" class="sudden-neg-tag hidden">Power Factor Compensation Equipment Anomaly (77%)</option>
+                                            <option value="phase-issue" class="sudden-neg-tag hidden">Area Main Meter Phase Anomaly (68%)</option>
+                                            <option value="ratio-change" class="sudden-neg-tag hidden">Ratio Change Not Synchronized (56%)</option>
+                                            <option value="terminal-box" class="sudden-neg-tag hidden">Junction Box Failure (45%)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单优先级</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Work Order Priority</label>
                                         <div class="flex space-x-4">
                                             <div class="flex items-center">
                                                 <input id="priority-high" name="priority" type="radio" checked class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
-                                                <label for="priority-high" class="ml-2 block text-sm text-gray-700">紧急</label>
+                                                <label for="priority-high" class="ml-2 block text-sm text-gray-700">Urgent</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input id="priority-medium" name="priority" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
-                                                <label for="priority-medium" class="ml-2 block text-sm text-gray-700">一般</label>
+                                                <label for="priority-medium" class="ml-2 block text-sm text-gray-700">Normal</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input id="priority-low" name="priority" type="radio" class="h-4 w-4 text-primary focus:ring-primary border-gray-300">
-                                                <label for="priority-low" class="ml-2 block text-sm text-gray-700">低优先级</label>
+                                                <label for="priority-low" class="ml-2 block text-sm text-gray-700">Low Priority</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">处理人</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Handler</label>
                                         <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                            <option selected>李强（河西供电所）</option>
-                                            <option>张明（计量班）</option>
-                                            <option>王刚（检修班）</option>
+                                            <option selected>Li Qiang (Hexi Power Supply Station)</option>
+                                            <option>Zhang Ming (Metering Team)</option>
+                                            <option>Wang Gang (Maintenance Team)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">计划完成时间</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Planned Completion Time</label>
                                         <input type="date" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" value="2023-05-15">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">工单说明</label>
-                                        <textarea rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="请输入工单说明">河西变1324台区线损异常，诊断为CT互感器倍率错误（匹配概率92%）。请按照《智能诊断标签与标准化治理流程》的长期高损流程进行核查和处置：
-1. 核实现场CT实际倍率，确认是否为250/5
-2. 修正系统参数并同步到相关系统
-3. 治理后监测线损率变化7天</textarea>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Work Order Description</label>
+                                        <textarea rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="Please enter work order description">Hexi Transformer 1324 Area line loss anomaly, diagnosed as CT transformer ratio error (match probability 92%). Please follow the long-term high loss process in the "Intelligent Diagnostic Tags and Standardized Governance Process" to verify and handle:
+1. Verify the actual CT ratio on site, confirm if it is 250/5
+2. Correct system parameters and synchronize to relevant systems
+3. Monitor line loss rate changes for 7 days after governance</textarea>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">相关附件</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Related Attachments</label>
                                         <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                             <div class="space-y-1 text-center">
                                                 <i class="fas fa-cloud-upload-alt text-gray-400 text-2xl"></i>
                                                 <div class="flex text-sm text-gray-600">
                                                     <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary-dark focus-within:outline-none">
-                                                        <span>上传文件</span>
+                                                        <span>Upload File</span>
                                                         <input id="file-upload" name="file-upload" type="file" class="sr-only">
                                                     </label>
-                                                    <p class="pl-1">或拖放文件</p>
+                                                    <p class="pl-1">or drag and drop files</p>
                                                 </div>
-                                                <p class="text-xs text-gray-500">支持 PNG, JPG, PDF 文件</p>
+                                                <p class="text-xs text-gray-500">Supported formats: PNG, JPG, PDF</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1125,186 +1099,87 @@
                                 
                                 <div class="mt-5 flex justify-end">
                                     <button type="button" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200 mr-2">
-                                        保存草稿
+                                        Save Draft
                                     </button>
                                     <button type="button" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                                        生成并派发工单
+                                        Generate and Dispatch Work Order <i class="fas fa-paper-plane ml-1"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
 
+                    <!-- Governance Tracking -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">Governance Tracking</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-sm font-medium text-gray-700">Governance Progress</div>
+                                <div class="text-sm text-primary">0%</div>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="flex flex-col space-y-4">
+                                <!-- Pending Status -->
+                                <div class="flex items-start">
+                                    <div class="h-5 w-5 rounded-full bg-primary flex-shrink-0 mt-0.5"></div>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium">Work Order Dispatch</div>
+                                        <div class="text-xs text-gray-500">Pending</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Waiting Status -->
+                                <div class="flex items-start">
+                                    <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium text-gray-500">Field Inspection</div>
+                                        <div class="text-xs text-gray-500">Waiting</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Waiting Status -->
+                                <div class="flex items-start">
+                                    <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium text-gray-500">System Update</div>
+                                        <div class="text-xs text-gray-500">Waiting</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Waiting Status -->
+                                <div class="flex items-start">
+                                    <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium text-gray-500">Verification</div>
+                                        <div class="text-xs text-gray-500">Waiting</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="text-sm font-medium text-gray-700 mb-2">Operation Records</div>
+                                <div class="text-xs text-gray-600">
+                                    <p>2023-05-12 14:30 - System generated governance work order (ID: TG202305120023)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- 底部操作区域 -->
+            <!-- Bottom Action Area -->
             <div class="flex justify-between mt-6">
-                <a href="/cn/diagnostic" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-1"></i> 返回诊断
+                <a href="/en/diagnostic" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Diagnostics
                 </a>
                 <button class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                    生成并派发工单 <i class="fas fa-paper-plane ml-1"></i>
+                    Generate and Dispatch Work Order <i class="fas fa-paper-plane ml-1"></i>
                 </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 案例库匹配弹窗 -->
-    <div id="case-library-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <!-- 弹窗内容 -->
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="px-5 py-4 border-b border-gray-200">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-lg font-medium text-gray-900">案例库匹配</h2>
-                            <button id="close-case-library-modal" class="text-gray-400 hover:text-gray-500">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
-                                        <i class="fas fa-book-open text-blue-600"></i>
-                                    </span>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-base font-medium text-gray-900">东区768台区CT倍率错误案例</h3>
-                                    <p class="text-sm text-gray-500 mt-1">2023年2月，东区768台区出现线损异常（偏高6.2%），诊断发现CT倍率设置错误（实际应为200/5，错误设置为300/5）。通过修正系统参数，台区线损率从12.3%降至6.1%，与理论线损基本吻合。</p>
-                                    <div class="mt-3">
-                                        <details class="text-sm">
-                                            <summary class="text-primary cursor-pointer">查看详细治理过程</summary>
-                                            <div class="mt-2 pl-2 border-l-2 border-primary-light">
-                                                <p class="text-gray-600">2023-02-15: 发现台区线损异常</p>
-                                                <p class="text-gray-600">2023-02-16: 现场检测互感器参数</p>
-                                                <p class="text-gray-600">2023-02-17: 修正系统配置参数</p>
-                                                <p class="text-gray-600">2023-02-24: 跟踪确认线损恢复正常</p>
-                                            </div>
-                                        </details>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
-                                        <i class="fas fa-book-open text-blue-600"></i>
-                                    </span>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-base font-medium text-gray-900">南区432台区CT互感器倍率错误案例</h3>
-                                    <p class="text-sm text-gray-500 mt-1">2023年4月，南区432台区线损率偏高7.3%，诊断为CT互感器倍率错误。现场核实后，将倍率由400/5修正为300/5，线损率降至正常水平。</p>
-                                    <div class="mt-3">
-                                        <details class="text-sm">
-                                            <summary class="text-primary cursor-pointer">查看详细治理过程</summary>
-                                            <div class="mt-2 pl-2 border-l-2 border-primary-light">
-                                                <p class="text-gray-600">2023-04-08: 发现台区线损异常</p>
-                                                <p class="text-gray-600">2023-04-09: 现场检测互感器参数</p>
-                                                <p class="text-gray-600">2023-04-10: 修正系统配置参数</p>
-                                                <p class="text-gray-600">2023-04-17: 确认线损恢复正常</p>
-                                            </div>
-                                        </details>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-5 flex justify-end">
-                            <button class="text-primary hover:text-primary-dark text-sm flex items-center">
-                                <i class="fas fa-search mr-1"></i> 查看更多类似案例
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 治理跟踪弹窗 -->
-    <div id="governance-tracking-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <!-- 弹窗内容 -->
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="px-5 py-4 border-b border-gray-200">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-lg font-medium text-gray-900">治理跟踪</h2>
-                            <button id="close-governance-tracking-modal" class="text-gray-400 hover:text-gray-500">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="text-sm font-medium text-gray-700">治理进度</div>
-                            <div class="text-sm text-primary">0%</div>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="flex flex-col space-y-4">
-                            <!-- 待处理状态 -->
-                            <div class="flex items-start">
-                                <div class="h-5 w-5 rounded-full bg-primary flex-shrink-0 mt-0.5"></div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium">工单派发</div>
-                                    <div class="text-xs text-gray-500">待处理</div>
-                                </div>
-                            </div>
-                            
-                            <!-- 等待中状态 -->
-                            <div class="flex items-start">
-                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-500">现场核查</div>
-                                    <div class="text-xs text-gray-500">等待中</div>
-                                </div>
-                            </div>
-                            
-                            <!-- 等待中状态 -->
-                            <div class="flex items-start">
-                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-500">系统更新</div>
-                                    <div class="text-xs text-gray-500">等待中</div>
-                                </div>
-                            </div>
-                            
-                            <!-- 等待中状态 -->
-                            <div class="flex items-start">
-                                <div class="h-5 w-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-500">验证确认</div>
-                                    <div class="text-xs text-gray-500">等待中</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <div class="text-sm font-medium text-gray-700 mb-2">操作记录</div>
-                            <div class="text-xs text-gray-600">
-                                <p>2023-05-12 14:30 - 系统生成治理工单（编号: TG202305120023）</p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-5 flex justify-end">
-                            <button type="button" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                                查看完整治理记录
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1582,67 +1457,29 @@
                 updateOverviewCards(initialValue);
             }
         });
-        
-        // 下拉菜单行为
-        const menuButton = document.getElementById('main-menu-button');
-        const menuDropdown = document.getElementById('main-menu-dropdown');
-        
-        // 点击菜单按钮时切换下拉菜单
-        menuButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            menuDropdown.classList.toggle('hidden');
-        });
-        
-        // 点击外部时关闭下拉菜单
-        document.addEventListener('click', function(e) {
-            if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
-                menuDropdown.classList.add('hidden');
-            }
-        });
-        
-        // 防止点击下拉菜单内部时关闭
-        menuDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-        
-        // 案例库匹配弹窗
-        const caseLibraryBtn = document.getElementById('case-library-btn');
-        const caseLibraryModal = document.getElementById('case-library-modal');
-        const closeCaseLibraryModal = document.getElementById('close-case-library-modal');
-        
-        caseLibraryBtn.addEventListener('click', function() {
-            caseLibraryModal.classList.remove('hidden');
-        });
-        
-        closeCaseLibraryModal.addEventListener('click', function() {
-            caseLibraryModal.classList.add('hidden');
-        });
-        
-        // 点击弹窗外部关闭
-        caseLibraryModal.addEventListener('click', function(e) {
-            if (e.target === caseLibraryModal) {
-                caseLibraryModal.classList.add('hidden');
-            }
-        });
-        
-        // 治理跟踪弹窗
-        const governanceTrackingBtn = document.getElementById('governance-tracking-btn');
-        const governanceTrackingModal = document.getElementById('governance-tracking-modal');
-        const closeGovernanceTrackingModal = document.getElementById('close-governance-tracking-modal');
-        
-        governanceTrackingBtn.addEventListener('click', function() {
-            governanceTrackingModal.classList.remove('hidden');
-        });
-        
-        closeGovernanceTrackingModal.addEventListener('click', function() {
-            governanceTrackingModal.classList.add('hidden');
-        });
-        
-        // 点击弹窗外部关闭
-        governanceTrackingModal.addEventListener('click', function(e) {
-            if (e.target === governanceTrackingModal) {
-                governanceTrackingModal.classList.add('hidden');
-            }
+
+        // Dropdown menu behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('main-menu-button');
+            const menuDropdown = document.getElementById('main-menu-dropdown');
+            
+            // Toggle dropdown when menu button is clicked
+            menuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
     </script>
 </body>

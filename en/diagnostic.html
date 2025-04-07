@@ -36,10 +36,10 @@
                         </span>
                         <div id="main-menu-dropdown" class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
                             <a href="/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
-                                Statistical Overview
+                                Overview Statistics
                             </a>
                             <a href="/en/filter" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
-                                Area Filtering
+                                Filter Configuration
                             </a>
                             <a href="/en/diagnostic" class="block px-4 py-2 text-sm text-gray-700 bg-primary-light text-primary">
                                 Diagnostic Analysis
@@ -66,28 +66,29 @@
             <div class="mt-6 mb-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-900">Diagnostic Analysis</h1>
                 <div class="flex items-center space-x-3">
-                    <div class="relative w-64">
-                        <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
-                            <option value="long-high" selected>Hexi Transformer 1324 (+6.44%) - Long-term High Loss</option>
-                            <option value="sudden-high">Chengnan 532 (+5.55%) - Sudden High Loss</option>
-                            <option value="long-negative">Donghu 785 (-4.24%) - Long-term Negative Loss</option>
-                            <option value="small-negative">Beijiao 198 (-0.85%) - Small Negative Loss</option>
-                            <option value="sudden-negative">Development Zone 672 (-3.76%) - Sudden Negative Loss</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
+                    <div class="relative group">
+                        <div class="w-64 h-10 rounded-md bg-transparent group-hover:bg-gray-50 flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <div class="absolute top-0 left-0 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
+                                <option value="long-high" selected>Hexi Substation 1324 Area (+6.44%) - Long-term High Loss</option>
+                                <option value="sudden-high">Chengnan 532 Area (+5.55%) - Sudden High Loss [Generated]</option>
+                                <option value="long-negative">Donghu 785 Area (-4.24%) - Long-term Negative Loss [Generated]</option>
+                                <option value="small-negative">Beijiao 198 Area (-0.85%) - Slight Negative Loss</option>
+                                <option value="sudden-negative">Development Zone 672 Area (-3.76%) - Sudden Negative Loss</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <div class="relative inline-block">
-                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <i class="fas fa-filter mr-2"></i>
-                            Sort/Filter
+                    <div class="relative group">
+                        <div class="w-32 h-8 rounded-md bg-transparent group-hover:bg-primary-light flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <button id="governanceButton" class="absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-all duration-200 whitespace-nowrap">
+                            Generate Governance Suggestions
                         </button>
                     </div>
-                    <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        <i class="fas fa-file-export mr-2"></i>
-                        Export
-                    </button>
                 </div>
             </div>
 
@@ -99,7 +100,7 @@
                         <div class="grid grid-cols-2 gap-x-6 gap-y-2">
                             <div>
                                 <p class="text-sm text-gray-500">Area Name</p>
-                                <p class="text-sm font-medium">Hexi Transformer 1324 Area</p>
+                                <p class="text-sm font-medium">Hexi Substation 1324 Area</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">Area Code</p>
@@ -118,8 +119,8 @@
                                 <p class="text-sm font-medium">Residential + Commercial Mixed</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Belonging Area</p>
-                                <p class="text-sm font-medium">Hexi District</p>
+                                <p class="text-sm text-gray-500">Region</p>
+                                <p class="text-sm font-medium">Hexi Area</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">CT Ratio</p>
@@ -134,7 +135,7 @@
                                 <p class="text-sm font-medium">600</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Connection Method</p>
+                                <p class="text-sm text-gray-500">Wiring Method</p>
                                 <p class="text-sm font-medium">Three-phase Four-wire</p>
                             </div>
                             <div>
@@ -148,7 +149,7 @@
                         </div>
                     </div>
                     <div class="col-span-2">
-                        <h2 class="text-lg font-medium text-gray-900 mb-3">Line Loss Anomaly Overview</h2>
+                        <h2 class="text-lg font-medium text-gray-900 mb-3">Line Loss Abnormality Overview</h2>
                         <div class="grid grid-cols-1 gap-y-2">
                             <div>
                                 <p class="text-sm text-gray-500">Actual Line Loss Rate</p>
@@ -163,12 +164,19 @@
                                 <p class="text-lg font-bold text-red-500">+6.44%</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Number of Days with Line Loss Anomaly</p>
+                                <p class="text-sm text-gray-500">Abnormal Line Loss Days</p>
                                 <p class="text-sm font-medium">28 days <span class="text-xs text-gray-500">(last 30 days)</span></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Anomaly State</p>
+                                <p class="text-sm text-gray-500">Abnormal Status</p>
                                 <p class="text-sm font-medium text-red-500">Long-term High Loss</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Governance Suggestions</p>
+                                <p class="text-sm font-medium" id="governanceStatus">Not Generated</p>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-xs text-gray-500">Data Source: Filter A - Line Loss Statistics Period: 2024-04-10 - 2024-05-10</p>
                             </div>
                         </div>
                     </div>
@@ -182,6 +190,10 @@
                         <div class="px-5 py-4 border-b border-gray-200">
                             <h2 class="text-lg font-medium text-gray-900">Intelligent Diagnostic Tags</h2>
                         </div>
+                        <div class="px-5 pt-4 pb-2 border-b border-gray-100 flex items-center">
+                            <input type="checkbox" id="select-all-tags" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" checked>
+                            <label for="select-all-tags" class="ml-2 text-sm text-gray-700 font-medium cursor-pointer">Select All</label>
+                        </div>
                         <div class="p-5">
                             <div class="flex flex-col space-y-3">
                                 <div class="flex items-center p-3 bg-red-50 border border-red-100 rounded-lg">
@@ -189,7 +201,7 @@
                                         <i class="fas fa-exclamation-triangle text-red-500"></i>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">CT Transformer Ratio Error</h3>
+                                        <h3 class="text-sm font-medium text-red-800">CT Ratio Error</h3>
                                         <p class="text-xs text-red-700 mt-1">Match Probability: 92%</p>
                                     </div>
                                 </div>
@@ -198,7 +210,7 @@
                                         <i class="fas fa-file-alt text-orange-500"></i>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-orange-800">Abnormal User-Transformer Relationship Records</h3>
+                                        <h3 class="text-sm font-medium text-orange-800">Abnormal Household-Transformer Relationship in Archives</h3>
                                         <p class="text-xs text-orange-700 mt-1">Match Probability: 68%</p>
                                     </div>
                                 </div>
@@ -207,7 +219,7 @@
                                         <i class="fas fa-bolt text-yellow-500"></i>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-yellow-800">Suspected Low-Voltage Power Theft</h3>
+                                        <h3 class="text-sm font-medium text-yellow-800">Suspected Low-Voltage Electricity Theft</h3>
                                         <p class="text-xs text-yellow-700 mt-1">Match Probability: 45%</p>
                                     </div>
                                 </div>
@@ -220,283 +232,24 @@
                                         <p class="text-xs text-blue-700 mt-1">Match Probability: 38%</p>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <hr class="my-4 border-gray-200"/>
-                            
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-700 mb-2">Historical Diagnostic Records</h3>
-                                <div class="flex flex-col space-y-2">
-                                    <div class="p-2 bg-gray-50 rounded text-xs">
-                                        <p class="flex justify-between">
-                                            <span class="text-gray-800">2023-05-01</span>
-                                            <span class="text-red-500">+6.12%</span>
-                                        </p>
-                                        <p class="text-gray-600 mt-1">CT Transformer Ratio Error (Unresolved)</p>
-                                    </div>
-                                    <div class="p-2 bg-gray-50 rounded text-xs">
-                                        <p class="flex justify-between">
-                                            <span class="text-gray-800">2023-03-15</span>
-                                            <span class="text-red-500">+5.87%</span>
-                                        </p>
-                                        <p class="text-gray-600 mt-1">Suspected Low-Voltage Power Theft (Resolved)</p>
-                                    </div>
-                                </div>
+                                
+                                <!-- Add extra vertical space to align with right-side card -->
+                                <div class="py-10"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Middle Column: Line Loss Fluctuation Tracing Chart and Multi-dimensional Comparative Analysis -->
+                <!-- Middle Column: Line Loss Fluctuation Traceability Chart and Multi-dimensional Comparison Analysis -->
                 <div class="col-span-1 lg:col-span-2">
-                    <!-- Line Loss Fluctuation Tracing Chart -->
+                    <!-- Line Loss Fluctuation Traceability Chart -->
                     <div class="bg-white rounded-lg shadow-sm mb-6">
                         <div class="px-5 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">Line Loss Fluctuation Tracing Chart</h2>
+                            <h2 class="text-lg font-medium text-gray-900">Line Loss Fluctuation Traceability Chart</h2>
                         </div>
                         <div class="p-5">
                             <div class="h-72">
                                 <canvas id="lossAnalysisChart"></canvas>
-                            </div>
-                            <div class="mt-4">
-                                <p class="text-sm text-gray-600 mb-1">Fluctuation Analysis:</p>
-                                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
-                                    <li>Theoretical line loss is calculated using <span class="font-medium">integral current method</span>, calculation value stabilizes around 6%</li>
-                                    <li>From <span class="text-red-500 font-medium">April 6</span>, actual line loss suddenly increased, with significant difference from theoretical line loss</li>
-                                    <li>During this period, <span class="font-medium">user electricity consumption and load distribution</span> showed no significant changes</li>
-                                    <li>CT secondary side current check revealed issues with <span class="text-red-500 font-medium">ratio settings</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Multi-dimensional Comparative Analysis -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-                            <h2 class="text-lg font-medium text-gray-900">Multi-dimensional Comparative Analysis</h2>
-                            <div class="flex space-x-2">
-                                <button id="compareNormal" class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm">Similar Normal Areas</button>
-                                <button id="compareHistory" class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm">Historical Comparison</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Similar Normal Areas Comparison -->
-                        <div id="normalComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Comparison Metrics Card -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Load Characteristics Comparison</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Average Load Rate</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">42.7%</span>
-                                            <span class="text-xs text-gray-500 ml-1">(This Area)</span>
-                                        </div>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">45.2%</span>
-                                            <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500">Max/Average Load Ratio</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">1.68</span>
-                                            <span class="text-xs text-gray-500 ml-1">(This Area)</span>
-                                        </div>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">1.72</span>
-                                            <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3 h-40">
-                                    <canvas id="loadCurveChart"></canvas>
-                                </div>
-                            </div>
-                            
-                            <!-- Three-phase Imbalance -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Three-phase Imbalance Analysis</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Three-phase Imbalance</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">17.3%</span>
-                                            <span class="text-xs text-gray-500 ml-1">(This Area)</span>
-                                        </div>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">12.1%</span>
-                                            <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500">Power Factor</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">0.92</span>
-                                            <span class="text-xs text-gray-500 ml-1">(This Area)</span>
-                                        </div>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">0.94</span>
-                                            <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3 h-40">
-                                    <canvas id="phaseBalanceChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Historical Comparison View -->
-                        <div id="historyComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
-                            <!-- Line Loss Rate Seasonal Change -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Line Loss Rate Seasonal Change</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Current Quarter Average Line Loss Rate</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">12.76%</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500">Last Year Same Period Average Line Loss Rate</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">6.78%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3 h-40">
-                                    <canvas id="seasonalLossChart"></canvas>
-                                </div>
-                                <div class="mt-2 text-xs text-gray-500">
-                                    <p>Abnormality Note: Compared to the same period last year, the line loss rate increased by <span class="text-red-500 font-medium">5.98%</span>, significantly exceeding the normal seasonal fluctuation range.</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Historical Load Comparison -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Historical Load Comparison</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Current Period Average Consumption</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">3,246 kWh</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500">Last Year Same Period Consumption</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
-                                            <span class="text-sm font-medium">3,127 kWh</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3 h-40">
-                                    <canvas id="historicalLoadChart"></canvas>
-                                </div>
-                                <div class="mt-2 text-xs text-gray-500">
-                                    <p>Conclusion: The power load increased by <span class="text-primary font-medium">3.8%</span> compared to the same period last year, which is within normal range and insufficient to explain the significant increase in line loss rate.</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Key Node Analysis -->
-                            <div class="col-span-1 md:col-span-2 bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Key Event Analysis</h3>
-                                <div class="relative">
-                                    <div class="absolute h-full w-1 bg-gray-200 left-2.5 top-0"></div>
-                                    <div class="space-y-4 relative">
-                                        <div class="flex items-start">
-                                            <div class="h-5 w-5 rounded-full bg-red-500 flex-shrink-0 z-10"></div>
-                                            <div class="ml-4">
-                                                <p class="text-sm font-medium text-gray-800">April 6, 2023</p>
-                                                <p class="text-xs text-gray-600">Line loss rate suddenly jumped from 6.8% to 12.5%, system automatically marked as an anomaly</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start">
-                                            <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
-                                            <div class="ml-4">
-                                                <p class="text-sm font-medium text-gray-800">March 15, 2023</p>
-                                                <p class="text-xs text-gray-600">Completed previous governance, line loss rate returned to normal (6.8%)</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start">
-                                            <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
-                                            <div class="ml-4">
-                                                <p class="text-sm font-medium text-gray-800">February 18, 2023</p>
-                                                <p class="text-xs text-gray-600">Discovered suspected low-voltage power theft, initiated governance process</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start">
-                                            <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
-                                            <div class="ml-4">
-                                                <p class="text-sm font-medium text-gray-800">Same Period in 2022</p>
-                                                <p class="text-xs text-gray-600">Line loss rate stable between 6.5%~7.0%, within normal range</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Interactive Troubleshooting Tools -->
-                        <div class="p-5">
-                            <div class="bg-gray-50 rounded-lg p-4 col-span-1 md:col-span-2">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Interactive Troubleshooting Tool</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div class="col-span-1">
-                                        <p class="text-xs text-gray-500 mb-1">Adjust CT Ratio</p>
-                                        <div class="flex rounded-md shadow-sm">
-                                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">Current</span>
-                                            <input type="text" value="300/5" class="flex-1 min-w-0 block w-full px-3 py-1.5 rounded-none border border-gray-300 focus:ring-primary focus:border-primary text-sm">
-                                            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">A</span>
-                                        </div>
-                                        <div class="mt-2">
-                                            <select class="block w-full pl-3 pr-10 py-1.5 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                                                <option>Simulate correction to 150/5 A</option>
-                                                <option>Simulate correction to 200/5 A</option>
-                                                <option selected>Simulate correction to 250/5 A</option>
-                                                <option>Simulate correction to 400/5 A</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-span-2">
-                                        <p class="text-xs text-gray-500 mb-1">Post-Correction Line Loss Prediction</p>
-                                        <div class="flex h-20 items-center">
-                                            <div class="flex-1 flex items-center space-x-2">
-                                                <div class="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
-                                                    6.51%
-                                                </div>
-                                                <div>
-                                                    <p class="text-xs text-gray-500">Estimated Line Loss Rate After Correction</p>
-                                                    <p class="text-xs text-green-500 font-medium mt-1">Deviation from Theoretical Loss: +0.19%</p>
-                                                </div>
-                                            </div>
-                                            <div class="flex-1">
-                                                <div class="relative w-full h-4 bg-gray-200 rounded">
-                                                    <div class="absolute h-4 bg-primary rounded" style="width: 21.7%;"></div>
-                                                </div>
-                                                <div class="flex justify-between mt-1 text-xs text-gray-500">
-                                                    <span>0%</span>
-                                                    <span>6.51%</span>
-                                                    <span>30%</span>
-                                                </div>
-                                                <p class="text-xs text-gray-500 mt-1">Line loss rate decreased by <span class="text-green-500 font-medium">6.25%</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -505,9 +258,17 @@
             
             <!-- Bottom Action Area -->
             <div class="flex justify-between">
-                <a href="/en/filter" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Filtering
-                </a>
+                <div class="flex space-x-2">
+                    <a href="/en/filter" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Filtering
+                    </a>
+                    <div class="relative group">
+                        <div class="w-10 h-8 rounded-md bg-transparent group-hover:bg-purple-50 flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <a href="/demo/new/diagnostic-tags-new.html" class="absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-purple-100 hover:bg-purple-200 text-purple-700 py-2 px-4 rounded-md text-sm transition-all duration-200 whitespace-nowrap">
+                            <i class="fas fa-tags mr-1"></i> View Diagnostic Tags Demo
+                        </a>
+                    </div>
+                </div>
                 <a href="/en/governance" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
                     Generate Governance Suggestions <i class="fas fa-arrow-right ml-1"></i>
                 </a>
@@ -515,8 +276,244 @@
         </div>
     </div>
 
+    <!-- Multi-dimensional Comparison Analysis Modal -->
+    <div id="analysisModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-6xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-lg font-medium text-gray-900">Multi-dimensional Comparison Analysis</h2>
+                <div class="flex space-x-2 items-center">
+                    <button id="compareNormal" class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm">Similar Normal Areas</button>
+                    <button id="compareHistory" class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm">Historical Same Period</button>
+                    <button id="closeAnalysisModal" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Comparison with Similar Normal Areas -->
+            <div id="normalComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Comparison Metrics Card -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Load Characteristics Comparison</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">Average Load Factor</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">42.7%</span>
+                                <span class="text-xs text-gray-500 ml-1">(This Area)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">45.2%</span>
+                                <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Max/Avg Load Ratio</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">1.68</span>
+                                <span class="text-xs text-gray-500 ml-1">(This Area)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">1.72</span>
+                                <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="loadCurveChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Three-Phase Imbalance -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Three-Phase Imbalance Analysis</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">Three-Phase Imbalance Degree</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">17.3%</span>
+                                <span class="text-xs text-gray-500 ml-1">(This Area)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">12.1%</span>
+                                <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Power Factor</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">0.92</span>
+                                <span class="text-xs text-gray-500 ml-1">(This Area)</span>
+                            </div>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">0.94</span>
+                                <span class="text-xs text-gray-500 ml-1">(Comparison Group)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="phaseBalanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Historical Comparison (New) -->
+            <div id="historyComparisonView" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                <!-- Seasonal Change in Line Loss Rate -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Seasonal Change in Line Loss Rate</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">Avg Loss Rate This Quarter</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">12.76%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Avg Loss Rate Same Period Last Year</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">6.78%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="seasonalLossChart"></canvas>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500">
+                        <p>Abnormality Description: Compared to the same period last year, the line loss rate increased by <span class="text-red-500 font-medium">5.98%</span>, significantly exceeding the seasonal fluctuation range.</p>
+                    </div>
+                </div>
+                
+                <!-- Historical Comparison of Power Consumption Load -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Historical Comparison of Power Consumption Load</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">Avg Consumption This Period</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">3,246 kWh</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Consumption Same Period Last Year</p>
+                            <div class="flex items-center mt-1">
+                                <div class="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium">3,127 kWh</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-40">
+                        <canvas id="historicalLoadChart"></canvas>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500">
+                        <p>Conclusion: Power consumption load increased by <span class="text-primary font-medium">3.8%</span> compared to the same period last year, which is within the normal range and does not explain the significant increase in line loss rate.</p>
+                    </div>
+                </div>
+                
+                <!-- Key Node Analysis -->
+                <div class="col-span-1 md:col-span-2 bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Key Node Analysis</h3>
+                    <div class="relative">
+                        <div class="absolute h-full w-1 bg-gray-200 left-2.5 top-0"></div>
+                        <div class="space-y-4 relative">
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-red-500 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">April 6, 2023</p>
+                                    <p class="text-xs text-gray-600">Line loss rate suddenly jumped from 6.8% to 12.5%, automatically marked as an abnormal point by the system</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">March 15, 2023</p>
+                                    <p class="text-xs text-gray-600">Previous governance completed, line loss rate returned to normal (6.8%)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">February 18, 2023</p>
+                                    <p class="text-xs text-gray-600">Suspected low-voltage electricity theft detected, governance process initiated</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-5 w-5 rounded-full bg-gray-400 flex-shrink-0 z-10"></div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-800">Same Period in 2022</p>
+                                    <p class="text-xs text-gray-600">Line loss rate stable between 6.5%~7.0%, within the normal range</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interactive Troubleshooting Tool -->
+            <div class="p-5">
+                <div class="bg-gray-50 rounded-lg p-4 col-span-1 md:col-span-2">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Interactive Troubleshooting Tool</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="col-span-1">
+                            <p class="text-xs text-gray-500 mb-1">Adjust CT Ratio</p>
+                            <div class="flex rounded-md shadow-sm">
+                                <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">Current</span>
+                                <input type="text" value="300/5" class="flex-1 min-w-0 block w-full px-3 py-1.5 rounded-none border border-gray-300 focus:ring-primary focus:border-primary text-sm">
+                                <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">A</span>
+                            </div>
+                            <div class="mt-2">
+                                <select class="block w-full pl-3 pr-10 py-1.5 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                                    <option>Simulate correction to 150/5 A</option>
+                                    <option>Simulate correction to 200/5 A</option>
+                                    <option selected>Simulate correction to 250/5 A</option>
+                                    <option>Simulate correction to 400/5 A</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-xs text-gray-500 mb-1">Predicted Line Loss After Correction</p>
+                            <div class="flex h-20 items-center">
+                                <div class="flex-1 flex items-center space-x-2">
+                                    <div class="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                                        6.51%
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Predicted Loss Rate After Correction</p>
+                                        <p class="text-xs text-green-500 font-medium mt-1">Deviation from Theoretical Loss: +0.19%</p>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="relative w-full h-4 bg-gray-200 rounded">
+                                        <div class="absolute h-4 bg-primary rounded" style="width: 21.7%;"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-1 text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span>6.51%</span>
+                                        <span>30%</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Line loss rate reduced by <span class="text-green-500 font-medium">6.25%</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Line Loss Fluctuation Tracing Chart
+        // Line Loss Fluctuation Traceability Chart
         const lossCtx = document.getElementById('lossAnalysisChart').getContext('2d');
         const lossAnalysisChart = new Chart(lossCtx, {
             type: 'line',
@@ -524,7 +521,7 @@
                 labels: ['3/15', '3/22', '3/29', '4/5', '4/12', '4/19', '4/26', '5/3'],
                 datasets: [
                     {
-                        label: 'Actual Line Loss Rate',
+                        label: 'Actual Loss Rate',
                         data: [6.8, 6.9, 6.7, 12.5, 12.8, 12.7, 12.9, 12.76],
                         borderColor: '#ef4444',
                         backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -534,7 +531,7 @@
                         yAxisID: 'y'
                     },
                     {
-                        label: 'Theoretical Line Loss Rate',
+                        label: 'Theoretical Loss Rate',
                         data: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
                         borderColor: '#309C9F',
                         backgroundColor: 'rgba(48, 156, 159, 0.1)',
@@ -591,7 +588,7 @@
                         max: 15,
                         title: {
                             display: true,
-                            text: 'Line Loss Rate (%)'
+                            text: 'Loss Rate (%)'
                         }
                     },
                     y1: {
@@ -667,20 +664,20 @@
             }
         });
 
-        // 三相不平衡图
+        // Three-Phase Imbalance Chart
         const phaseCtx = document.getElementById('phaseBalanceChart').getContext('2d');
         const phaseBalanceChart = new Chart(phaseCtx, {
             type: 'bar',
             data: {
-                labels: ['A相', 'B相', 'C相'],
+                labels: ['Phase A', 'Phase B', 'Phase C'],
                 datasets: [
                     {
-                        label: '本台区',
+                        label: 'This Area',
                         data: [145, 98, 162],
                         backgroundColor: '#309C9F',
                     },
                     {
-                        label: '对比组',
+                        label: 'Comparison Group',
                         data: [125, 118, 142],
                         backgroundColor: '#9ca3af',
                     }
@@ -704,22 +701,22 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: '电流 (A)'
+                            text: 'Current (A)'
                         }
                     }
                 }
             }
         });
 
-        // 季节性线损率变化图
+        // Seasonal Line Loss Rate Change Chart
         const seasonalCtx = document.getElementById('seasonalLossChart').getContext('2d');
         const seasonalLossChart = new Chart(seasonalCtx, {
             type: 'line',
             data: {
-                labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [
                     {
-                        label: '今年',
+                        label: 'This Year',
                         data: [6.8, 6.7, 6.6, 12.7, 12.8, null, null, null, null, null, null, null],
                         borderColor: '#ef4444',
                         backgroundColor: 'transparent',
@@ -727,7 +724,7 @@
                         tension: 0.3
                     },
                     {
-                        label: '去年',
+                        label: 'Last Year',
                         data: [6.9, 6.7, 6.8, 6.8, 6.7, 6.5, 6.4, 6.6, 6.7, 6.9, 7.0, 6.8],
                         borderColor: '#9ca3af',
                         backgroundColor: 'transparent',
@@ -757,27 +754,27 @@
                         max: 14,
                         title: {
                             display: true,
-                            text: '线损率 (%)'
+                            text: 'Line Loss Rate (%)'
                         }
                     }
                 }
             }
         });
 
-        // 用电负荷历史对比图
+        // Historical Load Comparison Chart
         const histLoadCtx = document.getElementById('historicalLoadChart').getContext('2d');
         const historicalLoadChart = new Chart(histLoadCtx, {
             type: 'bar',
             data: {
-                labels: ['第一季度', '第二季度', '第三季度', '第四季度'],
+                labels: ['First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter'],
                 datasets: [
                     {
-                        label: '今年',
+                        label: 'This Year',
                         data: [3120, 3246, null, null],
                         backgroundColor: '#309C9F',
                     },
                     {
-                        label: '去年',
+                        label: 'Last Year',
                         data: [3050, 3127, 3405, 3280],
                         backgroundColor: '#9ca3af',
                     }
@@ -801,7 +798,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: '用电量 (kWh)'
+                            text: 'Electricity Consumption (kWh)'
                         }
                     }
                 }
@@ -812,48 +809,48 @@
         document.addEventListener('DOMContentLoaded', function() {
             const normalView = document.getElementById('normalComparisonView');
             const historyView = document.getElementById('historyComparisonView');
-            const normalBtn = document.getElementById('compareNormal');
-            const historyBtn = document.getElementById('compareHistory');
+            const compareNormalBtn = document.getElementById('compareNormal');
+            const compareHistoryBtn = document.getElementById('compareHistory');
 
-            normalBtn.addEventListener('click', function() {
+            compareNormalBtn.addEventListener('click', () => {
                 normalView.classList.remove('hidden');
                 historyView.classList.add('hidden');
-                normalBtn.classList.add('bg-primary-light', 'text-primary');
-                normalBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
-                historyBtn.classList.remove('bg-primary-light', 'text-primary');
-                historyBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+                compareNormalBtn.classList.add('bg-primary-light', 'text-primary');
+                compareNormalBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                compareHistoryBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+                compareHistoryBtn.classList.remove('bg-primary-light', 'text-primary');
             });
 
-            historyBtn.addEventListener('click', function() {
-                historyView.classList.remove('hidden');
+            compareHistoryBtn.addEventListener('click', () => {
                 normalView.classList.add('hidden');
-                historyBtn.classList.add('bg-primary-light', 'text-primary');
-                historyBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
-                normalBtn.classList.remove('bg-primary-light', 'text-primary');
-                normalBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+                historyView.classList.remove('hidden');
+                compareHistoryBtn.classList.add('bg-primary-light', 'text-primary');
+                compareHistoryBtn.classList.remove('text-gray-500', 'hover:bg-gray-100');
+                compareNormalBtn.classList.add('text-gray-500', 'hover:bg-gray-100');
+                compareNormalBtn.classList.remove('bg-primary-light', 'text-primary');
             });
             
-            // Area switching functionality
+            // District switching functionality
             const districtSelect = document.getElementById('districtSelect');
             districtSelect.addEventListener('change', function() {
                 updateDistrictInfo(this.value);
             });
             
-            // Initialize area information
+            // Initialize district information
             updateDistrictInfo('long-high');
         });
-        
-        // Area information update function
+          
+        // District information update function
         function updateDistrictInfo(districtType) {
             // Basic information configuration
             const districtConfig = {
                 'long-high': {
-                    name: 'Hexi Transformer 1324 Area',
+                    name: 'Hexi Substation 1324 Area',
                     code: 'TQ-HX1324',
                     capacity: '400 kVA',
                     users: '87 households',
                     loadType: 'Residential + Commercial Mixed',
-                    area: 'Hexi District',
+                    area: 'Hexi Area',
                     ctRatio: '300/5 A',
                     ptRatio: '10000/100 V',
                     totalRatio: '600',
@@ -865,7 +862,9 @@
                     difference: '+6.44%',
                     abnormalDays: '28 days',
                     abnormalState: 'Long-term High Loss',
-                    abnormalStateColor: 'text-red-500'
+                    abnormalStateColor: 'text-red-500',
+                    governanceStatus: 'Not Generated',
+                    governanceStatusColor: 'text-gray-600'
                 },
                 'sudden-high': {
                     name: 'Chengnan 532 Area',
@@ -873,19 +872,21 @@
                     capacity: '315 kVA',
                     users: '65 households',
                     loadType: 'Residential + Commercial Mixed',
-                    area: 'Chengnan District',
+                    area: 'Chengnan Area',
                     ctRatio: '250/5 A',
                     ptRatio: '10000/100 V',
                     totalRatio: '500',
                     wireType: 'Three-phase Four-wire',
-                    renewableEnergy: 'Solar PV',
+                    renewableEnergy: 'Solar',
                     commType: '4G',
                     actualLoss: '11.95%',
                     theoryLoss: '6.40%',
                     difference: '+5.55%',
                     abnormalDays: '5 days',
                     abnormalState: 'Sudden High Loss',
-                    abnormalStateColor: 'text-orange-500'
+                    abnormalStateColor: 'text-orange-500',
+                    governanceStatus: 'Generated',
+                    governanceStatusColor: 'text-green-600'
                 },
                 'long-negative': {
                     name: 'Donghu 785 Area',
@@ -893,27 +894,29 @@
                     capacity: '500 kVA',
                     users: '95 households',
                     loadType: 'Residential + Industrial Mixed',
-                    area: 'Donghu District',
+                    area: 'Donghu Area',
                     ctRatio: '400/5 A',
                     ptRatio: '10000/100 V',
                     totalRatio: '800',
                     wireType: 'Three-phase Four-wire',
-                    renewableEnergy: 'Wind Power',
-                    commType: 'Fiber Optic',
+                    renewableEnergy: 'Wind',
+                    commType: 'Fiber',
                     actualLoss: '-4.24%',
                     theoryLoss: '6.8%',
                     difference: '-4.24%',
                     abnormalDays: '32 days',
                     abnormalState: 'Long-term Negative Loss',
-                    abnormalStateColor: 'text-blue-500'
+                    abnormalStateColor: 'text-blue-500',
+                    governanceStatus: 'Generated',
+                    governanceStatusColor: 'text-green-600'
                 },
                 'small-negative': {
                     name: 'Beijiao 198 Area',
                     code: 'TQ-BJ198',
                     capacity: '200 kVA',
                     users: '42 households',
-                    loadType: 'Mainly Residential',
-                    area: 'Beijiao District',
+                    loadType: 'Residential',
+                    area: 'Beijiao Area',
                     ctRatio: '150/5 A',
                     ptRatio: '10000/100 V',
                     totalRatio: '300',
@@ -924,28 +927,32 @@
                     theoryLoss: '5.20%',
                     difference: '-6.05%',
                     abnormalDays: '25 days',
-                    abnormalState: 'Small Negative Loss',
-                    abnormalStateColor: 'text-indigo-500'
+                    abnormalState: 'Slight Negative Loss',
+                    abnormalStateColor: 'text-indigo-500',
+                    governanceStatus: 'Not Generated',
+                    governanceStatusColor: 'text-gray-600'
                 },
                 'sudden-negative': {
                     name: 'Development Zone 672 Area',
                     code: 'TQ-KF672',
                     capacity: '630 kVA',
                     users: '23 households',
-                    loadType: 'Mainly Industrial',
+                    loadType: 'Industrial',
                     area: 'Development Zone',
                     ctRatio: '500/5 A',
                     ptRatio: '10000/100 V',
                     totalRatio: '1000',
                     wireType: 'Three-phase Four-wire',
                     renewableEnergy: 'None',
-                    commType: 'Fiber Optic',
+                    commType: 'Fiber',
                     actualLoss: '-3.76%',
                     theoryLoss: '4.95%',
                     difference: '-8.71%',
                     abnormalDays: '4 days',
                     abnormalState: 'Sudden Negative Loss',
-                    abnormalStateColor: 'text-purple-500'
+                    abnormalStateColor: 'text-purple-500',
+                    governanceStatus: 'Not Generated',
+                    governanceStatusColor: 'text-gray-600'
                 }
             };
             
@@ -964,17 +971,17 @@
                     case 'Transformer Capacity': valueEl.textContent = config.capacity; break;
                     case 'Number of Users': valueEl.textContent = config.users; break;
                     case 'Load Type': valueEl.textContent = config.loadType; break;
-                    case 'Belonging Area': valueEl.textContent = config.area; break;
+                    case 'Region': valueEl.textContent = config.area; break;
                     case 'CT Ratio': valueEl.textContent = config.ctRatio; break;
                     case 'PT Ratio': valueEl.textContent = config.ptRatio; break;
                     case 'Total Ratio': valueEl.textContent = config.totalRatio; break;
-                    case 'Connection Method': valueEl.textContent = config.wireType; break;
+                    case 'Wiring Method': valueEl.textContent = config.wireType; break;
                     case 'Renewable Energy': valueEl.textContent = config.renewableEnergy; break;
                     case 'Communication Method': valueEl.textContent = config.commType; break;
                 }
             });
             
-            // Update line loss anomaly overview
+            // Update line loss overview
             const abnormalLabels = document.querySelectorAll('.col-span-2 .grid.grid-cols-1.gap-y-2 > div > p:first-child');
             abnormalLabels.forEach(label => {
                 const valueEl = label.nextElementSibling;
@@ -992,12 +999,17 @@
                         valueEl.textContent = config.difference;
                         valueEl.className = 'text-lg font-bold ' + (parseFloat(config.difference) > 0 ? 'text-red-500' : 'text-blue-500');
                         break;
-                    case 'Number of Days with Line Loss Anomaly': 
+                    case 'Abnormal Line Loss Days': 
                         valueEl.innerHTML = config.abnormalDays + ' <span class="text-xs text-gray-500">(last 30 days)</span>';
                         break;
-                    case 'Anomaly State':
+                    case 'Abnormal Status':
                         valueEl.textContent = config.abnormalState;
                         valueEl.className = 'text-sm font-medium ' + config.abnormalStateColor;
+                        break;
+                    case 'Governance Suggestions':
+                        valueEl.textContent = config.governanceStatus;
+                        valueEl.className = 'text-sm font-medium ' + config.governanceStatusColor;
+                        document.getElementById('governanceStatus').textContent = config.governanceStatus; // Also update the standalone status element
                         break;
                 }
             });
@@ -1007,243 +1019,260 @@
             
             // Update charts
             updateCharts(districtType);
+            
+            // Update governance button
+            updateGovernanceButton(districtType);
         }
-        
+          
+        // Update governance button
+        function updateGovernanceButton(districtType) {
+            const button = document.getElementById('governanceButton');
+            const hasGovernance = districtType === 'sudden-high' || districtType === 'long-negative';
+            
+            if (hasGovernance) {
+                button.textContent = 'View Governance Suggestions';
+                button.className = 'absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm leading-4 transition-all duration-200 whitespace-nowrap';
+            } else {
+                button.textContent = 'Generate Governance Suggestions';
+                button.className = 'absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-all duration-200 whitespace-nowrap';
+            }
+        }
+          
         // Diagnostic tags update function
         function updateDiagnosticTags(districtType) {
             // Clear current diagnostic tags
             const tagContainer = document.querySelector('.flex.flex-col.space-y-3');
             tagContainer.innerHTML = '';
             
-            // Display corresponding diagnostic tags based on area type
+            // Display corresponding diagnostic tags based on district type
             const diagnosticTags = {
                 'long-high': [
                     {
-                        title: 'CT互感器倍率错误',
+                        title: 'CT Transformer Ratio Error',
                         probability: '92%',
                         icon: 'exclamation-triangle',
                         color: 'red',
                         details: [
-                            '事件代码：E-269, E-270',
-                            '线损稳定性：0.85',
-                            '常见原因：互感器更换后系统参数未更新'
+                            'Event Code: E-269, E-270',
+                            'Line Loss Stability: 0.85',
+                            'Common Cause: Transformer replacement system parameter not updated'
                         ]
                     },
                     {
-                        title: '档案户变关系异常',
+                        title: 'Archives Household-Transformer Relationship Anomaly',
                         probability: '68%',
                         icon: 'file-alt',
                         color: 'orange',
                         details: [
-                            '台户一致性：0.72',
-                            '用户变更记录：3次',
-                            '常见原因：用户迁移后系统未更新'
+                            'Household-Transformer Consistency: 0.72',
+                            'User Change Record: 3 times',
+                            'Common Cause: System not updated after user migration'
                         ]
                     },
                     {
-                        title: '疑似低压窃电',
+                        title: 'Suspected Low-Voltage Electricity Theft',
                         probability: '45%',
                         icon: 'bolt',
                         color: 'yellow',
                         details: [
-                            '夜间用电模式：异常',
-                            '节假日用电：异常',
-                            '负荷突变：2次'
+                            'Nighttime Power Usage Pattern: Abnormal',
+                            'Holiday Power Usage: Abnormal',
+                            'Load Spike: 2 times'
                         ]
                     },
                     {
-                        title: '三相不平衡',
+                        title: 'Three-Phase Imbalance',
                         probability: '38%',
                         icon: 'sync-alt',
                         color: 'blue',
                         details: [
-                            '不平衡度：17.3%',
-                            '持续时间：15天',
-                            '事件代码：E-279, E-280'
+                            'Imbalance Degree: 17.3%',
+                            'Duration: 15 days',
+                            'Event Code: E-279, E-280'
                         ]
                     }
                 ],
                 'sudden-high': [
                     {
-                        title: '用电负荷突增',
+                        title: 'Sudden Increase in Load',
                         probability: '87%',
                         icon: 'bolt',
                         color: 'red',
                         details: [
-                            '负荷增幅：32.6%',
-                            '突变时间点：4月28日',
-                            '常见原因：季节性用电设备启用'
+                            'Load Increase: 32.6%',
+                            'Time Point of Change: April 28th',
+                            'Common Cause: Seasonal power equipment activation'
                         ]
                     },
                     {
-                        title: '低压设备故障',
+                        title: 'Low-Voltage Equipment Failure',
                         probability: '65%',
                         icon: 'exclamation-triangle',
                         color: 'orange',
                         details: [
-                            '设备温度：异常',
-                            '故障报警数：2次',
-                            '常见原因：设备老化损坏'
+                            'Equipment Temperature: Abnormal',
+                            'Failure Alarm Count: 2 times',
+                            'Common Cause: Equipment aging and damage'
                         ]
                     },
                     {
-                        title: '短时漏电故障',
+                        title: 'Short-Circuit Fault',
                         probability: '52%',
                         icon: 'tint',
                         color: 'yellow',
                         details: [
-                            '接地电流：异常',
-                            '环境湿度：较高',
-                            '绝缘阻抗：降低'
+                            'Ground Current: Abnormal',
+                            'Environmental Humidity: High',
+                            'Insulation Resistance: Decreased'
                         ]
                     },
                     {
-                        title: '恶劣天气引发问题',
+                        title: 'Problems Caused by Adverse Weather',
                         probability: '48%',
                         icon: 'cloud-rain',
                         color: 'blue',
                         details: [
-                            '天气相关性：4月27日暴雨',
-                            '设备状态：可能受潮',
-                            '常见原因：雨水渗入设备'
+                            'Weather Correlation: Heavy rain on April 27th',
+                            'Equipment Condition: Possibly damp',
+                            'Common Cause: Water infiltration into equipment'
                         ]
                     }
                 ],
                 'long-negative': [
                     {
-                        title: '计量装置接线错误',
+                        title: 'Error in Line Connection',
                         probability: '94%',
                         icon: 'plug',
                         color: 'red',
                         details: [
-                            '接线检查：异常',
-                            '线损稳定性：0.88',
-                            '常见原因：接线施工错误'
+                            'Connection Check: Abnormal',
+                            'Line Loss Stability: 0.88',
+                            'Common Cause: Wiring error during construction'
                         ]
                     },
                     {
-                        title: '电表正反向接错',
+                        title: 'Incorrect Connection of Power Meter',
                         probability: '78%',
                         icon: 'exchange-alt',
                         color: 'orange',
                         details: [
-                            '事件代码：E-257, E-258',
-                            '光伏容量：15kW',
-                            '常见原因：分布式电源并网计量点设置不规范'
+                            'Event Code: E-257, E-258',
+                            'Solar Capacity: 15kW',
+                            'Common Cause: Inconsistent setting of distributed power grid metering point'
                         ]
                     },
                     {
-                        title: '台户关系不一致',
+                        title: 'Inconsistency in Household-Transformer Relationship',
                         probability: '63%',
                         icon: 'file-alt',
                         color: 'yellow',
                         details: [
-                            '户表比对：不一致',
-                            '异常记录：5次',
-                            '常见原因：系统迁移数据错误'
+                            'Household-Meter Comparison: Inconsistent',
+                            'Anomalous Record: 5 times',
+                            'Common Cause: System migration data error'
                         ]
                     },
                     {
-                        title: '光伏发电档案错误',
+                        title: 'Error in Solar Power Generation Archive',
                         probability: '42%',
                         icon: 'solar-panel',
                         color: 'blue',
                         details: [
-                            '光伏容量差异：+8kW',
-                            '发电记录：异常',
-                            '常见原因：光伏容量登记不准确'
+                            'Difference in Solar Capacity: +8kW',
+                            'Power Generation Record: Abnormal',
+                            'Common Cause: Inaccurate registration of solar capacity'
                         ]
                     }
                 ],
                 'small-negative': [
                     {
-                        title: '理论模型计算偏差',
+                        title: 'Deviation in Theoretical Model Calculation',
                         probability: '89%',
                         icon: 'calculator',
                         color: 'red',
                         details: [
-                            '负荷率：低于15%',
-                            '理论模型参数灵敏度：高',
-                            '常见原因：低负荷时模型不适用'
+                            'Load Factor: Below 15%',
+                            'Sensitivity of Theoretical Model Parameters: High',
+                            'Common Cause: Model not applicable at low load'
                         ]
                     },
                     {
-                        title: '互感器配置不合理',
+                        title: 'Unreasonable Configuration of Current Transformer',
                         probability: '72%',
                         icon: 'cogs',
                         color: 'orange',
                         details: [
-                            '二次负载率：8.2%',
-                            '互感器精度等级：0.5S',
-                            '常见原因：互感器倍率选择过大'
+                            'Secondary Load Rate: 8.2%',
+                            'Accuracy of Current Transformer: 0.5S',
+                            'Common Cause: Current Transformer ratio selection too large'
                         ]
                     },
                     {
-                        title: '采集数据偏差',
+                        title: 'Deviation in Data Collection',
                         probability: '58%',
                         icon: 'database',
                         color: 'yellow',
                         details: [
-                            '数据质量评分：83',
-                            '时钟同步状态：轻微偏差',
-                            '常见原因：数据时间戳不同步'
+                            'Data Quality Score: 83',
+                            'Clock Synchronization Status: Mild Discrepancy',
+                            'Common Cause: Data timestamp not synchronized'
                         ]
                     },
                     {
-                        title: '电表时钟超差',
+                        title: 'Clock Error of Power Meter',
                         probability: '45%',
                         icon: 'clock',
                         color: 'blue',
                         details: [
-                            '事件代码：E-1538',
-                            '时钟偏差：2.3分钟',
-                            '常见原因：电表时钟芯片漂移'
+                            'Event Code: E-1538',
+                            'Clock Drift: 2.3 minutes',
+                            'Common Cause: Clock chip drift of power meter'
                         ]
                     }
                 ],
                 'sudden-negative': [
                     {
-                        title: '电表计量故障',
+                        title: 'Fault in Power Meter Measurement',
                         probability: '91%',
                         icon: 'tachometer-alt',
                         color: 'red',
                         details: [
-                            '故障代码：E-258',
-                            '时间相关性：4月20日',
-                            '常见原因：电表内部组件损坏'
+                            'Fault Code: E-258',
+                            'Time Correlation: April 20th',
+                            'Common Cause: Damaged internal components of power meter'
                         ]
                     },
                     {
-                        title: '倍率变更未同步',
+                        title: 'Change in Ratio Not Synchronized',
                         probability: '79%',
                         icon: 'sync',
                         color: 'orange',
                         details: [
-                            '设备变更记录：4月19日',
-                            '时间相关性：高',
-                            '常见原因：更换互感器后系统档案未更新'
+                            'Equipment Change Record: April 19th',
+                            'Time Correlation: High',
+                            'Common Cause: System archive not updated after replacing current transformer'
                         ]
                     },
                     {
-                        title: '功率因数补偿设备异常',
+                        title: 'Failure of Power Factor Compensation Equipment',
                         probability: '64%',
                         icon: 'bolt',
                         color: 'yellow',
                         details: [
-                            '功率因数变化：0.95→0.82',
-                            '时间相关性：高',
-                            '常见原因：补偿电容器故障'
+                            'Change in Power Factor: 0.95→0.82',
+                            'Time Correlation: High',
+                            'Common Cause: Failure of power capacitor'
                         ]
                     },
                     {
-                        title: '台区总表某相异常',
+                        title: 'Anomaly in Total Meter of Substation',
                         probability: '58%',
                         icon: 'exclamation-triangle',
                         color: 'blue',
                         details: [
-                            '不平衡度变化：增大15%',
-                            '事件代码：E-299',
-                            '常见原因：某相接触不良'
+                            'Change in Imbalance Degree: Increased by 15%',
+                            'Event Code: E-299',
+                            'Common Cause: Poor contact with one phase'
                         ]
                     }
                 ]
@@ -1252,54 +1281,57 @@
             // Add corresponding tags
             const tags = diagnosticTags[districtType];
             tags.forEach((tag, index) => {
-                const tagElement = document.createElement('div');
-                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
-                tagElement.innerHTML = `
+                const tagWrapper = document.createElement('div');
+                tagWrapper.className = `flex items-start p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
+                tagWrapper.innerHTML = `
+                    <input type="checkbox" id="tag-${index}" class="mt-1 mr-2 w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary diagnostic-tag-checkbox" checked>
                     <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
                         <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
                     </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
-                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
-                        <div class="mt-2 text-xs text-gray-600">
-                            ${tag.details.map(detail => `<p>• ${detail}</p>`).join('')}
+                    <div class="ml-3 flex-1">
+                        <label for="tag-${index}" class="text-sm font-medium text-${tag.color}-800 cursor-pointer block">${tag.title}</label>
+                        <p class="text-xs text-${tag.color}-700 mt-1">Match Probability: ${tag.probability}</p>
+                        <div class="mt-2 text-xs text-gray-500">
+                            ${tag.details.map(detail => `<p>${detail}</p>`).join('')}
                         </div>
                     </div>
                 `;
-                tagContainer.appendChild(tagElement);
+                tagContainer.appendChild(tagWrapper);
             });
             
             // Update historical diagnostic records
             updateHistoryRecords(districtType);
+            
+            // Update select all checkbox status
+            setTimeout(updateSelectAllCheckbox, 0);
         }
-        
+          
         // Historical diagnostic records update function
         function updateHistoryRecords(districtType) {
             // Find historical records container
             const historyHeaderEl = document.querySelector('h3.text-sm.font-medium.text-gray-700.mb-2');
             if (!historyHeaderEl) return;
-            
-            const historyContainer = historyHeaderEl.nextElementSibling;
-            if (!historyContainer) return;
+            let historyContainer = historyHeaderEl.nextElementSibling;
+            if (!historyContainer || !historyContainer.classList.contains('space-y-3')) return;
             
             const historyRecords = {
                 'long-high': [
                     {
                         date: '2023-05-01',
                         value: '+6.12%',
-                        description: 'CT互感器倍率错误 (未处理)',
+                        description: 'CT Transformer Ratio Error (Unprocessed)',
                         details: [
-                            '事件代码：E-269',
-                            '线损稳定性：0.82'
+                            'Event Code: E-269',
+                            'Line Loss Stability: 0.82'
                         ]
                     },
                     {
                         date: '2023-03-15',
                         value: '+5.87%',
-                        description: '疑似低压窃电 (已治理)',
+                        description: 'Suspected Low-Voltage Electricity Theft (Processed)',
                         details: [
-                            '夜间用电异常',
-                            '负荷突变：1次'
+                            'Nighttime Power Usage Abnormal',
+                            'Load Spike: 1 time'
                         ]
                     }
                 ],
@@ -1307,19 +1339,19 @@
                     {
                         date: '2023-04-28',
                         value: '+5.55%',
-                        description: '用电负荷突增 (处理中)',
+                        description: 'Sudden Increase in Load (Processing)',
                         details: [
-                            '负荷增长32.6%',
-                            '季节性设备启用'
+                            'Load Increase: 32.6%',
+                            'Seasonal Equipment Activation'
                         ]
                     },
                     {
                         date: '2022-12-15',
                         value: '+4.28%',
-                        description: '低压设备故障 (已处理)',
+                        description: 'Low-Voltage Equipment Failure (Processed)',
                         details: [
-                            '设备温度异常',
-                            '已更换低压设备'
+                            'Equipment Temperature Abnormal',
+                            'Low-Voltage Equipment Replaced'
                         ]
                     }
                 ],
@@ -1327,19 +1359,19 @@
                     {
                         date: '2023-04-15',
                         value: '-4.24%',
-                        description: '计量装置接线错误 (未处理)',
+                        description: 'Error in Line Connection (Unprocessed)',
                         details: [
-                            '接线检查异常',
-                            '计划5月10日处理'
+                            'Connection Check Abnormal',
+                            'Plan to handle on May 10th'
                         ]
                     },
                     {
                         date: '2023-03-02',
                         value: '-4.12%',
-                        description: '电表正反向接错 (未处理)',
+                        description: 'Incorrect Connection of Power Meter (Unprocessed)',
                         details: [
-                            'E-257事件',
-                            '涉及光伏并网用户'
+                            'E-257 Event',
+                            'Involves Grid-Connected Solar Power Users'
                         ]
                     }
                 ],
@@ -1347,19 +1379,19 @@
                     {
                         date: '2023-04-20',
                         value: '-0.85%',
-                        description: '理论模型计算偏差 (观察中)',
+                        description: 'Deviation in Theoretical Model Calculation (Observation)',
                         details: [
-                            '负荷率低',
-                            '模型参数调整中'
+                            'Load Factor Low',
+                            'Model Parameter Adjustment'
                         ]
                     },
                     {
                         date: '2023-03-10',
                         value: '-0.92%',
-                        description: '互感器配置不合理 (规划更换)',
+                        description: 'Unreasonable Configuration of Current Transformer (Planning Replacement)',
                         details: [
-                            '二次负载率低',
-                            '计划更换合适规格'
+                            'Low Secondary Load Rate',
+                            'Plan to replace with suitable specifications'
                         ]
                     }
                 ],
@@ -1367,19 +1399,19 @@
                     {
                         date: '2023-04-20',
                         value: '-3.76%',
-                        description: '电表计量故障 (已安排维修)',
+                        description: 'Fault in Power Meter Measurement (Scheduled Maintenance)',
                         details: [
-                            '故障代码E-258',
-                            '已安排4月25日更换'
+                            'Fault Code E-258',
+                            'Scheduled for April 25th Replacement'
                         ]
                     },
                     {
                         date: '2023-01-15',
                         value: '-2.65%',
-                        description: '倍率变更未同步 (已处理)',
+                        description: 'Change in Ratio Not Synchronized (Processed)',
                         details: [
-                            '系统参数更新',
-                            '已修正倍率设置'
+                            'System Parameter Update',
+                            'Corrected Ratio Setting'
                         ]
                     }
                 ]
@@ -1388,102 +1420,107 @@
             // Clear and add new records
             historyContainer.innerHTML = '';
             const records = historyRecords[districtType];
-            
             records.forEach(record => {
                 const recordElement = document.createElement('div');
-                recordElement.className = 'p-2 bg-gray-50 rounded text-xs';
+                recordElement.className = 'flex items-start text-xs';
                 recordElement.innerHTML = `
-                    <p class="flex justify-between">
-                        <span class="text-gray-800">${record.date}</span>
-                        <span class="${parseFloat(record.value) > 0 ? 'text-red-500' : 'text-blue-500'}">${record.value}</span>
-                    </p>
-                    <p class="text-gray-600 mt-1">${record.description}</p>
-                    ${record.details.map(detail => `<p class="text-gray-500 mt-1">• ${detail}</p>`).join('')}
+                    <div class="w-16 font-medium text-gray-500 flex-shrink-0">${record.date}</div>
+                    <div class="w-16 font-semibold ${parseFloat(record.value) > 0 ? 'text-red-500' : 'text-blue-500'} flex-shrink-0">${record.value}</div>
+                    <div class="ml-2">
+                        <p class="font-medium text-gray-800">${record.description}</p>
+                        <div class="text-gray-500 text-[11px]">${record.details.map(d => `<p>${d}</p>`).join('')}</div>
+                    </div>
                 `;
                 historyContainer.appendChild(recordElement);
             });
         }
-        
+          
         function updateCharts(districtType) {
             // Line loss chart data configuration
             const chartConfig = {
                 'long-high': {
                     lossRates: {
+                        labels: ['3/15', '3/22', '3/29', '4/5', '4/12', '4/19', '4/26', '5/3'],
                         actual: [6.8, 6.9, 6.7, 12.5, 12.8, 12.7, 12.9, 12.76],
                         theory: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
-                        lossQuantity: [245, 252, 238, 450, 462, 458, 465, 460],
-                        diffQuantity: [0, 0, 0, 205, 212, 208, 215, 210]
+                        quantity: [245, 252, 238, 450, 462, 458, 465, 460],
+                        diffQuantity: [10, 18, 14, 228, 218, 213, 218, 215]
                     },
                     analysisText: [
-                        '理论线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右',
-                        '<span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与理论线损差值明显增大',
-                        '期间<span class="font-medium">用户用电量、负荷分布</span>无明显变化',
-                        'CT二次侧电流检查发现<span class="text-red-500 font-medium">倍率设置</span>存在问题'
+                        'Theoretical Line Loss Calculation uses <span class="font-medium">integral current method</span>, stable at around 6%',
+                        '<span class="text-red-500 font-medium">April 6th</span> began to suddenly rise, significantly increasing the difference from theoretical line loss',
+                        'During this period, <span class="font-medium">user electricity consumption and load distribution</span> remained unchanged',
+                        'CT current check on the secondary side found <span class="text-red-500 font-medium">problems with the ratio setting</span>'
                     ]
                 },
                 'sudden-high': {
                     lossRates: {
-                        actual: [6.2, 6.3, 6.1, 6.0, 11.8, 11.95, 11.9, 11.95],
-                        theory: [6.3, 6.4, 6.2, 6.3, 6.35, 6.4, 6.38, 6.4],
-                        lossQuantity: [220, 225, 218, 215, 425, 430, 428, 432],
-                        diffQuantity: [0, 0, 0, 0, 190, 198, 195, 200]
+                        labels: ['4/20', '4/22', '4/24', '4/26', '4/28', '4/30', '5/2', '5/4'],
+                        actual: [6.5, 6.6, 6.4, 6.7, 11.8, 11.9, 12.1, 11.95],
+                        theory: [6.3, 6.3, 6.2, 6.4, 6.4, 6.4, 6.5, 6.4],
+                        quantity: [210, 215, 208, 218, 380, 385, 392, 388],
+                        diffQuantity: [6, 10, 6, 10, 173, 178, 182, 178]
                     },
                     analysisText: [
-                        '理论线损率保持在<span class="font-medium">6.2%-6.4%</span>的正常范围',
-                        '<span class="text-red-500 font-medium">4月28日</span>发生突发负荷增长，线损率陡然升高',
-                        '从用电负荷数据看，<span class="font-medium">负荷增幅超过30%</span>',
-                        '结合现场检查，发现<span class="text-red-500 font-medium">季节性空调设备</span>大量启用'
+                        'Theoretical Line Loss Rate remains within the normal range of <span class="font-medium">6.2%-6.4%</span>',
+                        '<span class="text-red-500 font-medium">April 28th</span> sudden load growth occurred, causing a sharp increase in line loss rate',
+                        'From the data of power load, <span class="font-medium">load growth exceeded 30%</span>',
+                        'Combined with on-site inspection, it was found that <span class="text-red-500 font-medium">seasonal air conditioning equipment</span> was widely used'
                     ]
                 },
                 'long-negative': {
                     lossRates: {
-                        actual: [-4.1, -4.2, -4.3, -4.25, -4.2, -4.3, -4.24, -4.24],
-                        theory: [5.8, 5.9, 5.85, 5.8, 5.85, 5.9, 5.85, 5.85],
-                        lossQuantity: [-155, -160, -165, -162, -160, -164, -162, -162],
-                        diffQuantity: [-380, -385, -390, -388, -385, -390, -388, -388]
+                        labels: ['4/10', '4/14', '4/18', '4/22', '4/26', '4/30', '5/4', '5/8'],
+                        actual: [-4.1, -4.3, -4.2, -4.1, -4.4, -4.2, -4.3, -4.24],
+                        theory: [5.8, 5.9, 5.8, 5.9, 5.8, 5.9, 5.8, 5.85],
+                        quantity: [0, 0, 0, 0, 0, 0, 0, 0], // Placeholder, actual quantity is complex
+                        diffQuantity: [-320, -330, -325, -328, -335, -327, -332, -330] // Represents negative loss amount
                     },
                     analysisText: [
-                        '理论线损率在<span class="font-medium">5.8%-5.9%</span>范围内正常波动',
-                        '实际线损率持续为<span class="text-blue-500 font-medium">负值</span>，表明电能计量存在系统性问题',
-                        '负值线损率<span class="font-medium">稳定且持续时间长</span>，典型的长期负损特征',
-                        '现场检查发现总表端<span class="text-red-500 font-medium">电表接线错误</span>，导致正反向电能记录异常'
+                        'Theoretical Line Loss Rate fluctuates within the normal range of <span class="font-medium">5.8%-5.9%</span>',
+                        'Actual Line Loss Rate remains <span class="text-blue-500 font-medium">negative</span>, indicating a systemic problem in power metering',
+                        'Negative Line Loss Rate <span class="font-medium">stable and long-lasting</span>, typical characteristics of long-term negative loss',
+                        'Inspection found that the meter connection at the total table end was <span class="text-red-500 font-medium">incorrect</span>, leading to abnormal recording of positive and negative power'
                     ]
                 },
                 'small-negative': {
                     lossRates: {
-                        actual: [-0.8, -0.85, -0.82, -0.87, -0.83, -0.86, -0.85, -0.85],
-                        theory: [5.1, 5.2, 5.25, 5.2, 5.15, 5.2, 5.2, 5.2],
-                        lossQuantity: [-25, -26, -25, -27, -26, -27, -26, -26],
-                        diffQuantity: [-180, -182, -181, -183, -182, -183, -182, -182]
+                        labels: ['3/25', '3/30', '4/5', '4/10', '4/15', '4/20', '4/25', '4/30'],
+                        actual: [-0.7, -0.8, -0.9, -0.7, -0.8, -0.85, -0.9, -0.8],
+                        theory: [5.1, 5.2, 5.1, 5.2, 5.15, 5.2, 5.1, 5.2],
+                        quantity: [0, 0, 0, 0, 0, 0, 0, 0],
+                        diffQuantity: [-85, -90, -92, -88, -91, -93, -94, -92]
                     },
                     analysisText: [
-                        '理论线损率在<span class="font-medium">5.1%-5.25%</span>范围内波动',
-                        '实际线损率持续为<span class="text-blue-500 font-medium">小负值</span>，且波动很小',
-                        '台区<span class="font-medium">负荷率较低</span>，仅15%左右',
-                        '综合评估认为<span class="text-red-500 font-medium">理论模型在低负荷工况下计算偏差</span>是主因'
+                        'Theoretical Line Loss Rate fluctuates within the range of <span class="font-medium">5.1%-5.25%</span>',
+                        'Actual Line Loss Rate remains <span class="text-blue-500 font-medium">small negative</span>, and the fluctuation is very small',
+                        'The load rate of the area is <span class="font-medium">low</span>, only about 15%',
+                        'Comprehensive evaluation shows that <span class="text-red-500 font-medium">theoretical model has deviation when calculating at low load conditions</span> is the main cause'
                     ]
                 },
                 'sudden-negative': {
                     lossRates: {
-                        actual: [4.8, 4.9, 5.0, 4.85, -3.6, -3.7, -3.76, -3.75],
-                        theory: [4.9, 5.0, 4.95, 4.9, 4.95, 5.0, 4.95, 4.95],
-                        lossQuantity: [320, 325, 330, 322, -240, -245, -248, -247],
-                        diffQuantity: [0, 0, 0, 0, -565, -570, -573, -572]
+                        labels: ['4/15', '4/17', '4/19', '4/21', '4/23', '4/25', '4/27', '4/29'],
+                        actual: [4.9, 4.8, 4.9, -3.5, -3.8, -3.7, -3.6, -3.76],
+                        theory: [4.8, 4.9, 4.8, 4.9, 4.85, 4.9, 4.8, 4.95],
+                        quantity: [150, 148, 152, 0, 0, 0, 0, 0],
+                        diffQuantity: [3, -3, 3, -285, -290, -288, -286, -292]
                     },
                     analysisText: [
-                        '早期线损率在<span class="font-medium">4.8%-5.0%</span>范围内正常波动',
-                        '<span class="text-red-500 font-medium">4月20日</span>线损率突然转为负值，且幅度较大',
-                        '线损率从<span class="font-medium">正常值突变为负值</span>，变化剧烈',
-                        '结合事件记录，推断<span class="text-red-500 font-medium">电表计量故障</span>是主要原因'
+                        'Early Line Loss Rate fluctuates within the normal range of <span class="font-medium">4.8%-5.0%</span>',
+                        '<span class="text-red-500 font-medium">April 20th</span> line loss rate suddenly turned negative, and the amplitude was large',
+                        'Line Loss Rate suddenly changed from <span class="font-medium">normal value to negative value</span>, changed violently',
+                        'Combined with event records, it is inferred that <span class="text-red-500 font-medium">power meter measurement fault</span> is the main reason'
                     ]
                 }
             };
             
             // Update line loss fluctuation tracing chart
             const config = chartConfig[districtType];
+            lossAnalysisChart.data.labels = config.lossRates.labels;
             lossAnalysisChart.data.datasets[0].data = config.lossRates.actual;
             lossAnalysisChart.data.datasets[1].data = config.lossRates.theory;
-            lossAnalysisChart.data.datasets[2].data = config.lossRates.lossQuantity;
+            lossAnalysisChart.data.datasets[2].data = config.lossRates.quantity;
             lossAnalysisChart.data.datasets[3].data = config.lossRates.diffQuantity;
             
             // Adjust Y-axis range
@@ -1492,18 +1529,42 @@
             lossAnalysisChart.options.scales.y.min = Math.floor(minLoss < 0 ? minLoss * 1.2 : 0);
             lossAnalysisChart.options.scales.y.max = Math.ceil(maxLoss * 1.2);
             
-            // Update annotation points
-            if (districtType === 'long-high' || districtType === 'sudden-high') {
+            // Update annotation point
+            if (districtType === 'long-high') {
                 lossAnalysisChart.options.plugins.annotation = {
                     annotations: {
                         point1: {
                             type: 'point',
-                            xValue: districtType === 'long-high' ? 3 : 4,
-                            yValue: districtType === 'long-high' ? 12.5 : 11.8,
+                            xValue: 3,
+                            yValue: 12.5,
                             backgroundColor: 'rgba(255, 99, 132, 0.25)',
                             borderWidth: 1,
                             borderColor: 'rgba(255, 99, 132, 1)',
-                            radius: 10
+                            radius: 10,
+                            label: {
+                                content: 'Abnormal Point',
+                                enabled: true,
+                                position: 'top'
+                            }
+                        }
+                    }
+                };
+            } else if (districtType === 'sudden-high') {
+                 lossAnalysisChart.options.plugins.annotation = {
+                    annotations: {
+                        point1: {
+                            type: 'point',
+                            xValue: 4,
+                            yValue: 11.8,
+                            backgroundColor: 'rgba(255, 159, 64, 0.25)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            radius: 10,
+                            label: {
+                                content: 'Load Increase Point',
+                                enabled: true,
+                                position: 'top'
+                            }
                         }
                     }
                 };
@@ -1512,82 +1573,199 @@
                     annotations: {
                         point1: {
                             type: 'point',
-                            xValue: 4,
-                            yValue: -3.6,
-                            backgroundColor: 'rgba(66, 153, 225, 0.25)',
+                            xValue: 3,
+                            yValue: -3.5,
+                            backgroundColor: 'rgba(153, 102, 255, 0.25)',
                             borderWidth: 1,
-                            borderColor: 'rgba(66, 153, 225, 1)',
-                            radius: 10
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            radius: 10,
+                            label: {
+                                content: 'Sudden Negative Loss Point',
+                                enabled: true,
+                                position: 'bottom'
+                            }
                         }
                     }
                 };
             } else {
-                lossAnalysisChart.options.plugins.annotation = {
-                    annotations: {}
-                };
+                lossAnalysisChart.options.plugins.annotation = { annotations: {} };
             }
             
             lossAnalysisChart.update();
             
             // Update fluctuation analysis text
             const analysisContainer = document.querySelector('.mt-4 ul');
-            analysisContainer.innerHTML = config.analysisText.map(text => `<li>${text}</li>`).join('');
+            analysisContainer.innerHTML = config.analysisText.map(text => `<li class="text-sm text-gray-600 mb-1">${text}</li>`).join('');
             
-            // Update other specific charts based on area type
+            // Update other specific charts based on district type
             updateSpecificCharts(districtType);
         }
-        
+          
         // Update other specific charts
         function updateSpecificCharts(districtType) {
-            // Here you can update other charts based on area type
+            // Here you can update other charts based on district type
             // For example, update load curve, three-phase imbalance, etc.
             
             // Example: Update load curve
             if (districtType === 'sudden-high') {
-                loadCurveChart.data.datasets[0].data = [42, 30, 48, 75, 70, 82];
-                loadCurveChart.data.datasets[1].data = [38, 28, 45, 65, 60, 70];
-                loadCurveChart.update();
-            } else if (districtType === 'long-high') {
-                loadCurveChart.data.datasets[0].data = [35, 25, 40, 60, 55, 68];
-                loadCurveChart.data.datasets[1].data = [38, 28, 45, 65, 60, 70];
-                loadCurveChart.update();
+                loadCurveChart.data.datasets[0].data = [42, 30, 48, 75, 70, 82]; // Example data for sudden high
+            } else if (districtType === 'long-negative') {
+                loadCurveChart.data.datasets[0].data = [38, 28, 42, 62, 58, 70]; // Example data for long negative
+            } else {
+                loadCurveChart.data.datasets[0].data = [35, 25, 40, 60, 55, 68]; // Default data
             }
+            loadCurveChart.update();
             
             // Example: Update three-phase imbalance data
             if (districtType === 'long-high') {
-                phaseBalanceChart.data.datasets[0].data = [145, 98, 162];
-                phaseBalanceChart.data.datasets[1].data = [125, 118, 142];
-                phaseBalanceChart.update();
-            } else if (districtType === 'long-negative') {
-                phaseBalanceChart.data.datasets[0].data = [165, 85, 155];
-                phaseBalanceChart.data.datasets[1].data = [125, 118, 142];
-                phaseBalanceChart.update();
+                phaseBalanceChart.data.datasets[0].data = [145, 98, 162]; // Example data for long high
+            } else if (districtType === 'small-negative') {
+                phaseBalanceChart.data.datasets[0].data = [110, 105, 115]; // Example data for small negative
+            } else {
+                phaseBalanceChart.data.datasets[0].data = [130, 120, 140]; // Default data
             }
+            phaseBalanceChart.update();
         }
-
+  
         // Dropdown menu behavior
         document.addEventListener('DOMContentLoaded', function() {
             const menuButton = document.getElementById('main-menu-button');
             const menuDropdown = document.getElementById('main-menu-dropdown');
             
-            // Toggle dropdown when menu button is clicked
+            // Toggle dropdown menu when menu button is clicked
             menuButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 menuDropdown.classList.toggle('hidden');
             });
             
-            // Close dropdown when clicking outside
+            // Close dropdown menu when clicking outside
             document.addEventListener('click', function(e) {
                 if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
                     menuDropdown.classList.add('hidden');
                 }
             });
             
-            // Prevent dropdown from closing when clicking inside it
+            // Prevent closing dropdown menu when clicking inside
             menuDropdown.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
         });
+  
+        // Multi-dimensional comparison analysis modal control
+        document.addEventListener('DOMContentLoaded', function() {
+            // Existing code for dropdown menu behavior...
+            
+            // Multi-dimensional comparison analysis modal control
+            const modal = document.getElementById('analysisModal');
+            const openModalBtn = document.getElementById('openAnalysisModal');
+            const closeModalBtn = document.getElementById('closeAnalysisModal');
+            
+            // Open modal
+            openModalBtn.addEventListener('click', function() {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+            
+            // Close modal
+            closeModalBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                document.body.style.overflow = ''; // Restore background scrolling
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = ''; // Restore background scrolling
+                }
+            });
+            
+            // View switching functionality - maintain original logic
+            const normalView = document.getElementById('normalComparisonView');
+            const historyView = document.getElementById('historyComparisonView');
+            const compareNormalBtn = document.getElementById('compareNormal');
+            const compareHistoryBtn = document.getElementById('compareHistory');
+            // Logic for switching views between normal and history comparison is handled in the other DOMContentLoaded event listener
+            
+            // District switching functionality
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.addEventListener('change', function() {
+                updateDistrictInfo(this.value);
+            });
+            
+            // Initialize district information
+            updateDistrictInfo('long-high');
+            
+            // Initialize tag selection functionality
+            setupTagSelection();
+            
+            // Governance button click event
+            document.getElementById('governanceButton').addEventListener('click', function() {
+                const districtType = document.getElementById('districtSelect').value;
+                const hasGovernance = districtType === 'sudden-high' || districtType === 'long-negative';
+                
+                // Get selected diagnostic tags
+                const selectedTags = getSelectedTags();
+                const tagsParam = encodeURIComponent(JSON.stringify(selectedTags));
+                const currentLang = window.location.pathname.split('/')[1] || 'en'; // Get current language from URL
+                const governancePath = `/${currentLang}/governance`;
+                
+                if (hasGovernance) {
+                    // View existing governance suggestions
+                     window.location.href = `${governancePath}?district=${districtType}&tags=${tagsParam}`;
+                } else {
+                    // Generate new governance suggestions
+                    alert("Generating governance suggestions for the current area, you will be redirected to the governance suggestions page shortly...");
+                    setTimeout(function() {
+                        window.location.href = `${governancePath}?district=${districtType}&new=true&tags=${tagsParam}`;
+                    }, 1500);
+                }
+            });
+        });
+  
+        // Handle diagnostic tag selection functionality
+        function setupTagSelection() {
+            const selectAllCheckbox = document.getElementById('select-all-tags');
+            
+            // Select or deselect all tags
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.diagnostic-tag-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+            
+            // Listen for changes to individual tags to update select all status
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.classList.contains('diagnostic-tag-checkbox')) {
+                    updateSelectAllCheckbox();
+                }
+            });
+        }
+          
+        // Update select all checkbox status
+        function updateSelectAllCheckbox() {
+            const selectAllCheckbox = document.getElementById('select-all-tags');
+            const checkboxes = document.querySelectorAll('.diagnostic-tag-checkbox');
+            const checkedBoxes = document.querySelectorAll('.diagnostic-tag-checkbox:checked');
+            
+            // If all checkboxes are checked, select all checkbox is checked
+            selectAllCheckbox.checked = checkboxes.length > 0 && checkboxes.length === checkedBoxes.length;
+        }
+          
+        // Get selected diagnostic tags
+        function getSelectedTags() {
+            const selectedTags = [];
+            const checkedBoxes = document.querySelectorAll('.diagnostic-tag-checkbox:checked');
+            checkedBoxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    selectedTags.push(label.textContent.trim());
+                }
+            });
+            return selectedTags;
+        }
+
     </script>
 </body>
 </html> 

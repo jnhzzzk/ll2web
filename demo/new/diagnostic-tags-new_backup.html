@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能诊断标签卡片弹窗示例</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#309C9F',
+                        'primary-light': '#e6f1f1',
+                        'primary-dark': '#256e70',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">智能诊断标签卡片弹窗示例</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">智能诊断标签</h2>
+            <div class="flex flex-col space-y-3" id="diagnosticTags">
+                <!-- 诊断标签会通过JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 返回按钮 -->
+        <div class="mt-6">
+            <a href="/cn/diagnostic.html" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-1"></i> 返回诊断分析页面
+            </a>
+        </div>
+    </div>
+    
+    <!-- 诊断标签详情弹窗 -->
+    <div id="tagDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-3xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+                <h2 id="tagModalTitle" class="text-lg font-medium text-gray-900">标签详情</h2>
+                <button id="closeTagModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="tagModalContent" class="p-5">
+                <!-- 弹窗内容将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 诊断标签数据
+        const diagnosticTags = {
+            // 标签库
+            'tag-library': [
+                {
+                    title: 'CT互感器倍率错误',
+                    probability: '92%',
+                    icon: 'exclamation-triangle',
+                    color: 'red', 
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "本台区线损率异常高达12.76%，远超正常水平5%",
+                            "电流互感器倍率突然发生变化，由300/5变更为150/5",
+                            "变压器容量与记录电流不匹配，显示电流值远低于实际值",
+                            "倍率变更发生在2023-02-22期间，与线损率开始上升时间吻合",
+                            "总表与子表电量反差显著，总表记录电量被倍率错误缩小了一半"
+                        ],
+                        // 时序图数据 - 修正为真实相关的业务数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1510, 1520, 1535, 765, 755, 770, 760, 780, 765, 775],
+                            lossRate: [5.2, 5.4, 5.3, 11.8, 12.2, 12.5, 12.3, 12.4, 12.8, 12.7]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "PP-CT Short/Bypass occurrence",
+                                eventCode: "Event-269",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "PP-CT Short/Bypass restoration",
+                                eventCode: "Event-270",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance occurrence",
+                                eventCode: "Event-281",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance restoration",
+                                eventCode: "Event-282",
+                                date: "2023-02-24",
+                                relatedUser: "总表"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "CT倍率变更",
+                                date: "2023-02-22",
+                                relatedUser: "总表",
+                                details: "300/5 → 150/5"
+                            },
+                            {
+                                eventType: "计量装置检修",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '台区户表关系错误',
+                    probability: '84%',
+                    icon: 'file-alt',
+                    color: 'orange',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区总表记录电量与子表电量合计差异过大，线损率持续高于合理水平",
+                            "发现台区内3户用电大户（编号U2023102等）未正确挂接到该台区",
+                            "系统中存在总表供电但电量未计入统计的'失联表'现象",
+                            "区域档案中未完整记录所有实际接入用户信息",
+                            "台区改造后未及时更新户表关系"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1498, 1522, 1540, 1502, 1485, 1650, 1720, 1835],
+                            lossRate: [6.1, 6.2, 6.3, 6.1, 8.4, 9.5, 9.3, 11.8, 12.5, 13.8]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Remote connected",
+                                eventCode: "Event-514",
+                                date: "2023-02-18",
+                                relatedUser: "用户U20230102"
+                            },
+                            {
+                                eventType: "Phase sequence reversal occurrence",
+                                eventCode: "Event-299",
+                                date: "2023-02-20",
+                                relatedUser: "用户U20230108"
+                            },
+                            {
+                                eventType: "Online (GPRS)",
+                                eventCode: "Event-90",
+                                date: "2023-02-25",
+                                relatedUser: "U2023102 (共3户)"
+                            },
+                            {
+                                eventType: "Absence of A Phases occurrence",
+                                eventCode: "Event-202",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230105"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "线路改造",
+                                date: "2023-02-20",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "用户迁移",
+                                date: "2023-02-18",
+                                relatedUser: "U2023055... (共5户)"
+                            },
+                            {
+                                eventType: "户表关系变更",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230102, U20230105, U20230108"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '用电负荷突增',
+                    probability: '78%',
+                    icon: 'bolt',
+                    color: 'yellow',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区用电负荷在近期出现持续上升趋势，异常峰值高于历史均值40%以上",
+                            "增长主要来自3户大型用户，单日用电量增幅超过100%",
+                            "负荷突增与温度变化不匹配，排除气温因素影响",
+                            "负荷变化集中在白天工作时段，疑似新增生产设备或商业活动",
+                            "台区整体线损率随负荷增长有所提高，但仍处于合理范围"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1520, 1560, 1780, 1860, 2050, 2180, 2210, 2250],
+                            lossRate: [5.2, 5.3, 5.3, 5.4, 5.8, 6.2, 6.5, 6.8, 6.9, 7.0]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "L1 current over occurrence",
+                                eventCode: "Event-251",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230421"
+                            },
+                            {
+                                eventType: "L2 current over occurrence",
+                                eventCode: "Event-253",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230456"
+                            },
+                            {
+                                eventType: "Power over occurrence",
+                                eventCode: "Event-1023",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230456"
+                            },
+                            {
+                                eventType: "Power over restoration",
+                                eventCode: "Event-1024",
+                                date: "2023-02-26",
+                                relatedUser: "用户U20230456"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "用户容量变更",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230456"
+                            },
+                            {
+                                eventType: "设备参数变更",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230421"
+                            },
+                            {
+                                eventType: "用电类型变更",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230456"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '低压设备故障',
+                    probability: '75%',
+                    icon: 'exclamation-triangle',
+                    color: 'orange',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区线损率突然上升，同时有多次低电压事件记录",
+                            "多户用户同时报告电压不稳定问题，电压波动超过额定值±7%",
+                            "发现台区低压设备接触不良，引起局部发热增加能耗",
+                            "设备故障发生在恶劣天气后，可能与雷击或电涌有关",
+                            "部分线路接头温度异常，红外测温显示超过正常值35℃"
+                        ],
+                        // 治理建议内容  
+                        suggestions: [
+                            "1. 立即对台区低压配电设备进行全面检查和维修",
+                            "2. 更换老化的接头和连接器，确保良好接触",
+                            "3. 对线路进行红外测温巡检，发现热点及时处理",
+                            "4. 加装电涌保护装置，防止天气因素导致的设备损坏",
+                            "5. 建立设备定期检查机制，预防性维护老化设备"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1530, 1540, 1570, 1650, 1690, 1680, 1670, 1630],
+                            lossRate: [5.2, 5.3, 7.8, 8.5, 8.7, 9.2, 9.5, 9.3, 8.9, 8.6]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "欠压告警",
+                                eventCode: "Event-5633",
+                                date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "相位不平衡",
+                                eventCode: "Event-283",
+                                date: "2023-02-23",
+                                relatedUser: "总表"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "设备故障维修",
+                                date: "2023-02-25",
+                                relatedUser: "台区低压系统"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '窃电行为突增',
+                    probability: '68%',
+                    icon: 'user-secret',
+                    color: 'red',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区线损率持续异常，总表与用户表计量差异持续扩大",
+                            "多次检测到电表外壳开启、端子盖开启等异常事件",
+                            "部分用户用电量异常下降，与季节性用电规律不符",
+                            "多台电表检测到磁场干扰事件，疑似使用强磁干扰计量",
+                            "夜间用电比例异常上升，但用户表记录电量未随之增加"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1490, 1520, 1540, 1550, 1570, 1590, 1610, 1630, 1650],
+                            lossRate: [5.2, 5.5, 8.6, 12.3, 13.5, 14.2, 15.8, 16.3, 16.5, 17.2]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Terminal cover opened",
+                                eventCode: "Event-289",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230112"
+                            },
+                            {
+                                eventType: "Strong DC magnetic field detected",
+                                eventCode: "Event-297",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230225"
+                            },
+                            {
+                                eventType: "Current reverse occurrence",
+                                eventCode: "Event-249",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230336"
+                            },
+                            {
+                                eventType: "Main cover opened",
+                                eventCode: "Event-287",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230112"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "CT倍率检查",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230112"
+                            },
+                            {
+                                eventType: "电表检修",
+                                date: "2023-02-26",
+                                relatedUser: "用户U20230225, U20230336"
+                            },
+                            {
+                                eventType: "计量装置检修",
+                                date: "2023-02-27",
+                                relatedUser: "多户用户"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '恶劣天气影响',
+                    probability: '62%',
+                    icon: 'cloud-rain',
+                    color: 'blue',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区线损率随极端天气条件突然上升，历时约3-5天后恢复",
+                            "线损率异常与当地气象部门记录的暴雨/大风天气高度吻合",
+                            "多次记录到短时间停电和电压波动事件，符合恶劣天气特征",
+                            "多个相邻台区同时出现类似线损特征，呈区域性分布",
+                            "设备湿度传感器数据异常，显示设备环境潮湿"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1490, 1420, 1350, 1380, 1450, 1520, 1550, 1530, 1510],
+                            lossRate: [5.2, 5.4, 9.3, 13.5, 14.2, 11.6, 8.5, 6.2, 5.8, 5.5]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Power off (short)",
+                                eventCode: "Event-7",
+                                date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "Power on (short)",
+                                eventCode: "Event-8",
+                                date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "Offline (GPRS)",
+                                eventCode: "Event-91",
+                                date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "L1 Under voltage occurrence",
+                                eventCode: "Event-5633",
+                                date: "2023-02-23",
+                                relatedUser: "多户用户"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "线路检修",
+                                date: "2023-02-24",
+                                relatedUser: "台区配电线路"
+                            },
+                            {
+                                eventType: "设备维护",
+                                date: "2023-02-24",
+                                relatedUser: "台区设备"
+                            },
+                            {
+                                eventType: "防雷装置检查",
+                                date: "2023-02-25",
+                                relatedUser: "台区设备"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '计量装置接线错误',
+                    probability: '58%',
+                    icon: 'plug',
+                    color: 'red',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区总表电能计量值突然异常下降，线损率持续为负值",
+                            "总表二次侧接线相序错误，导致部分功率未被正确计量",
+                            "功率因数计算结果异常，与实际负载特性不符",
+                            "三相电流不平衡度正常，但计量电能显著低于预期",
+                            "维护记录显示近期进行过计量装置改造，时间与异常开始吻合"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1520, 980, 960, 940, 920, 910, 900, 885],
+                            lossRate: [5.2, 5.3, 5.2, -25.5, -28.3, -29.5, -30.8, -31.5, -32.2, -33.6]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Phase sequence reversal occurrence",
+                                eventCode: "Event-299",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Phase sequence reversal restoration",
+                                eventCode: "Event-300",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Power unbalance occurrence",
+                                eventCode: "Event-281",
+                                date: "2023-02-23",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "Low power factor occurrence",
+                                eventCode: "Event-301",
+                                date: "2023-02-23",
+                                relatedUser: "总表"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "计量装置改造",
+                                date: "2023-02-22",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "电表检修",
+                                date: "2023-02-23",
+                                relatedUser: "总表"
+                            },
+                            {
+                                eventType: "接线检查",
+                                date: "2023-02-24",
+                                relatedUser: "总表"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '电表正反向设置错误',
+                    probability: '55%',
+                    icon: 'exchange-alt',
+                    color: 'orange',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "多次检测到电表电流反向事件，涉及多个测量点",
+                            "计量数据显示部分电能被记录在反向电量中，未纳入正向用电统计",
+                            "问题始于电表更换或参数设置更新后，疑似安装方向或参数配置有误",
+                            "多个测量点在同一时间段发生类似问题，可能源于批量参数设置错误",
+                            "电表运行状态正常，但正反向电能累积与实际用电情况不符"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1480, 1150, 1080, 1120, 1140, 1130, 1150, 1320],
+                            lossRate: [5.2, 5.3, 6.8, 18.5, 22.3, 20.8, 19.5, 20.2, 18.8, 15.3]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Current reverse occurrence",
+                                eventCode: "Event-249",
+                                date: "2023-02-22",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "L1 Current reverse occurrence",
+                                eventCode: "Event-257",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230186"
+                            },
+                            {
+                                eventType: "L2 Current reverse occurrence",
+                                eventCode: "Event-259",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230112"
+                            },
+                            {
+                                eventType: "L3 Current reverse occurrence",
+                                eventCode: "Event-261",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230112"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "电表参数修正",
+                                date: "2023-02-25",
+                                relatedUser: "多户用户"
+                            },
+                            {
+                                eventType: "电表更换",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230186"
+                            },
+                            {
+                                eventType: "参数配置检查",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230112"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '分布式能源反向计量异常',
+                    probability: '50%',
+                    icon: 'solar-panel',
+                    color: 'green',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区内近期新增光伏用户，但反向电能计量显著低于预期",
+                            "光伏发电高峰期台区线损率异常升高，疑似反向电能计量不准确",
+                            "部分光伏用户电表未正确配置双向计量功能，导致反向电能计量失准",
+                            "光伏并网点电压偏高，但反向功率记录不足，计量数据不合理",
+                            "台区内分布式能源用户与普通用户电量统计混乱，影响线损计算"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1490, 1450, 1430, 1410, 1380, 1350, 1320, 1290],
+                            lossRate: [5.2, 5.3, 5.5, 8.7, 10.5, 11.2, 12.8, 13.5, 14.2, 15.0]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Current reverse occurrence",
+                                eventCode: "Event-249",
+                                date: "2023-02-23",
+                                relatedUser: "光伏用户U20230532"
+                            },
+                            {
+                                eventType: "Power over restoration",
+                                eventCode: "Event-1024",
+                                date: "2023-02-24",
+                                relatedUser: "光伏用户U20230546"
+                            },
+                            {
+                                eventType: "L1 Current reverse occurrence",
+                                eventCode: "Event-257",
+                                date: "2023-02-24",
+                                relatedUser: "光伏用户U20230532"
+                            },
+                            {
+                                eventType: "L2 Current reverse occurrence",
+                                eventCode: "Event-259",
+                                date: "2023-02-24",
+                                relatedUser: "光伏用户U20230546"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "光伏并网登记",
+                                date: "2023-02-20",
+                                relatedUser: "用户U20230532,U20230546,U20230571"
+                            },
+                            {
+                                eventType: "电表参数配置",
+                                date: "2023-02-21",
+                                relatedUser: "光伏用户电表"
+                            },
+                            {
+                                eventType: "计量装置检查",
+                                date: "2023-02-22",
+                                relatedUser: "光伏用户"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '时钟同步偏差',
+                    probability: '45%',
+                    icon: 'clock',
+                    color: 'blue',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区内多台电表时钟漂移异常，导致采集数据时间错位",
+                            "时间记录与实际用电时序不匹配，造成计量统计误差",
+                            "电表内部时钟漂移超过阈值，触发时钟同步告警",
+                            "部分电表时钟偏差超过30分钟，远超正常误差范围",
+                            "远程时钟同步操作后，线损波动恢复正常范围"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1490, 1350, 1320, 1360, 1420, 1470, 1510, 1500],
+                            lossRate: [5.2, 5.3, 5.8, 9.3, 10.2, 9.5, 7.2, 6.5, 5.4, 5.3]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "Clock synchronization over threshold",
+                                eventCode: "Event-1538",
+                                date: "2023-02-22",
+                                relatedUser: "用户U20230412,U20230425"
+                            },
+                            {
+                                eventType: "Clock drift over threshold",
+                                eventCode: "Event-12803",
+                                date: "2023-02-23",
+                                relatedUser: "用户U20230438"
+                            },
+                            {
+                                eventType: "Meter alarm status word is set",
+                                eventCode: "Event-12804",
+                                date: "2023-02-24",
+                                relatedUser: "用户U20230412"
+                            },
+                            {
+                                eventType: "Offline (GPRS-Time out)",
+                                eventCode: "Event-92",
+                                date: "2023-02-24",
+                                relatedUser: "多户用户"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "电表时钟校准",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230412,U20230425,U20230438"
+                            },
+                            {
+                                eventType: "时钟同步参数修改",
+                                date: "2023-02-25",
+                                relatedUser: "台区计量终端"
+                            },
+                            {
+                                eventType: "通信模块维护",
+                                date: "2023-02-26",
+                                relatedUser: "台区多户用户"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '供电半径过长',
+                    probability: '40%',
+                    icon: 'ruler',
+                    color: 'green',
+                    details: {
+                        // 分析结论内容
+                        analysis: [
+                            "台区末端用户电压偏低，与变压器距离超过600米",
+                            "线损率随用电负荷增加而显著提高，符合长半径供电特征",
+                            "电压降与用户距离变压器远近呈正相关，最远户电压降达到7%以上",
+                            "台区导线截面偏小，不足以支撑远距离低损耗供电",
+                            "高峰负荷期间线损率偏高，远端户电压质量差"
+                        ],
+                        // 时序图数据
+                        mainMeterChartData: {
+                            dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                            usage: [1485, 1510, 1560, 1620, 1680, 1710, 1750, 1770, 1740, 1650],
+                            lossRate: [5.2, 5.3, 6.2, 7.8, 8.5, 9.2, 9.5, 9.8, 9.3, 8.2]
+                        },
+                        // 档案记录 - 电表事件
+                        meterEvents: [
+                            {
+                                eventType: "L1 Under voltage occurrence",
+                                eventCode: "Event-5633",
+                                date: "2023-02-25",
+                                relatedUser: "远端用户U20230621"
+                            },
+                            {
+                                eventType: "L2 Under voltage occurrence",
+                                eventCode: "Event-5635",
+                                date: "2023-02-25",
+                                relatedUser: "远端用户U20230622"
+                            },
+                            {
+                                eventType: "Low power factor occurrence",
+                                eventCode: "Event-301",
+                                date: "2023-02-25",
+                                relatedUser: "用户U20230614"
+                            },
+                            {
+                                eventType: "L1 Under voltage restoration",
+                                eventCode: "Event-5634",
+                                date: "2023-02-26",
+                                relatedUser: "远端用户U20230621"
+                            }
+                        ],
+                        // 档案变更记录
+                        archiveChanges: [
+                            {
+                                eventType: "供电方案评估",
+                                date: "2023-02-27",
+                                relatedUser: "台区供电系统"
+                            },
+                            {
+                                eventType: "线路检测",
+                                date: "2023-02-26",
+                                relatedUser: "远端用户线路"
+                            },
+                            {
+                                eventType: "电压质量分析",
+                                date: "2023-02-25",
+                                relatedUser: "台区供电系统"
+                            }
+                        ]
+                    }
+                }
+            ]
+        };
+        
+        // 当前显示的异常类型
+        let currentType = 'tag-library';
+        
+        // 显示标签
+        function renderTags(type) {
+            currentType = type;
+            const tagContainer = document.getElementById('diagnosticTags');
+            tagContainer.innerHTML = '';
+            
+            // 添加标签
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'flex flex-col space-y-3';
+            
+            diagnosticTags[type].forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg cursor-pointer hover:shadow-md transition-shadow`;
+                tagElement.innerHTML = `
+                    <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-${tag.color}-100 rounded-full">
+                        <i class="fas fa-${tag.icon} text-${tag.color}-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-${tag.color}-800">${tag.title}</h3>
+                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
+                    </div>
+                `;
+                tagElement.addEventListener('click', () => showTagDetail(type, index));
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            tagContainer.appendChild(tagsContainer);
+        }
+        
+        // 显示标签详情弹窗
+        function showTagDetail(type, tagIndex) {
+            const tagData = diagnosticTags[type][tagIndex];
+            const modal = document.getElementById('tagDetailModal');
+            const modalTitle = document.getElementById('tagModalTitle');
+            const modalContent = document.getElementById('tagModalContent');
+            
+            // 设置标题
+            modalTitle.textContent = tagData.title;
+            
+            // 设置弹窗内容
+            modalContent.innerHTML = '';
+            
+            // 统一的UI框架
+            modalContent.innerHTML = `
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <!-- 左侧：总表信息 -->
+                        <div class="flex-1 bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-chart-line text-primary mr-1"></i> 总表信息
+                            </h3>
+                            
+                            <!-- 档案信息 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-folder text-gray-500 mr-1"></i> 档案信息
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">测量点ID:</span>
+                                            <span class="font-medium">PNT2023063</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">所属区域:</span>
+                                            <span class="font-medium">郊区东供电所</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">测量点状态:</span>
+                                            <span class="font-medium">正常</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">测量点编号:</span>
+                                            <span class="font-medium">MP2023063</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电表类型:</span>
+                                            <span class="font-medium">三相电表</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">通信类型:</span>
+                                            <span class="font-medium">GPRS</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">用电类型:</span>
+                                            <span class="font-medium">农村用电</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">电流CT变比:</span>
+                                            <span class="font-medium">100/5</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">是否总表:</span>
+                                            <span class="font-medium">是</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">台区编号:</span>
+                                            <span class="font-medium">T2023063</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">用户数量:</span>
+                                            <span class="font-medium">63户</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">变压器容量:</span>
+                                            <span class="font-medium">160kVA</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">经度:</span>
+                                            <span class="font-medium">120.3456</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">纬度:</span>
+                                            <span class="font-medium">30.3278</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 采集数据 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-database text-gray-500 mr-1"></i> 采集数据
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="text-xs font-medium text-gray-700 mb-2">总表上月数据</div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">月用电量:</span>
+                                            <span class="font-medium">49,500 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">最大负荷:</span>
+                                            <span class="font-medium">170 kW</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">日正向有功累计:</span>
+                                            <span class="font-medium">1,650 kWh/天</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">日反向有功累计:</span>
+                                            <span class="font-medium">0 kWh/天</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">台区供电量:</span>
+                                            <span class="font-medium">49,500 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">台区用电量:</span>
+                                            <span class="font-medium">45,441 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">采集成功率:</span>
+                                            <span class="font-medium">100%</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">线损率:</span>
+                                            <span class="font-medium text-orange-600">8.2%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 时序数据可视化 -->
+                                    <div class="mt-3">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="text-gray-600 font-medium">电流/功率因数日维度变化</span>
+                                        </div>
+                                        <div class="h-40">
+                                            <canvas id="mainMeterTimeSeriesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 档案记录 -->
+                            <div>
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-file-alt text-gray-500 mr-1"></i> 档案记录
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs space-y-3">
+                                    <!-- 电表事件记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">电表事件记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${tagData.details && tagData.details.meterEvents ? tagData.details.meterEvents.map(event => `
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">${event.eventType}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">${event.eventCode}</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">${event.date}</td>
+                                                    <td class="py-1 px-2 text-gray-500">${event.relatedUser}</td>
+                                                </tr>
+                                                `).join('') : ''}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 档案变更记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">档案变更记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${tagData.details && tagData.details.archiveChanges ? tagData.details.archiveChanges.map(event => `
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-route text-purple-500 mr-1"></i>
+                                                            <span class="font-medium">${event.eventType}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">${event.date}</td>
+                                                    <td class="py-1 px-2 text-gray-500">${event.relatedUser}</td>
+                                                </tr>
+                                                `).join('') : ''}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：子表信息 -->
+                        <div class="flex-1 bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-table text-primary mr-1"></i> 子表信息
+                                <span class="text-xs font-normal text-gray-500">(165户)</span>
+                            </h3>
+                            
+                            <!-- 档案信息 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-folder text-gray-500 mr-1"></i> 档案信息
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">单相表数量:</span>
+                                            <span class="font-medium">118台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">三相表数量:</span>
+                                            <span class="font-medium">21台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">最新接入日期:</span>
+                                            <span class="font-medium">2023-02-25</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">漏挂接表计:</span>
+                                            <span class="font-medium text-orange-600">3台</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 采集数据 -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-database text-gray-500 mr-1"></i> 采集数据
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs">
+                                    <div class="text-xs font-medium text-gray-700 mb-2">用户上月数据</div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-gray-500">月用电量:</span>
+                                            <span class="font-medium">45,441 kWh</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">平均负荷:</span>
+                                            <span class="font-medium">3.02 kW/户</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">日正向有功累计:</span>
+                                            <span class="font-medium">1,515 kWh/天</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">普通表数量:</span>
+                                            <span class="font-medium">63台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">普通表采集数量:</span>
+                                            <span class="font-medium">63台</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500">平均采集成功率:</span>
+                                            <span class="font-medium">100%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 时序数据可视化 -->
+                                    <div class="mt-3">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="text-gray-600 font-medium">三相电流不平衡度变化</span>
+                                        </div>
+                                        <div class="h-40">
+                                            <canvas id="subMeterTimeSeriesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 档案记录 -->
+                            <div>
+                                <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                    <i class="fas fa-file-alt text-gray-500 mr-1"></i> 档案记录
+                                </h4>
+                                <div class="bg-gray-50 rounded p-2 text-xs space-y-3">
+                                    <!-- 电表事件记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">电表事件记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件码</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">Current unbalance occurrence</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">Event-279</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-23</td>
+                                                    <td class="py-1 px-2 text-gray-500">用户U20230195</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-tools text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">Current unbalance restoration</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2">
+                                                        <span class="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">Event-280</span>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-24</td>
+                                                    <td class="py-1 px-2 text-gray-500">用户U20230195</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 档案变更记录子项 -->
+                                    <div>
+                                        <div class="text-xs font-medium text-gray-600 mb-1">档案变更记录</div>
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">事件类型</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">日期</th>
+                                                    <th class="py-1.5 px-2 text-left text-gray-600 font-medium">相关用户</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-user-plus text-green-500 mr-1"></i>
+                                                            <span class="font-medium">用户添加</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-25</td>
+                                                    <td class="py-1 px-2 text-gray-500">U20230102, U20230105, U20230108</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2">
+                                                        <div class="flex items-center">
+                                                            <i class="fas fa-project-diagram text-blue-500 mr-1"></i>
+                                                            <span class="font-medium">台区拓扑结构变更</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-1 px-2 text-gray-500">2023-02-20</td>
+                                                    <td class="py-1 px-2 text-gray-500">T2023084台区</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 错误分析与治理建议 -->
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 左侧：分析结论 -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-chart-pie text-primary mr-1"></i> 分析结论
+                            </h3>
+                            <div class="text-xs text-gray-600">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    ${tagData.details && tagData.details.analysis ? tagData.details.analysis.map(item => `
+                                    <li>${item}</li>
+                                    `).join('') : '<li>无分析结论</li>'}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：匹配概率 -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-sm font-medium text-gray-800 border-b pb-2 mb-3">
+                                <i class="fas fa-percentage text-primary mr-1"></i> 匹配概率
+                            </h3>
+                            <div class="text-xs text-gray-600" id="probabilityContent">
+                                <!-- 匹配概率内容将根据当前标签动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 显示弹窗
+            modal.classList.remove('hidden');
+            
+            // 根据标签类型生成匹配概率表格
+            const probabilityContent = document.getElementById('probabilityContent');
+            const tagTitle = tagData.title;
+            const tagProbability = tagData.probability;
+            
+            // 为不同标签生成对应的匹配概率内容
+            let probabilityHtml = '';
+            
+            if (tagTitle === 'CT互感器倍率错误') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率异常持续</td>
+                                <td class="text-center py-1 px-2">35%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">32.2%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">CT变更记录</td>
+                                <td class="text-center py-1 px-2">30%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">29.4%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电流异常事件</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">18.5%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">功率因数异常</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8.7%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电能计量突变</td>
+                                <td class="text-center py-1 px-2">5%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">3.2%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">92%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '台区户表关系错误') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">台区线损率持续异常</td>
+                                <td class="text-center py-1 px-2">40%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">35%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">子表用电量合计偏低</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">22%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">台区改造后户表关系变更</td>
+                                <td class="text-center py-1 px-2">18%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">用户上线通信事件记录</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">相位关系异常</td>
+                                <td class="text-center py-1 px-2">7%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">4%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">84%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '用电负荷突增') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电流过载事件频发</td>
+                                <td class="text-center py-1 px-2">32%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">25%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">用电量突增超过40%</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">20%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">工业用户容量变更记录</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">负荷变化集中在工作时段</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">10%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率变化趋势合理</td>
+                                <td class="text-center py-1 px-2">8%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">78%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '窃电行为突增') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率持续异常高</td>
+                                <td class="text-center py-1 px-2">30%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">22%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表开盖/端子盖开启事件</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">18%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">强磁场干扰事件记录</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电流反向事件</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损与负荷变化不符</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">5%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">68%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '恶劣天气影响') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损与气象数据高度相关</td>
+                                <td class="text-center py-1 px-2">28%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">20%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">多户用户同时掉线/停电</td>
+                                <td class="text-center py-1 px-2">24%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">区域性线损异常特征</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">设备保护动作记录</td>
+                                <td class="text-center py-1 px-2">16%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损恢复趋势明显</td>
+                                <td class="text-center py-1 px-2">12%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">7%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">62%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '计量装置接线错误') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">相序异常事件记录</td>
+                                <td class="text-center py-1 px-2">30%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">20%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">功率因数异常</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">计量装置改造记录</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率持续为负</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">6%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电能计量突变</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">5%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">58%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '电表正反向设置错误') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电流反向事件频发</td>
+                                <td class="text-center py-1 px-2">30%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">18%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">反向电量异常增加</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表参数批量修改记录</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表更换后异常</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">6%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率持续异常</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">4%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">55%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '分布式能源反向计量异常') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电流反向事件频发</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">16%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">光伏并网登记记录</td>
+                                <td class="text-center py-1 px-2">22%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">反向电量异常低</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">10%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率持续升高</td>
+                                <td class="text-center py-1 px-2">18%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">7%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表参数配置记录</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">5%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">50%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '时钟同步偏差') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">时钟偏差事件记录</td>
+                                <td class="text-center py-1 px-2">30%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">采集成功率波动</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">12%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表时钟校准记录</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">10%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率临时波动</td>
+                                <td class="text-center py-1 px-2">15%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">5%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">电表时钟同步参数修改</td>
+                                <td class="text-center py-1 px-2">10%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">3%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">45%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '供电半径过长') {
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">末端用户电压偏低告警</td>
+                                <td class="text-center py-1 px-2">35%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">负荷增长导致线损率上升</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">10%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">用户距离与电压降相关性</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">功率因数低告警</td>
+                                <td class="text-center py-1 px-2">12%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">4%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线路分布地理特征</td>
+                                <td class="text-center py-1 px-2">8%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">3%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">40%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            } else if (tagTitle === '低压设备故障') {
+                // 低压设备故障的图表配置
+                const chartData = {
+                    labels: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                    voltageData: [220, 218, 215, 208, 205, 202, 200, 198, 195, 192],
+                    currentData: [150, 155, 160, 165, 170, 175, 180, 185, 190, 195]
+                };
+                
+                // 特定标签数据覆盖
+                if (tagData.details && tagData.details.mainMeterChartData) {
+                    chartData.labels = tagData.details.mainMeterChartData.dates;
+                }
+                
+                // 更新图表标题
+                document.querySelector('.text-gray-600.font-medium').textContent = '电压/电流日维度变化';
+                
+                new Chart(mainMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '三相平均电压 (V)',
+                                data: chartData.voltageData,
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: '三相平均电流 (A)',
+                                data: chartData.currentData,
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '电压 (V)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '电流 (A)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 更新子表图表标题
+                document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '三相电压不平衡度变化';
+                
+                new Chart(subMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '三相电压不平衡度 (%)',
+                                data: [1.2, 1.5, 2.0, 2.8, 3.5, 4.2, 5.0, 5.8, 6.5, 7.2],
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '不平衡度 (%)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                // 默认低压设备故障
+                probabilityHtml = `
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="text-left py-1 px-2 font-medium">特征</th>
+                                <th class="text-center py-1 px-2 font-medium">权重</th>
+                                <th class="text-right py-1 px-2 font-medium">加权概率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">多户电压波动事件</td>
+                                <td class="text-center py-1 px-2">35%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">28%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线路接头温度异常</td>
+                                <td class="text-center py-1 px-2">25%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">20%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">线损率突变特征</td>
+                                <td class="text-center py-1 px-2">20%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">15%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">三相不平衡度超标</td>
+                                <td class="text-center py-1 px-2">12%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">8%</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-1 px-2">设备温度传感器警告</td>
+                                <td class="text-center py-1 px-2">8%</td>
+                                <td class="text-right py-1 px-2 text-orange-600">4%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-medium text-base">
+                                <td colspan="2" class="py-2 px-2 text-right">匹配概率</td>
+                                <td class="py-2 px-2 text-right text-orange-600">75%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+            }
+            
+            probabilityContent.innerHTML = probabilityHtml;
+            
+            // 初始化图表
+            setTimeout(() => {
+                // 获取标签类型
+                const tagType = tagData.title;
+                const mainMeterCtx = document.getElementById('mainMeterTimeSeriesChart').getContext('2d');
+                const subMeterCtx = document.getElementById('subMeterTimeSeriesChart').getContext('2d');
+                
+                // 根据标签类型初始化对应的图表
+                if (tagType === 'CT互感器倍率错误') {
+                    // CT互感器倍率错误的图表配置
+                    const chartData = {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        currentData: [150, 152, 151, 153, 155, 152, 150, 165, 172, 183],
+                        powerFactorData: [0.92, 0.91, 0.92, 0.90, 0.89, 0.88, 0.87, 0.85, 0.84, 0.82]
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '电流/功率因数日维度变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '三相平均电流 (A)',
+                                    data: chartData.currentData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '功率因数',
+                                    data: chartData.powerFactorData,
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    borderDash: [5, 5],
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '电流 (A)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '功率因数',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '三相电流不平衡度变化';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '三相电流不平衡度 (%)',
+                                    data: [2.5, 2.8, 2.6, 2.9, 3.2, 3.0, 2.8, 3.5, 3.8, 4.2],
+                                    borderColor: '#16a34a',
+                                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '不平衡度 (%)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (tagType === '台区户表关系错误') {
+                    // 台区户表关系错误的图表配置
+                    const chartData = {
+                        labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                        voltageCorrelationData: [0.95, 0.94, 0.92, 0.85, 0.78, 0.76, 0.72, 0.68, 0.65, 0.60],
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '电压相关性日维度变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '总表-用户表电压相关性',
+                                    data: chartData.voltageCorrelationData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: false,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '相关性',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    min: 0,
+                                    max: 1
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '户表距离总表距离分布';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['0-100m', '100-200m', '200-300m', '300-400m', '400-500m', '500-600m', '600-700m', '700-800m', '800-900m', '900m+'],
+                            datasets: [
+                                {
+                                    label: '户表距离分布 (米)',
+                                    data: [5, 12, 15, 20, 8, 3, 1, 0, 0, 2],
+                                    backgroundColor: 'rgba(22, 163, 74, 0.6)',
+                                    borderColor: '#16a34a',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: '距离区间',
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '户表数量',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (tagType === '用电负荷突增') {
+                    // 用电负荷突增的图表配置
+                    const chartData = {
+                        labels: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                        maxPowerData: [80, 83, 85, 110, 155, 170, 190, 195, 198, 200],
+                        avgPowerData: [65, 67, 68, 75, 95, 110, 125, 130, 135, 140]
+                    };
+                    
+                    // 特定标签数据覆盖
+                    if (tagData.details && tagData.details.mainMeterChartData) {
+                        chartData.labels = tagData.details.mainMeterChartData.dates;
+                    }
+                    
+                    // 更新图表标题
+                    document.querySelector('.text-gray-600.font-medium').textContent = '最大负荷与平均负荷对比变化';
+                    
+                    new Chart(mainMeterCtx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [
+                                {
+                                    label: '最大负荷 (kW)',
+                                    data: chartData.maxPowerData,
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: false,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '平均负荷 (kW)',
+                                    data: chartData.avgPowerData,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    tension: 0.3,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: '环比增长率 (%)',
+                                    data: [0, 3.8, 2.4, 29.4, 40.9, 9.7, 11.8, 2.6, 1.5, 1.0], // 计算最大负荷的环比增长率
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    fill: false,
+                                    borderDash: [5, 5],
+                                    tension: 0.3,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: '负荷 (kW)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: '增长率 (%)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新子表图表标题
+                    document.querySelectorAll('.text-gray-600.font-medium')[1].textContent = '负荷突增用户分布';
+                    
+                    new Chart(subMeterCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['<10%', '10-30%', '30-50%', '50-80%', '80-100%', '>100%'],
+                            datasets: [
+                                {
+                                    label: '用户数量',
+                                    data: [12, 18, 8, 5, 3, 3],
+                                    backgroundColor: [
+                                        'rgba(59, 130, 246, 0.6)', // 蓝色
+                                        'rgba(16, 185, 129, 0.6)', // 绿色
+                                        'rgba(245, 158, 11, 0.6)', // 黄色
+                                        'rgba(249, 115, 22, 0.6)', // 橙色
+                                        'rgba(239, 68, 68, 0.6)',  // 红色
+                                        'rgba(139, 92, 246, 0.6)'  // 紫色
+                                    ],
+                                    borderColor: [
+                                        '#3b82f6',
+                                        '#10b981',
+                                        '#f59e0b',
+                                        '#f97316',
+                                        '#ef4444',
+                                        '#8b5cf6'
+                                    ],
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            const item = tooltipItems[0];
+                                            return `负荷增长: ${item.label}`;
+                                        },
+                                        label: function(context) {
+                                            return `用户数: ${context.parsed.y}户`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '负荷增长率区间',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '用户数量 (户)',
+                                        font: {
+                                            size: 8
+                                        }
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 8
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    // 其他标签的默认图表配置
+                let chartData = {
+                    labels: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日'],
+                    usageData: [1485, 1510, 1498, 1522, 1540, 1502, 1485, 1650, 1720, 1835],
+                    lossRateData: [6.1, 6.2, 6.3, 6.1, 6.4, 6.5, 6.3, 9.8, 11.5, 12.8]
+                };
+                
+                // 如果有标签特定数据，使用它
+                if (tagData.details && tagData.details.mainMeterChartData) {
+                    chartData.labels = tagData.details.mainMeterChartData.dates;
+                    chartData.usageData = tagData.details.mainMeterChartData.usage;
+                    chartData.lossRateData = tagData.details.mainMeterChartData.lossRate;
+                }
+                
+                new Chart(mainMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '日用电量 (kWh)',
+                                data: chartData.usageData,
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: '线损率 (%)',
+                                data: chartData.lossRateData,
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: false,
+                                tension: 0.3,
+                                borderDash: [5, 5],
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '电量 (kWh)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '线损率 (%)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                new Chart(subMeterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [
+                            {
+                                label: '平均日负荷 (kW/户)',
+                                data: [1.2, 1.25, 1.23, 1.27, 1.3, 1.26, 1.22, 1.35, 1.42, 1.5],
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            },
+                            {
+                                label: '最大日负荷 (kW/户)',
+                                data: [2.3, 2.4, 2.2, 2.5, 2.6, 2.4, 2.3, 2.8, 3.2, 3.5],
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0.3,
+                                borderDash: [5, 5]
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: '负荷 (kW/户)',
+                                    font: {
+                                        size: 8
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                }
+            }, 100);
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 渲染标签
+            renderTags(currentType);
+            
+            // 关闭弹窗
+            document.getElementById('closeTagModal').addEventListener('click', () => {
+                document.getElementById('tagDetailModal').classList.add('hidden');
+            });
+            
+            // 点击弹窗外部关闭弹窗
+            document.getElementById('tagDetailModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('tagDetailModal')) {
+                    document.getElementById('tagDetailModal').classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
