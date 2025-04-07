@@ -66,23 +66,29 @@
             <div class="mt-6 mb-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-900">诊断分析</h1>
                 <div class="flex items-center space-x-3">
-                    <div class="relative w-64">
-                        <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
-                            <option value="long-high" selected>河西变1324台区 (+6.44%) - 长期高损</option>
-                            <option value="sudden-high">城南532台区 (+5.55%) - 突发高损 [已生成]</option>
-                            <option value="long-negative">东湖785台区 (-4.24%) - 长期负损 [已生成]</option>
-                            <option value="small-negative">北郊198台区 (-0.85%) - 小负损</option>
-                            <option value="sudden-negative">开发区672台区 (-3.76%) - 突发负损</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
+                    <div class="relative group">
+                        <div class="w-64 h-10 rounded-md bg-transparent group-hover:bg-gray-50 flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <div class="absolute top-0 left-0 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <select id="districtSelect" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm leading-5 focus:outline-none focus:ring-primary focus:border-primary">
+                                <option value="long-high" selected>河西变1324台区 (+6.44%) - 长期高损</option>
+                                <option value="sudden-high">城南532台区 (+5.55%) - 突发高损 [已生成]</option>
+                                <option value="long-negative">东湖785台区 (-4.24%) - 长期负损 [已生成]</option>
+                                <option value="small-negative">北郊198台区 (-0.85%) - 小负损</option>
+                                <option value="sudden-negative">开发区672台区 (-3.76%) - 突发负损</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <button id="governanceButton" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200">
-                        生成治理建议
-                    </button>
+                    <div class="relative group">
+                        <div class="w-32 h-8 rounded-md bg-transparent group-hover:bg-primary-light flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <button id="governanceButton" class="absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-all duration-200 whitespace-nowrap">
+                            生成治理建议
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -256,9 +262,12 @@
                     <a href="/cn/filter" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
                         <i class="fas fa-arrow-left mr-1"></i> 返回筛选
                     </a>
-                    <a href="/demo/new/diagnostic-tags-new.html" class="bg-purple-100 hover:bg-purple-200 text-purple-700 py-2 px-4 rounded-md text-sm transition-colors duration-200">
-                        <i class="fas fa-tags mr-1"></i> 查看诊断标签演示
-                    </a>
+                    <div class="relative group">
+                        <div class="w-10 h-8 rounded-md bg-transparent group-hover:bg-purple-50 flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
+                        <a href="/demo/new/diagnostic-tags-new.html" class="absolute top-0 left-0 opacity-0 group-hover:opacity-100 bg-purple-100 hover:bg-purple-200 text-purple-700 py-2 px-4 rounded-md text-sm transition-all duration-200 whitespace-nowrap">
+                            <i class="fas fa-tags mr-1"></i> 查看诊断标签演示
+                        </a>
+                    </div>
                 </div>
                 <a href="/cn/governance" class="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm transition-colors duration-200">
                     生成治理建议 <i class="fas fa-arrow-right ml-1"></i>
