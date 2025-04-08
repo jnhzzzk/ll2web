@@ -511,6 +511,21 @@
         </div>
     </div>
 
+    <!-- 诊断标签详情弹窗 -->
+    <div id="tagDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-3xl max-h-[90vh] overflow-auto">
+            <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+                <h2 id="tagModalTitle" class="text-lg font-medium text-gray-900">标签详情</h2>
+                <button id="closeTagModal" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="tagModalContent" class="p-5">
+                <p class="text-gray-600">点击标签可以查看详细信息。</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 线损波动溯源图
         const lossCtx = document.getElementById('lossAnalysisChart').getContext('2d');
@@ -1745,6 +1760,102 @@
             
             return selectedTags;
         }
+
+        // 诊断标签数据
+        const diagnosticTags = {
+            'CT互感器倍率错误': {
+                title: 'CT互感器倍率错误',
+                probability: '92%',
+                icon: 'exclamation-triangle',
+                color: 'red', 
+                details: {
+                    // 分析结论内容
+                    analysis: [
+                        "本台区线损率异常高达12.76%，远超正常水平5%",
+                        "电流互感器倍率突然发生变化，由300/5变更为150/5",
+                        "变压器容量与记录电流不匹配，显示电流值远低于实际值",
+                        "倍率变更发生在2023-02-22期间，与线损率开始上升时间吻合",
+                        "总表与子表电量反差显著，总表记录电量被倍率错误缩小了一半"
+                    ],
+                    // 时序图数据
+                    mainMeterChartData: {
+                        dates: ['2月20日', '2月21日', '2月22日', '2月23日', '2月24日', '2月25日', '2月26日', '2月27日', '2月28日', '3月1日'],
+                        usage: [1510, 1520, 1535, 765, 755, 770, 760, 780, 765, 775],
+                        lossRate: [5.2, 5.4, 5.3, 11.8, 12.2, 12.5, 12.3, 12.4, 12.8, 12.7]
+                    },
+                    // 档案记录 - 电表事件
+                    meterEvents: [
+                        {
+                            eventType: "PP-CT Short/Bypass occurrence",
+                            eventCode: "Event-269",
+                            date: "2023-02-22",
+                            relatedUser: "总表"
+                        },
+                        {
+                            eventType: "PP-CT Short/Bypass restoration",
+                            eventCode: "Event-270",
+                            date: "2023-02-22",
+                            relatedUser: "总表"
+                        },
+                        {
+                            eventType: "Power unbalance occurrence",
+                            eventCode: "Event-281",
+                            date: "2023-02-22",
+                            relatedUser: "总表"
+                        },
+                        {
+                            eventType: "Power unbalance restoration",
+                            eventCode: "Event-282",
+                            date: "2023-02-24",
+                            relatedUser: "总表"
+                        }
+                    ],
+                    // 档案变更记录
+                    archiveChanges: [
+                        {
+                            eventType: "CT倍率变更",
+                            date: "2023-02-22",
+                            relatedUser: "总表",
+                            details: "300/5 → 150/5"
+                        },
+                        {
+                            eventType: "计量装置检修",
+                            date: "2023-02-22",
+                            relatedUser: "总表"
+                        }
+                    ]
+                }
+            }
+        };
+
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... existing code ...
+
+            // 为CT互感器倍率错误标签添加点击事件
+            const ctTag = document.querySelector('.flex.items-center.p-3.bg-red-50');
+            if (ctTag) {
+                ctTag.style.cursor = 'pointer';
+                ctTag.addEventListener('click', function() {
+                    const modal = document.getElementById('tagDetailModal');
+                    const modalTitle = document.getElementById('tagModalTitle');
+                    modalTitle.textContent = 'CT互感器倍率错误';
+                    modal.classList.remove('hidden');
+                });
+            }
+
+            // 关闭弹窗按钮事件
+            document.getElementById('closeTagModal').addEventListener('click', function() {
+                document.getElementById('tagDetailModal').classList.add('hidden');
+            });
+
+            // 点击弹窗外部关闭
+            document.getElementById('tagDetailModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        });
     </script>
 </body>
 </html> 
