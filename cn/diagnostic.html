@@ -184,6 +184,20 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- 线损波动溯源图 -->
+                <div class="col-span-1 lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-sm mb-6">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">线损波动溯源图</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="h-72">
+                                <canvas id="lossAnalysisChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 诊断分类看板 -->
                 <div class="col-span-1">
                     <div class="bg-white rounded-lg shadow-sm mb-6">
@@ -235,21 +249,6 @@
                                 
                                 <!-- 添加额外的垂直空间以便与右侧卡片对齐 -->
                                 <div class="py-10"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 中间列：线损波动溯源图和多维度对比分析 -->
-                <div class="col-span-1 lg:col-span-2">
-                    <!-- 线损波动溯源图 -->
-                    <div class="bg-white rounded-lg shadow-sm mb-6">
-                        <div class="px-5 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">线损波动溯源图</h2>
-                        </div>
-                        <div class="p-5">
-                            <div class="h-72">
-                                <canvas id="lossAnalysisChart"></canvas>
                             </div>
                         </div>
                     </div>
