@@ -41,12 +41,6 @@
                             <a href="/en/filter" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
                                 Filter Configuration
                             </a>
-                            <a href="/en/diagnostic" class="block px-4 py-2 text-sm text-gray-700 bg-primary-light text-primary">
-                                Diagnostic Analysis
-                            </a>
-                            <a href="/en/governance" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-light hover:text-primary">
-                                Governance Suggestions
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -62,9 +56,12 @@
     <!-- Main Content Area -->
     <div class="pt-16 pb-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Page Title and Area Selection -->
+            <!-- Page Title and District Selection -->
             <div class="mt-6 mb-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-900">Diagnostic Analysis</h1>
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Diagnostic Analysis</h1>
+                    <span class="text-xs text-gray-500 ml-4">Data Source: Filter A - Line Loss Statistics Period: 2024-04-10 - 2024-05-10</span>
+                </div>
                 <div class="flex items-center space-x-3">
                     <div class="relative group">
                         <div class="w-64 h-10 rounded-md bg-transparent group-hover:bg-gray-50 flex items-center justify-center transition-colors duration-200 cursor-pointer"></div>
@@ -171,8 +168,8 @@
                                 <p class="text-sm text-gray-500">Abnormal Status</p>
                                 <p class="text-sm font-medium text-red-500">Long-term High Loss</p>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Governance Suggestions</p>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-gray-700">Governance Status:</span>
                                 <p class="text-sm font-medium" id="governanceStatus">Not Generated</p>
                             </div>
                             <div class="mt-2">
@@ -1767,4 +1764,4 @@
 
     </script>
 </body>
-</html> 
+</html>
