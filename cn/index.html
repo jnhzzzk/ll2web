@@ -147,7 +147,6 @@
                         <h2 class="text-lg font-medium text-gray-900">线损趋势分析</h2>
                         <div class="flex space-x-2">
                             <button class="bg-primary-light text-primary px-3 py-1 rounded-md text-sm" id="day-btn">日</button>
-                            <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="week-btn">周</button>
                             <button class="text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-md text-sm" id="month-btn">月</button>
                         </div>
                     </div>
@@ -387,31 +386,8 @@
                     }
                 ]
             },
-            week: {
-                labels: ['第1周', '第2周', '第3周', '第4周', '第5周', '第6周', '第7周', '第8周'],
-                datasets: [
-                    {
-                        label: '实际线损率',
-                        data: [6.4, 6.7, 6.2, 6.9, 7.2, 6.8, 6.5, 6.6],
-                        borderColor: '#ef4444',
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                        borderWidth: 2,
-                        fill: false,
-                        tension: 0.4
-                    },
-                    {
-                        label: '理论线损率',
-                        data: [5.2, 5.3, 5.4, 5.2, 5.3, 5.4, 5.3, 5.3],
-                        borderColor: '#309C9F',
-                        backgroundColor: 'rgba(48, 156, 159, 0.1)',
-                        borderWidth: 2,
-                        fill: false,
-                        tension: 0.4
-                    }
-                ]
-            },
             month: {
-                labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
+                labels: ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'],
                 datasets: [
                     {
                         label: '实际线损率',
@@ -527,26 +503,10 @@
             document.getElementById('day-btn').classList.add('bg-primary-light', 'text-primary');
             document.getElementById('day-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
             
-            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
-            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
-            
             document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
             document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
             
             updateTrendChart('day');
-        });
-
-        document.getElementById('week-btn').addEventListener('click', function() {
-            document.getElementById('week-btn').classList.add('bg-primary-light', 'text-primary');
-            document.getElementById('week-btn').classList.remove('text-gray-500', 'hover:bg-gray-100');
-            
-            document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
-            document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
-            
-            document.getElementById('month-btn').classList.remove('bg-primary-light', 'text-primary');
-            document.getElementById('month-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
-            
-            updateTrendChart('week');
         });
 
         document.getElementById('month-btn').addEventListener('click', function() {
@@ -555,9 +515,6 @@
             
             document.getElementById('day-btn').classList.remove('bg-primary-light', 'text-primary');
             document.getElementById('day-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
-            
-            document.getElementById('week-btn').classList.remove('bg-primary-light', 'text-primary');
-            document.getElementById('week-btn').classList.add('text-gray-500', 'hover:bg-gray-100');
             
             updateTrendChart('month');
         });
