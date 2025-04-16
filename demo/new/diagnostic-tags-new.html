@@ -40,7 +40,7 @@
         </div>
     </div>
     
-    <!-- 诊断标签详情弹窗 -->
+    <!-- 诊断标签详情弹窗测试 -->
     <div id="tagDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-3xl max-h-[90vh] overflow-auto">
             <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
@@ -899,13 +899,18 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- 时序数据可视化 -->
-                                    <div class="mt-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-gray-600 font-medium chart-title" data-chart-id="mainMeterTimeSeriesChart">电流/功率因数日维度变化</span>
-                                        </div>
-                                        <div class="h-40">
-                                            <canvas id="mainMeterTimeSeriesChart"></canvas>
+                                    <!-- 关键指标可视化 -->
+                                    <div class="mt-4 border-t border-gray-200 pt-3">
+                                        <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                            <i class="fas fa-chart-line text-gray-500 mr-1"></i> 关键指标
+                                        </h4>
+                                        <div class="bg-gray-50 rounded p-2 text-xs">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-gray-600 font-medium chart-title" data-chart-id="mainMeterTimeSeriesChart">电流/功率因数日维度变化</span>
+                                            </div>
+                                            <div class="h-40">
+                                                <canvas id="mainMeterTimeSeriesChart"></canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1033,27 +1038,25 @@
                                             <span class="text-gray-500">日正向有功累计:</span>
                                             <span class="font-medium">1,515 kWh/天</span>
                                         </div>
-                                        <div>
-                                            <span class="text-gray-500">普通表数量:</span>
-                                            <span class="font-medium">63台</span>
-                                        </div>
-                                        <div>
-                                            <span class="text-gray-500">普通表采集数量:</span>
-                                            <span class="font-medium">63台</span>
-                                        </div>
+                                        
                                         <div>
                                             <span class="text-gray-500">平均采集成功率:</span>
                                             <span class="font-medium">100%</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- 时序数据可视化 -->
-                                    <div class="mt-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-gray-600 font-medium chart-title" data-chart-id="subMeterTimeSeriesChart">三相电流不平衡度变化</span>
-                                        </div>
-                                        <div class="h-40">
-                                            <canvas id="subMeterTimeSeriesChart"></canvas>
+                                    <!-- 关键指标可视化 -->
+                                    <div class="mt-4 border-t border-gray-200 pt-3">
+                                        <h4 class="text-xs font-medium text-gray-700 mb-2 flex items-center">
+                                            <i class="fas fa-chart-line text-gray-500 mr-1"></i> 关键指标
+                                        </h4>
+                                        <div class="bg-gray-50 rounded p-2 text-xs">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-gray-600 font-medium chart-title" data-chart-id="subMeterTimeSeriesChart">三相电流不平衡度变化</span>
+                                            </div>
+                                            <div class="h-40">
+                                                <canvas id="subMeterTimeSeriesChart"></canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
