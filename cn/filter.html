@@ -156,16 +156,7 @@
                                         <option>突发负损</option>
                                     </select>
                                 </div>
-                                <div class="w-40">
-                                    <label class="block text-xs font-medium text-gray-700 mb-1">台区类型</label>
-                                    <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
-                                        <option>全部类型</option>
-                                        <option>居民</option>
-                                        <option>商业</option>
-                                        <option>工业</option>
-                                        <option>混合</option>
-                                    </select>
-                                </div>
+                                <!-- 台区类型字段已移除 -->
                                 
                                 <!-- 日期范围选择 -->
                                 <div class="flex-grow">
@@ -190,15 +181,7 @@
                                         <option>>30天</option>
                                     </select>
                                 </div>
-                                <div class="w-40">
-                                    <label class="block text-xs font-medium text-gray-700 mb-1">治理状态</label>
-                                    <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
-                                        <option>全部状态</option>
-                                        <option>已生成</option>
-                                        <option>未生成</option>
-                                        <option>处理中</option>
-                                    </select>
-                                </div>
+                                <!-- 移除治理状态下拉菜单 -->
                                 <div class="w-40">
                                     <label class="block text-xs font-medium text-gray-700 mb-1">可再生能源</label>
                                     <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
@@ -217,6 +200,24 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- 添加治理状态标签页筛选 -->
+                        <div class="mb-4 border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-6">
+                                <button class="py-2 border-b-2 border-primary text-sm font-medium text-primary">
+                                    全部状态
+                                </button>
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    已生成
+                                </button>
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    未生成
+                                </button>
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    处理中
+                                </button>
+                            </nav>
                         </div>
 
                         <!-- 异常台区报表表格 -->
@@ -264,9 +265,7 @@
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             治理状态
                                         </th>
-                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            台区类型
-                                        </th>
+                                        <!-- 移除台区类型列 -->
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             可再生能源
                                         </th>
@@ -313,16 +312,14 @@
                                                 长期高损
                                             </span>
                                         </td>
-                                        <!-- 为新列添加数据 -->
+                                        <!-- 第一行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             28天
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                                             未生成
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            居民
-                                        </td>
+                                        <!-- 移除台区类型单元格 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             无
                                         </td>
@@ -367,16 +364,14 @@
                                                 突发高损
                                             </span>
                                         </td>
-                                        <!-- 为新列添加数据 -->
+                                        <!-- 第二行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             5天
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-green-600">
                                             已生成
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            商业
-                                        </td>
+                                        <!-- 移除台区类型单元格 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             光伏
                                         </td>
@@ -421,16 +416,14 @@
                                                 长期负损
                                             </span>
                                         </td>
-                                        <!-- 为新列添加数据 -->
+                                        <!-- 第三行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             32天
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-green-600">
                                             已生成
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            居民
-                                        </td>
+                                        <!-- 移除台区类型单元格 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             无
                                         </td>
@@ -475,16 +468,14 @@
                                                 小负损
                                             </span>
                                         </td>
-                                        <!-- 为新列添加数据 -->
+                                        <!-- 第四行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             25天
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                                             未生成
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            混合
-                                        </td>
+                                        <!-- 移除台区类型单元格 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             风电
                                         </td>
@@ -529,16 +520,14 @@
                                                 突发负损
                                             </span>
                                         </td>
-                                        <!-- 为新列添加数据 -->
+                                        <!-- 第五行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             4天
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                                             未生成
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            工业
-                                        </td>
+                                        <!-- 移除台区类型单元格 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             无
                                         </td>
@@ -1095,7 +1084,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 下拉菜单行为 (Keep existing logic)
+            // 下拉菜单行为 (保持现有逻辑)
             const menuButton = document.getElementById('main-menu-button');
             const menuDropdown = document.getElementById('main-menu-dropdown');
             if (menuButton && menuDropdown) {
@@ -1113,7 +1102,48 @@
                 });
             }
 
-            // Initialize Choices.js for multi-select dropdowns
+            // 添加治理状态标签页事件监听
+            const governanceStatusTabs = document.querySelectorAll('.mb-4.border-b.border-gray-200 button');
+            if (governanceStatusTabs.length > 0) {
+                governanceStatusTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // 移除所有标签页的激活状态
+                        governanceStatusTabs.forEach(t => {
+                            t.classList.remove('border-primary', 'text-primary');
+                            t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        });
+                        
+                        // 添加点击标签页的激活状态
+                        this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        this.classList.add('border-primary', 'text-primary');
+                        
+                        // 根据选中的标签页筛选表格
+                        const status = this.textContent.trim();
+                        filterTableByGovernanceStatus(status);
+                    });
+                });
+            }
+            
+            // 根据治理状态筛选表格的函数
+            function filterTableByGovernanceStatus(status) {
+                const tableRows = document.querySelectorAll('.min-w-full tbody tr');
+                
+                tableRows.forEach(row => {
+                    const governanceStatusCell = row.querySelector('td:nth-child(13)'); // 调整索引如果需要
+                    
+                    if (governanceStatusCell) {
+                        const rowStatus = governanceStatusCell.textContent.trim();
+                        
+                        if (status === '全部状态' || rowStatus === status) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // 初始化Choices.js多选下拉菜单
             const choicesConfig = {
                 removeItemButton: true,
                 searchEnabled: true,
