@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>突发高损原因分析指标体系 - 第二部分</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #fff1f0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e8e8e8;
+            font-weight: bold;
+            font-size: 18px;
+            color: #ff4d4f;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .indicator-group {
+            margin-bottom: 30px;
+        }
+        .indicator {
+            border-left: 4px solid #ff4d4f;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background-color: #fff1f0;
+            border-radius: 0 4px 4px 0;
+        }
+        .indicator.total {
+            border-left-color: #722ed1;
+            background-color: #f9f0ff;
+        }
+        .indicator.sub {
+            border-left-color: #13c2c2;
+            background-color: #e6fffb;
+        }
+        .indicator-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .indicator-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .indicator-formula {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .visualization {
+            margin-top: 15px;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: white;
+        }
+        .viz-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ff4d4f;
+            font-size: 14px;
+        }
+        .chart {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+        .axis-label {
+            font-size: 12px;
+            color: #666;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f7fa;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #fff1f0;
+        }
+        .bar-chart .bar {
+            fill: #ff4d4f;
+            transition: fill 0.3s;
+        }
+        .bar-chart .bar:hover {
+            fill: #ff7875;
+        }
+        .line-chart .line {
+            fill: none;
+            stroke: #ff4d4f;
+            stroke-width: 2;
+        }
+        .line-chart .point {
+            fill: #ff4d4f;
+        }
+        .line-chart .line.normal {
+            stroke: #52c41a;
+        }
+        .scatter-chart .point {
+            fill: #ff4d4f;
+            transition: r 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">突发高损原因分析指标体系 - 第二部分</div>
+            <div class="card-body">
+                <div class="indicator-group">
+                    <h3>原因三：用电负荷突增</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">用电负荷突增指标(总表) (GM_LOAD_SURGE)</div>
+                        <div class="indicator-desc">总表用电负荷突增程度，评估当日负荷与前期平均负荷的比值</div>
+                        <div class="indicator-formula">LOAD_RATE / AVG(LOAD_RATE OVER PREV_7_DAYS) WHERE LOAD_RATE > PREV_AVG_LOAD_RATE * 1.5</div>
+                        <div class="visualization">
+                            <div class="viz-title">总表负荷率突增示例</div>
+                            <div class="chart">
+                                <svg width="100%" height="100%" viewBox="0 0 800 200" class="line-chart">
+                                    <!-- X轴 -->
+                                    <line x1="50" y1="150" x2="750" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    <!-- Y轴 -->
+                                    <line x1="50" y1="20" x2="50" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    
+                                    <!-- X轴刻度 -->
+                                    <text x="100" y="170" text-anchor="middle" class="axis-label">6/1</text>
+                                    <text x="200" y="170" text-anchor="middle" class="axis-label">6/2</text>
+                                    <text x="300" y="170" text-anchor="middle" class="axis-label">6/3</text>
+                                    <text x="400" y="170" text-anchor="middle" class="axis-label">6/4</text>
+                                    <text x="500" y="170" text-anchor="middle" class="axis-label">6/5</text>
+                                    <text x="600" y="170" text-anchor="middle" class="axis-label">6/6</text>
+                                    <text x="700" y="170" text-anchor="middle" class="axis-label">6/7</text>
+                                    
+                                    <!-- Y轴刻度 - 负荷率 -->
+                                    <text x="40" y="150" text-anchor="end" class="axis-label">0%</text>
+                                    <text x="40" y="120" text-anchor="end" class="axis-label">20%</text>
+                                    <text x="40" y="90" text-anchor="end" class="axis-label">40%</text>
+                                    <text x="40" y="60" text-anchor="end" class="axis-label">60%</text>
+                                    <text x="40" y="30" text-anchor="end" class="axis-label">80%</text>
+                                    
+                                    <!-- 负荷率阈值线 -->
+                                    <line x1="50" y1="60" x2="750" y2="60" stroke="#fa8c16" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="750" y="55" text-anchor="end" fill="#fa8c16" font-size="12">负荷率阈值(60%)</text>
+                                    
+                                    <!-- 平均负荷率线 -->
+                                    <line x1="50" y1="120" x2="450" y2="120" stroke="#52c41a" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="450" y="125" text-anchor="end" fill="#52c41a" font-size="12">前期平均负荷率(20%)</text>
+                                    
+                                    <!-- 负荷率曲线 -->
+                                    <path d="M50,115 L100,125 L200,118 L300,122 L400,120 L500,40 L600,45 L700,43" class="line"></path>
+                                    <circle cx="100" cy="125" r="3" class="point"></circle>
+                                    <circle cx="200" cy="118" r="3" class="point"></circle>
+                                    <circle cx="300" cy="122" r="3" class="point"></circle>
+                                    <circle cx="400" cy="120" r="3" class="point"></circle>
+                                    <circle cx="500" cy="40" r="5" class="point"></circle>
+                                    <circle cx="600" cy="45" r="5" class="point"></circle>
+                                    <circle cx="700" cy="43" r="5" class="point"></circle>
+                                    
+                                    <!-- 突增点标记 -->
+                                    <line x1="500" y1="20" x2="500" y2="150" stroke="#ff4d4f" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="500" y="15" text-anchor="middle" fill="#ff4d4f" font-size="12">负荷突增点</text>
+                                    
+                                    <!-- 变化率标注 -->
+                                    <text x="600" y="30" text-anchor="middle" fill="#ff4d4f" font-weight="bold" font-size="14">负荷率突增约200%</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #ff4d4f;"></div>
+                                    <span>负荷率曲线</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #52c41a;"></div>
+                                    <span>前期平均负荷率</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">用电负荷突增指标(分表) (SM_LOAD_SURGE)</div>
+                        <div class="indicator-desc">分表用电负荷突增程度，评估当日用电量与前期平均用电量的比值</div>
+                        <div class="indicator-formula">Usage / AVG(Usage OVER PREV_7_DAYS) WHERE Usage > AVG_PREV_USAGE * 2</div>
+                        <div class="visualization">
+                            <div class="viz-title">分表用电量突增示例</div>
+                            <div class="chart">
+                                <svg width="100%" height="100%" viewBox="0 0 800 200" class="bar-chart">
+                                    <!-- X轴 -->
+                                    <line x1="50" y1="150" x2="750" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    <!-- Y轴 -->
+                                    <line x1="50" y1="20" x2="50" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    
+                                    <!-- X轴刻度 -->
+                                    <text x="150" y="170" text-anchor="middle" class="axis-label">用户A</text>
+                                    <text x="250" y="170" text-anchor="middle" class="axis-label">用户B</text>
+                                    <text x="350" y="170" text-anchor="middle" class="axis-label">用户C</text>
+                                    <text x="450" y="170" text-anchor="middle" class="axis-label">用户D</text>
+                                    <text x="550" y="170" text-anchor="middle" class="axis-label">用户E</text>
+                                    <text x="650" y="170" text-anchor="middle" class="axis-label">用户F</text>
+                                    
+                                    <!-- Y轴刻度 - 用电量增长率 -->
+                                    <text x="40" y="150" text-anchor="end" class="axis-label">0倍</text>
+                                    <text x="40" y="120" text-anchor="end" class="axis-label">1倍</text>
+                                    <text x="40" y="90" text-anchor="end" class="axis-label">2倍</text>
+                                    <text x="40" y="60" text-anchor="end" class="axis-label">3倍</text>
+                                    <text x="40" y="30" text-anchor="end" class="axis-label">4倍</text>
+                                    
+                                    <!-- 阈值线 -->
+                                    <line x1="50" y1="90" x2="750" y2="90" stroke="#fa8c16" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="750" y="85" text-anchor="end" fill="#fa8c16" font-size="12">增长阈值(2倍)</text>
+                                    
+                                    <!-- 用电量增长柱形图 -->
+                                    <rect x="130" y="130" width="40" height="20" fill="#13c2c2"></rect>
+                                    <rect x="230" y="110" width="40" height="40" fill="#13c2c2"></rect>
+                                    <rect x="330" y="40" width="40" height="110" fill="#ff4d4f"></rect>
+                                    <rect x="430" y="145" width="40" height="5" fill="#13c2c2"></rect>
+                                    <rect x="530" y="30" width="40" height="120" fill="#ff4d4f"></rect>
+                                    <rect x="630" y="125" width="40" height="25" fill="#13c2c2"></rect>
+                                    
+                                    <!-- 增长率标签 -->
+                                    <text x="150" y="125" text-anchor="middle" class="bar-label">0.5倍</text>
+                                    <text x="250" y="105" text-anchor="middle" class="bar-label">1.2倍</text>
+                                    <text x="350" y="35" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-weight="bold">3.3倍</text>
+                                    <text x="450" y="140" text-anchor="middle" class="bar-label">0.2倍</text>
+                                    <text x="550" y="25" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-weight="bold">3.8倍</text>
+                                    <text x="650" y="120" text-anchor="middle" class="bar-label">0.7倍</text>
+                                    
+                                    <!-- 异常标注 -->
+                                    <text x="400" y="15" text-anchor="middle" fill="#ff4d4f" font-weight="bold" font-size="14">用户C和E用电量突增超过阈值</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #13c2c2;"></div>
+                                    <span>正常用电增长</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #ff4d4f;"></div>
+                                    <span>异常用电增长</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因四：窃电行为突增</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">窃电行为突增指标(总表) (GM_THEFT_SURGE)</div>
+                        <div class="indicator-desc">总表窃电行为突然增加程度，评估线损率与理论线损率差值的突增</div>
+                        <div class="indicator-formula">(LOSS_RATIO - TECH_LOSS_RATIO) - AVG(LOSS_RATIO - TECH_LOSS_RATIO OVER PREV_7_DAYS)</div>
+                        <div class="visualization">
+                            <div class="viz-title">线损率差值突增示例</div>
+                            <div class="chart">
+                                <svg width="100%" height="100%" viewBox="0 0 800 200" class="line-chart">
+                                    <!-- X轴 -->
+                                    <line x1="50" y1="150" x2="750" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    <!-- Y轴 -->
+                                    <line x1="50" y1="20" x2="50" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    
+                                    <!-- X轴刻度 -->
+                                    <text x="100" y="170" text-anchor="middle" class="axis-label">6/1</text>
+                                    <text x="200" y="170" text-anchor="middle" class="axis-label">6/2</text>
+                                    <text x="300" y="170" text-anchor="middle" class="axis-label">6/3</text>
+                                    <text x="400" y="170" text-anchor="middle" class="axis-label">6/4</text>
+                                    <text x="500" y="170" text-anchor="middle" class="axis-label">6/5</text>
+                                    <text x="600" y="170" text-anchor="middle" class="axis-label">6/6</text>
+                                    <text x="700" y="170" text-anchor="middle" class="axis-label">6/7</text>
+                                    
+                                    <!-- Y轴刻度 - 线损率差值 -->
+                                    <text x="40" y="150" text-anchor="end" class="axis-label">0%</text>
+                                    <text x="40" y="120" text-anchor="end" class="axis-label">2%</text>
+                                    <text x="40" y="90" text-anchor="end" class="axis-label">4%</text>
+                                    <text x="40" y="60" text-anchor="end" class="axis-label">6%</text>
+                                    <text x="40" y="30" text-anchor="end" class="axis-label">8%</text>
+                                    
+                                    <!-- 阈值线 -->
+                                    <line x1="50" y1="90" x2="750" y2="90" stroke="#fa8c16" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="750" y="85" text-anchor="end" fill="#fa8c16" font-size="12">差值阈值(4%)</text>
+                                    
+                                    <!-- 理论线损率线 -->
+                                    <line x1="50" y1="135" x2="750" y2="135" stroke="#52c41a" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="750" y="140" text-anchor="end" fill="#52c41a" font-size="12">理论线损率(~1%)</text>
+                                    
+                                    <!-- 实际线损率曲线 -->
+                                    <path d="M50,132 L100,130 L200,128 L300,125 L400,127 L500,45 L600,40 L700,43" class="line"></path>
+                                    <circle cx="100" cy="130" r="3" class="point"></circle>
+                                    <circle cx="200" cy="128" r="3" class="point"></circle>
+                                    <circle cx="300" cy="125" r="3" class="point"></circle>
+                                    <circle cx="400" cy="127" r="3" class="point"></circle>
+                                    <circle cx="500" cy="45" r="5" class="point"></circle>
+                                    <circle cx="600" cy="40" r="5" class="point"></circle>
+                                    <circle cx="700" cy="43" r="5" class="point"></circle>
+                                    
+                                    <!-- 突增点标记 -->
+                                    <line x1="500" y1="20" x2="500" y2="150" stroke="#ff4d4f" stroke-width="1.5" stroke-dasharray="5,5"></line>
+                                    <text x="500" y="15" text-anchor="middle" fill="#ff4d4f" font-size="12">窃电行为突增点</text>
+                                    
+                                    <!-- 变化率标注 -->
+                                    <text x="600" y="30" text-anchor="middle" fill="#ff4d4f" font-weight="bold" font-size="14">线损率差值突增约6%</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #ff4d4f;"></div>
+                                    <span>实际线损率曲线</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #52c41a;"></div>
+                                    <span>理论线损率</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">窃电行为突增指标(分表) (SM_THEFT_SURGE)</div>
+                        <div class="indicator-desc">分表窃电行为突然增加程度，统计近期窃电相关事件的新增发生次数</div>
+                        <div class="indicator-formula">COUNT(Event-269 OR Event-287 OR Event-289 OR Event-297) WHERE IsGM = 0</div>
+                        <div class="visualization">
+                            <div class="viz-title">窃电事件突增示例</div>
+                            <div class="chart">
+                                <svg width="100%" height="100%" viewBox="0 0 800 200" class="bar-chart">
+                                    <!-- X轴 -->
+                                    <line x1="50" y1="150" x2="750" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    <!-- Y轴 -->
+                                    <line x1="50" y1="20" x2="50" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    
+                                    <!-- X轴刻度 -->
+                                    <text x="150" y="170" text-anchor="middle" class="axis-label">表盖打开</text>
+                                    <text x="300" y="170" text-anchor="middle" class="axis-label">端子盖打开</text>
+                                    <text x="450" y="170" text-anchor="middle" class="axis-label">CT短接/旁路</text>
+                                    <text x="600" y="170" text-anchor="middle" class="axis-label">强磁场干扰</text>
+                                    
+                                    <!-- Y轴刻度 - 事件次数 -->
+                                    <text x="40" y="150" text-anchor="end" class="axis-label">0</text>
+                                    <text x="40" y="120" text-anchor="end" class="axis-label">5</text>
+                                    <text x="40" y="90" text-anchor="end" class="axis-label">10</text>
+                                    <text x="40" y="60" text-anchor="end" class="axis-label">15</text>
+                                    <text x="40" y="30" text-anchor="end" class="axis-label">20</text>
+                                    
+                                    <!-- 前一周事件柱形图 -->
+                                    <rect x="120" y="135" width="30" height="15" fill="#52c41a"></rect>
+                                    <rect x="270" y="140" width="30" height="10" fill="#52c41a"></rect>
+                                    <rect x="420" y="145" width="30" height="5" fill="#52c41a"></rect>
+                                    <rect x="570" y="138" width="30" height="12" fill="#52c41a"></rect>
+                                    
+                                    <!-- 当日事件柱形图 -->
+                                    <rect x="160" y="90" width="30" height="60" fill="#ff4d4f"></rect>
+                                    <rect x="310" y="60" width="30" height="90" fill="#ff4d4f"></rect>
+                                    <rect x="460" y="40" width="30" height="110" fill="#ff4d4f"></rect>
+                                    <rect x="610" y="110" width="30" height="40" fill="#ff4d4f"></rect>
+                                    
+                                    <!-- 事件次数标签 -->
+                                    <text x="135" y="130" text-anchor="middle" class="bar-label" font-size="10">3</text>
+                                    <text x="285" y="135" text-anchor="middle" class="bar-label" font-size="10">2</text>
+                                    <text x="435" y="140" text-anchor="middle" class="bar-label" font-size="10">1</text>
+                                    <text x="585" y="133" text-anchor="middle" class="bar-label" font-size="10">2.5</text>
+                                    
+                                    <text x="175" y="85" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-size="10" font-weight="bold">12</text>
+                                    <text x="325" y="55" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-size="10" font-weight="bold">18</text>
+                                    <text x="475" y="35" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-size="10" font-weight="bold">22</text>
+                                    <text x="625" y="105" text-anchor="middle" class="bar-label" fill="#ff4d4f" font-size="10" font-weight="bold">8</text>
+                                    
+                                    <!-- 异常标注 -->
+                                    <text x="400" y="15" text-anchor="middle" fill="#ff4d4f" font-weight="bold" font-size="14">窃电相关事件突然增加</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #52c41a;"></div>
+                                    <span>前一周事件次数</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #ff4d4f;"></div>
+                                    <span>当日事件次数</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因五：恶劣天气影响</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">恶劣天气影响指标(总表) (GM_WEATHER_IMPACT)</div>
+                        <div class="indicator-desc">总表受恶劣天气影响程度，评估恶劣天气期间线损率与正常天气期间的差值</div>
+                        <div class="indicator-formula">LOSS_RATIO - AVG(LOSS_RATIO OVER PREV_NORMAL_DAYS) WHERE WEATHER_CONDITION IN ('暴雨', '台风', '雷暴', '冰雪')</div>
+                        <div class="visualization">
+                            <div class="viz-title">恶劣天气对线损率的影响示例</div>
+                            <div class="chart">
+                                <svg width="100%" height="100%" viewBox="0 0 800 200" class="line-chart">
+                                    <!-- X轴 -->
+                                    <line x1="50" y1="150" x2="750" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    <!-- Y轴 -->
+                                    <line x1="50" y1="20" x2="50" y2="150" stroke="#ccc" stroke-width="1"></line>
+                                    
+                                    <!-- X轴刻度 -->
+                                    <text x="100" y="170" text-anchor="middle" class="axis-label">6/1</text>
+                                    <text x="200" y="170" text-anchor="middle" class="axis-label">6/2</text>
+                                    <text x="300" y="170" text-anchor="middle" class="axis-label">6/3</text>
+                                    <text x="400" y="170" text-anchor="middle" class="axis-label">6/4</text>
+                                    <text x="500" y="170" text-anchor="middle" class="axis-label">6/5</text>
+                                    <text x="600" y="170" text-anchor="middle" class="axis-label">6/6</text>
+                                    <text x="700" y="170" text-anchor="middle" class="axis-label">6/7</text>
+                                    
+                                    <!-- Y轴刻度 - 线损率 -->
+                                    <text x="40" y="150" text-anchor="end" class="axis-label">0%</text>
+                                    <text x="40" y="120" text-anchor="end" class="axis-label">5%</text>
+                                    <text x="40" y="90" text-anchor="end" class="axis-label">10%</text>
+                                    <text x="40" y="60" text-anchor="end" class="axis-label">15%</text>
+                                    <text x="40" y="30" text-anchor="end" class="axis-label">20%</text>
+                                    
+                                    <!-- 天气类型标记 -->
+                                    <text x="100" y="185" text-anchor="middle" class="axis-label">晴</text>
+                                    <text x="200" y="185" text-anchor="middle" class="axis-label">晴</text>
+                                    <text x="300" y="185" text-anchor="middle" class="axis-label">阴</text>
+                                    <text x="400" y="185" text-anchor="middle" class="axis-label">雨</text>
+                                    <text x="500" y="185" text-anchor="middle" class="axis-label" fill="#ff4d4f" font-weight="bold">暴雨</text>
+                                    <text x="600" y="185" text-anchor="middle" class="axis-label" fill="#ff4d4f" font-weight="bold">雷暴</text>
+                                    <text x="700" y="185" text-anchor="middle" class="axis-label">雨</text>
+                                    
+                                    <!-- 线损率曲线 -->
+                                    <path d="M50,125 L100,128 L200,122 L300,125 L400,120 L500,45 L600,40 L700,80" class="line"></path>
+                                    <circle cx="100" cy="128" r="3" class="point"></circle>
+                                    <circle cx="200" cy="122" r="3" class="point"></circle>
+                                    <circle cx="300" cy="125" r="3" class="point"></circle>
+                                    <circle cx="400" cy="120" r="3" class="point"></circle>
+                                    <circle cx="500" cy="45" r="5" class="point"></circle>
+                                    <circle cx="600" cy="40" r="5" class="point"></circle>
+                                    <circle cx="700" cy="80" r="4" class="point"></circle>
+                                    
+                                    <!-- 天气变化区域 -->
+                                    <rect x="450" y="20" width="200" height="130" fill="rgba(255,77,79,0.1)" stroke="none"></rect>
+                                    
+                                    <!-- 恶劣天气标注 -->
+                                    <text x="550" y="30" text-anchor="middle" fill="#ff4d4f" font-weight="bold" font-size="14">恶劣天气期间线损率突增</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: #ff4d4f;"></div>
+                                    <span>线损率曲线</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background-color: rgba(255,77,79,0.1);"></div>
+                                    <span>恶劣天气期间</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">突发高损指标汇总表</div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>指标类别</th>
+                            <th>总表指标</th>
+                            <th>分表指标</th>
+                            <th>数据来源</th>
+                            <th>判定阈值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>基础判定</td>
+                            <td>SUDDEN_HIGH_LOSS_DETECTION</td>
+                            <td>-</td>
+                            <td>M_ENERGY_STATIS_REGION_DAILY</td>
+                            <td>差值 > 5%</td>
+                        </tr>
+                        <tr>
+                            <td>CT倍率互感器异常</td>
+                            <td>GM_CT_SUDDEN_ABNORMAL</td>
+                            <td>SM_CT_SUDDEN_ABNORMAL</td>
+                            <td>C_AR_CT_PT_CHANGE_LOG</td>
+                            <td>变化率 > 50%</td>
+                        </tr>
+                        <tr>
+                            <td>台区户表关系错误</td>
+                            <td>GM_RELATION_SUDDEN_CHANGE</td>
+                            <td>SM_RELATION_SUDDEN_CHANGE</td>
+                            <td>户变关系变更记录</td>
+                            <td>变更量 > 30个</td>
+                        </tr>
+                        <tr>
+                            <td>用电负荷突增</td>
+                            <td>GM_LOAD_SURGE</td>
+                            <td>SM_LOAD_SURGE</td>
+                            <td>台区变压器负载数据</td>
+                            <td>增长率 > 150%</td>
+                        </tr>
+                        <tr>
+                            <td>窃电行为突增</td>
+                            <td>GM_THEFT_SURGE</td>
+                            <td>SM_THEFT_SURGE</td>
+                            <td>异常用电大宽表</td>
+                            <td>差值 > 4%或事件次数突增</td>
+                        </tr>
+                        <tr>
+                            <td>恶劣天气影响</td>
+                            <td>GM_WEATHER_IMPACT</td>
+                            <td>SM_WEATHER_IMPACT</td>
+                            <td>天气数据表</td>
+                            <td>差值 > 5%</td>
+                        </tr>
+                        <tr>
+                            <td>计量装置接线错误</td>
+                            <td>GM_WIRING_ERROR</td>
+                            <td>SM_WIRING_ERROR</td>
+                            <td>异常用电大宽表</td>
+                            <td>偏差 > 0.2或事件次数 > 1</td>
+                        </tr>
+                        <tr>
+                            <td>时钟同步偏差</td>
+                            <td>GM_CLOCK_SYNC_SUDDEN</td>
+                            <td>SM_CLOCK_SYNC_SUDDEN</td>
+                            <td>异常用电大宽表</td>
+                            <td>偏差 > 10分钟</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">突发高损分析应用流程</div>
+            <div class="card-body">
+                <ol>
+                    <li>基于突发高损检测(SUDDEN_HIGH_LOSS_DETECTION)，筛选出线损率突然增长的台区</li>
+                    <li>计算突发高损台区的综合评分(SUDDEN_HIGH_LOSS_SCORE)，按照得分从高到低排序</li>
+                    <li>对于每个台区，分别计算7个原因类别的总表和分表指标值</li>
+                    <li>根据各指标的阈值，判断导致突发高损的最可能原因</li>
+                    <li>针对性制定紧急核查和整改措施</li>
+                </ol>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 电网线损分析系统 - 突发高损指标体系 v1.0</p>
+        </footer>
+    </div>
+</body>
+</html> 

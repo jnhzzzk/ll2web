@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>突发高损原因分析指标体系</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #ff4d4f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #fff1f0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e8e8e8;
+            font-weight: bold;
+            font-size: 18px;
+            color: #ff4d4f;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .indicator-group {
+            margin-bottom: 30px;
+        }
+        .indicator {
+            border-left: 4px solid #ff4d4f;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background-color: #fff1f0;
+            border-radius: 0 4px 4px 0;
+        }
+        .indicator.total {
+            border-left-color: #722ed1;
+            background-color: #f9f0ff;
+        }
+        .indicator.sub {
+            border-left-color: #13c2c2;
+            background-color: #e6fffb;
+        }
+        .indicator-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .indicator-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .indicator-formula {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f7fa;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #fff1f0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>突发高损原因分析指标体系</h1>
+        </header>
+
+        <div class="card">
+            <div class="card-header">突发高损概述</div>
+            <div class="card-body">
+                <p>突发高损是指台区线损率在短期内（通常为1-3天）突然出现显著增长的现象，相较于前期平均水平增长超过预设阈值（如5%）。突发高损往往提示存在突发性的技术问题或人为干预，需要快速识别和解决。</p>
+                <p>本指标体系通过设计一系列与突发高损密切相关的诊断指标，为快速定位和解决突发高损问题提供数据支持。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">突发高损指标体系</div>
+            <div class="card-body">
+                <div class="indicator-group">
+                    <h3>基础判定指标</h3>
+                    <div class="indicator">
+                        <div class="indicator-name">突发高损检测 (SUDDEN_HIGH_LOSS_DETECTION)</div>
+                        <div class="indicator-desc">检测台区线损率的突发性增长，超过预设阈值即判定为突发高损</div>
+                        <div class="indicator-formula">LOSS_RATIO - AVG(LOSS_RATIO OVER PREV_5_DAYS)</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因一：CT倍率互感器异常</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">CT倍率突变异常指标(总表) (GM_CT_SUDDEN_ABNORMAL)</div>
+                        <div class="indicator-desc">总表CT倍率突变异常评分，评估CT倍率变更前后倍率变化幅度</div>
+                        <div class="indicator-formula">ABS((NEW_RATE/OLD_RATE) - 1) * 100 WHERE CT_PT_TYPE = 'CT' AND IsGM = 1</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">CT倍率突变异常指标(分表) (SM_CT_SUDDEN_ABNORMAL)</div>
+                        <div class="indicator-desc">分表CT倍率突变异常评分，评估CT倍率变更前后倍率变化幅度</div>
+                        <div class="indicator-formula">ABS((NEW_RATE/OLD_RATE) - 1) * 100 WHERE CT_PT_TYPE = 'CT' AND IsGM = 0</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因二：台区户表关系错误</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">户表关系突变指标(总表) (GM_RELATION_SUDDEN_CHANGE)</div>
+                        <div class="indicator-desc">总表关联户表突变程度，通过户表关系变更前后线损率变化评估</div>
+                        <div class="indicator-formula">LOSS_RATIO - PRE_CHANGE_LOSS_RATIO WHERE DATEDIFF(STATIS_DATE, CHANGE_TIME) <= 3</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">户表关系突变指标(分表) (SM_RELATION_SUDDEN_CHANGE)</div>
+                        <div class="indicator-desc">分表关联台区突变程度，统计近期变更关系的电表数量</div>
+                        <div class="indicator-formula">COUNT(DISTINCT MeterNo) WHERE DATEDIFF(FreezeDate, CHANGE_TIME) <= 3</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因三：用电负荷突增</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">用电负荷突增指标(总表) (GM_LOAD_SURGE)</div>
+                        <div class="indicator-desc">总表用电负荷突增程度，评估当日负荷与前期平均负荷的比值</div>
+                        <div class="indicator-formula">LOAD_RATE / AVG(LOAD_RATE OVER PREV_7_DAYS) WHERE LOAD_RATE > PREV_AVG_LOAD_RATE * 1.5</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">用电负荷突增指标(分表) (SM_LOAD_SURGE)</div>
+                        <div class="indicator-desc">分表用电负荷突增程度，评估当日用电量与前期平均用电量的比值</div>
+                        <div class="indicator-formula">Usage / AVG(Usage OVER PREV_7_DAYS) WHERE Usage > AVG_PREV_USAGE * 2</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因四：窃电行为突增</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">窃电行为突增指标(总表) (GM_THEFT_SURGE)</div>
+                        <div class="indicator-desc">总表窃电行为突然增加程度，评估线损率与理论线损率差值的突增</div>
+                        <div class="indicator-formula">(LOSS_RATIO - TECH_LOSS_RATIO) - AVG(LOSS_RATIO - TECH_LOSS_RATIO OVER PREV_7_DAYS)</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">窃电行为突增指标(分表) (SM_THEFT_SURGE)</div>
+                        <div class="indicator-desc">分表窃电行为突然增加程度，统计近期窃电相关事件的新增发生次数</div>
+                        <div class="indicator-formula">COUNT(Event-269 OR Event-287 OR Event-289 OR Event-297) WHERE IsGM = 0</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因五：恶劣天气影响</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">恶劣天气影响指标(总表) (GM_WEATHER_IMPACT)</div>
+                        <div class="indicator-desc">总表受恶劣天气影响程度，评估恶劣天气期间线损率与正常天气期间的差值</div>
+                        <div class="indicator-formula">LOSS_RATIO - AVG(LOSS_RATIO OVER PREV_NORMAL_DAYS) WHERE WEATHER_CONDITION IN ('暴雨', '台风', '雷暴', '冰雪')</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">恶劣天气影响指标(分表) (SM_WEATHER_IMPACT)</div>
+                        <div class="indicator-desc">分表受恶劣天气影响程度，统计恶劣天气期间电压异常、信号中断等事件发生次数</div>
+                        <div class="indicator-formula">COUNT(Event-2001 OR Event-2002 OR Event-2003) WHERE WEATHER_CONDITION IN ('暴雨', '台风', '雷暴', '冰雪')</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因六：计量装置接线错误</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">计量装置接线错误指标(总表) (GM_WIRING_ERROR)</div>
+                        <div class="indicator-desc">总表计量装置接线错误程度，通过功率因数与正常值的偏差评估</div>
+                        <div class="indicator-formula">ABS(Power_Factor - NORMAL_POWER_FACTOR) WHERE IsGM = 1</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">计量装置接线错误指标(分表) (SM_WIRING_ERROR)</div>
+                        <div class="indicator-desc">分表计量装置接线错误程度，统计相序异常、接线错误等事件发生次数</div>
+                        <div class="indicator-formula">COUNT(Event-1025 OR Event-1026 OR Event-1027) WHERE IsGM = 0</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>原因七：时钟同步偏差</h3>
+                    <div class="indicator total">
+                        <div class="indicator-name">时钟同步突变指标(总表) (GM_CLOCK_SYNC_SUDDEN)</div>
+                        <div class="indicator-desc">总表时钟同步突然异常程度，计算总表与系统时间的最大偏差</div>
+                        <div class="indicator-formula">MAX(ABS(Time_Diff)) WHERE IsGM = 1</div>
+                    </div>
+                    <div class="indicator sub">
+                        <div class="indicator-name">时钟同步突变指标(分表) (SM_CLOCK_SYNC_SUDDEN)</div>
+                        <div class="indicator-desc">分表时钟同步突然异常程度，统计时钟偏差大于10分钟的电表数量</div>
+                        <div class="indicator-formula">COUNT(MeterNo WHERE ABS(Time_Diff) > 10) WHERE IsGM = 0</div>
+                    </div>
+                </div>
+
+                <div class="indicator-group">
+                    <h3>综合评分</h3>
+                    <div class="indicator">
+                        <div class="indicator-name">突发高损综合评分 (SUDDEN_HIGH_LOSS_SCORE)</div>
+                        <div class="indicator-desc">综合评估台区突发高损风险的评分，评分越高表明突发高损风险越大</div>
+                        <div class="indicator-formula">0.2*NORM(GM_CT_SUDDEN_ABNORMAL) + 0.15*NORM(GM_RELATION_SUDDEN_CHANGE) + 0.15*NORM(GM_LOAD_SURGE) + 0.15*NORM(GM_THEFT_SURGE) + 0.1*NORM(GM_WEATHER_IMPACT) + 0.15*NORM(GM_WIRING_ERROR) + 0.1*NORM(GM_CLOCK_SYNC_SUDDEN)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">突发高损指标汇总表</div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>指标类别</th>
+                            <th>总表指标</th>
+                            <th>分表指标</th>
+                            <th>数据来源</th>
+                            <th>判定阈值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>基础判定</td>
+                            <td>SUDDEN_HIGH_LOSS_DETECTION</td>
+                            <td>-</td>
+                            <td>M_ENERGY_STATIS_REGION_DAILY</td>
+                            <td>差值 > 5%</td>
+                        </tr>
+                        <tr>
+                            <td>CT倍率互感器异常</td>
+                            <td>GM_CT_SUDDEN_ABNORMAL</td>
+                            <td>SM_CT_SUDDEN_ABNORMAL</td>
+                            <td>C_AR_CT_PT_CHANGE_LOG</td>
+                            <td>变化率 > 50%</td>
+                        </tr>
+                        <tr>
+                            <td>台区户表关系错误</td>
+                            <td>GM_RELATION_SUDDEN_CHANGE</td>
+                            <td>SM_RELATION_SUDDEN_CHANGE</td>
+                            <td>户变关系变更记录</td>
+                            <td>变更量 > 30个</td>
+                        </tr>
+                        <tr>
+                            <td>用电负荷突增</td>
+                            <td>GM_LOAD_SURGE</td>
+                            <td>SM_LOAD_SURGE</td>
+                            <td>台区变压器负载数据</td>
+                            <td>增长率 > 150%</td>
+                        </tr>
+                        <tr>
+                            <td>窃电行为突增</td>
+                            <td>GM_THEFT_SURGE</td>
+                            <td>SM_THEFT_SURGE</td>
+                            <td>异常用电大宽表</td>
+                            <td>差值 > 4%或事件次数突增</td>
+                        </tr>
+                        <tr>
+                            <td>恶劣天气影响</td>
+                            <td>GM_WEATHER_IMPACT</td>
+                            <td>SM_WEATHER_IMPACT</td>
+                            <td>天气数据表</td>
+                            <td>差值 > 5%</td>
+                        </tr>
+                        <tr>
+                            <td>计量装置接线错误</td>
+                            <td>GM_WIRING_ERROR</td>
+                            <td>SM_WIRING_ERROR</td>
+                            <td>异常用电大宽表</td>
+                            <td>偏差 > 0.2或事件次数 > 1</td>
+                        </tr>
+                        <tr>
+                            <td>时钟同步偏差</td>
+                            <td>GM_CLOCK_SYNC_SUDDEN</td>
+                            <td>SM_CLOCK_SYNC_SUDDEN</td>
+                            <td>异常用电大宽表</td>
+                            <td>偏差 > 10分钟</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">突发高损分析应用流程</div>
+            <div class="card-body">
+                <ol>
+                    <li>基于突发高损检测(SUDDEN_HIGH_LOSS_DETECTION)，筛选出线损率突然增长的台区</li>
+                    <li>计算突发高损台区的综合评分(SUDDEN_HIGH_LOSS_SCORE)，按照得分从高到低排序</li>
+                    <li>对于每个台区，分别计算7个原因类别的总表和分表指标值</li>
+                    <li>根据各指标的阈值，判断导致突发高损的最可能原因</li>
+                    <li>针对性制定紧急核查和整改措施</li>
+                </ol>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 电网线损分析系统 - 突发高损指标体系 v1.0</p>
+        </footer>
+    </div>
+</body>
+</html> 
