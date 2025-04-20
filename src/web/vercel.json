@@ -5,7 +5,6 @@
   "github": {
     "silent": true
   },
-  "outputDirectory": "src/web",
   "redirects": [
     { "source": "/", "destination": "/switchlang" }
   ],
@@ -24,6 +23,8 @@
     { "source": "/en/diagnostic", "destination": "/en/diagnostic.html" },
     { "source": "/en/filter", "destination": "/en/filter.html" },
     { "source": "/en/governance", "destination": "/en/governance.html" },
-    { "source": "/en/detail", "destination": "/en/detail.html" }
+    { "source": "/en/detail", "destination": "/en/detail.html" },
+    
+    { "source": "/demo/new/diagnostic-tags-new", "destination": "/demo/new/diagnostic-tags-new.html" }
   ]
 } 
