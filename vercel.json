@@ -18,6 +18,7 @@
     { "source": "/cn/filter", "destination": "/cn/filter.html" },
     { "source": "/cn/governance", "destination": "/cn/governance.html" },
     { "source": "/cn/detail", "destination": "/cn/detail.html" },
+    { "source": "/cn/sudden-high-loss-indicators", "destination": "/cn/sudden-high-loss-indicators.html" },
     
     { "source": "/en", "destination": "/en/index.html" },
     { "source": "/en/index", "destination": "/en/index.html" },
