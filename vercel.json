@@ -19,6 +19,10 @@
     { "source": "/cn/governance", "destination": "/cn/governance.html" },
     { "source": "/cn/detail", "destination": "/cn/detail.html" },
     { "source": "/cn/sudden-high-loss-indicators", "destination": "/cn/sudden-high-loss-indicators.html" },
+    { "source": "/cn/long-term-high-loss-indicators", "destination": "/cn/long-term-high-loss-indicators.html" },
+    { "source": "/cn/long-term-negative-loss-indicators", "destination": "/cn/long-term-negative-loss-indicators.html" },
+    { "source": "/cn/small-negative-loss-indicators", "destination": "/cn/small-negative-loss-indicators.html" },
+    { "source": "/cn/sudden-negative-loss-indicators", "destination": "/cn/sudden-negative-loss-indicators.html" },
     
     { "source": "/en", "destination": "/en/index.html" },
     { "source": "/en/index", "destination": "/en/index.html" },
