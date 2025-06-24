@@ -157,6 +157,10 @@
                                 <p class="text-lg font-bold text-primary">6.32%</p>
                             </div>
                             <div>
+                                <p class="text-sm text-gray-500">台区用户平均压降</p>
+                                <p class="text-sm font-medium">5.8V</p>
+                            </div>
+                            <div>
                                 <p class="text-sm text-gray-500">差值</p>
                                 <p class="text-lg font-bold text-red-500">+6.44%</p>
                             </div>
@@ -867,6 +871,7 @@
                     commType: '4G',
                     actualLoss: '12.76%',
                     theoryLoss: '6.32%',
+                    voltageDropValue: '5.8V',
                     difference: '+6.44%',
                     abnormalDays: '28天',
                     abnormalState: '长期高损',
@@ -889,6 +894,7 @@
                     commType: '4G',
                     actualLoss: '11.95%',
                     theoryLoss: '6.40%',
+                    voltageDropValue: '6.2V',
                     difference: '+5.55%',
                     abnormalDays: '5天',
                     abnormalState: '突发高损',
@@ -911,6 +917,7 @@
                     commType: '光纤',
                     actualLoss: '-4.24%',
                     theoryLoss: '6.8%',
+                    voltageDropValue: '4.9V',
                     difference: '-4.24%',
                     abnormalDays: '32天',
                     abnormalState: '长期负损',
@@ -933,6 +940,7 @@
                     commType: '4G',
                     actualLoss: '-0.85%',
                     theoryLoss: '5.20%',
+                    voltageDropValue: '3.5V',
                     difference: '-6.05%',
                     abnormalDays: '25天',
                     abnormalState: '小负损',
@@ -955,6 +963,7 @@
                     commType: '光纤',
                     actualLoss: '-3.76%',
                     theoryLoss: '4.95%',
+                    voltageDropValue: '4.2V',
                     difference: '-8.71%',
                     abnormalDays: '4天',
                     abnormalState: '突发负损',
@@ -1002,6 +1011,9 @@
                         break;
                     case '理论线损率': 
                         valueEl.textContent = config.theoryLoss;
+                        break;
+                    case '台区用户平均压降': 
+                        valueEl.textContent = config.voltageDropValue;
                         break;
                     case '差值': 
                         valueEl.textContent = config.difference;
