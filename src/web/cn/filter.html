@@ -152,7 +152,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- 所属区域 -->
+                                                                        <!-- 所属区域 -->
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">所属区域</label>
                                         <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
@@ -165,16 +165,14 @@
                                         </select>
                                     </div>
                                     
-                                    <!-- 异常类型 -->
+                                    <!-- 治理状态 -->
                                     <div class="w-40">
-                                        <label class="block text-xs font-medium text-gray-700 mb-1">异常类型</label>
-                                        <select class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
-                                            <option>全部异常</option>
-                                            <option>长期高损</option>
-                                            <option>突发高损</option>
-                                            <option>长期负损</option>
-                                            <option>小负损</option>
-                                            <option>突发负损</option>
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">治理状态</label>
+                                        <select id="governance-status-select" class="w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                            <option value="all">全部状态</option>
+                                            <option value="已生成">已生成</option>
+                                            <option value="未生成">未生成</option>
+                                            <option value="处理中">处理中</option>
                                         </select>
                                     </div>
                                     
@@ -346,23 +344,31 @@
                             </div>
                         </div>
 
-                        <!-- 添加治理状态标签页筛选 -->
+                        <!-- 添加异常类型标签页筛选 -->
                         <div class="mb-4 border-b border-gray-200">
-                            <nav class="-mb-px flex space-x-6">
-                                <button class="py-2 border-b-2 border-primary text-sm font-medium text-primary">
-                                    全部状态
+                            <nav class="-mb-px flex space-x-6" id="anomaly-type-tabs">
+                                <button class="py-2 border-b-2 border-primary text-sm font-medium text-primary" data-type="all">
+                                    全部类型
                                 </button>
-                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                    已生成
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-red-600 hover:text-red-700 hover:border-red-300" data-type="长期高损">
+                                    长期高损
                                 </button>
-                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                    未生成
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-orange-600 hover:text-orange-700 hover:border-orange-300" data-type="突发高损">
+                                    突发高损
                                 </button>
-                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                    处理中
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-blue-600 hover:text-blue-700 hover:border-blue-300" data-type="长期负损">
+                                    长期负损
+                                </button>
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-sky-600 hover:text-sky-700 hover:border-sky-300" data-type="小负损">
+                                    小负损
+                                </button>
+                                <button class="py-2 border-b-2 border-transparent text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:border-indigo-300" data-type="突发负损">
+                                    突发负损
                                 </button>
                             </nav>
                         </div>
+
+
 
                         <!-- 异常台区报表表格 -->
                         <div class="overflow-x-auto border border-gray-200 rounded-lg">
@@ -399,9 +405,6 @@
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             发生日期
                                         </th>
-                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            异常状态
-                                        </th>
                                         <!-- 添加新的表头 -->
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             异常天数
@@ -420,7 +423,7 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <!-- 长期高损 -->
-                                    <tr>
+                                    <tr data-anomaly-type="长期高损">
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                             河西变1324台区
                                         </td>
@@ -451,11 +454,6 @@
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             2024-05-08
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                长期高损
-                                            </span>
-                                        </td>
                                         <!-- 第一行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             28天
@@ -472,7 +470,7 @@
                                         </td>
                                     </tr>
                                     <!-- 突发高损 -->
-                                    <tr>
+                                    <tr data-anomaly-type="突发高损">
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                             城南532台区
                                         </td>
@@ -503,11 +501,6 @@
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             2024-05-07
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                突发高损
-                                            </span>
-                                        </td>
                                         <!-- 第二行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             5天
@@ -524,7 +517,7 @@
                                         </td>
                                     </tr>
                                     <!-- 长期负损 -->
-                                    <tr>
+                                    <tr data-anomaly-type="长期负损">
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                             北郊198台区
                                         </td>
@@ -555,11 +548,6 @@
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             2024-05-07
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                长期负损
-                                            </span>
-                                        </td>
                                         <!-- 第三行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             32天
@@ -576,7 +564,7 @@
                                         </td>
                                     </tr>
                                     <!-- 小负损 -->
-                                    <tr>
+                                    <tr data-anomaly-type="小负损">
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                             东湖785台区
                                         </td>
@@ -607,11 +595,6 @@
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             2024-05-08
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                小负损
-                                            </span>
-                                        </td>
                                         <!-- 第四行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             25天
@@ -628,7 +611,7 @@
                                         </td>
                                     </tr>
                                     <!-- 突发负损 -->
-                                    <tr>
+                                    <tr data-anomaly-type="突发负损">
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                             开发区672台区
                                         </td>
@@ -658,11 +641,6 @@
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                                             2024-05-08
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                突发负损
-                                            </span>
                                         </td>
                                         <!-- 第五行数据 -->
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
@@ -1503,7 +1481,7 @@
                     // 基础筛选
                     stationName: document.querySelector('input[placeholder="输入台区名称搜索..."]')?.value.trim() || '',
                     area: document.querySelector('select').value,
-                    anomalyType: document.querySelectorAll('select')[1]?.value,
+                    governanceStatus: document.getElementById('governance-status-select')?.value,
                     dateFrom: document.querySelector('input[type="date"]')?.value,
                     dateTo: document.querySelectorAll('input[type="date"]')[1]?.value,
                     
@@ -1555,13 +1533,8 @@
                         }
                     }
                     
-                    // 异常类型筛选
-                    if (filters.anomalyType && filters.anomalyType !== '全部异常') {
-                        const anomalyCell = row.querySelector('td:nth-child(11) span');
-                        if (anomalyCell && anomalyCell.textContent.trim() !== filters.anomalyType) {
-                            shouldShow = false;
-                        }
-                    }
+                    // 异常类型筛选（已改为tab筛选，这里移除相关代码）
+                    // 异常类型现在通过tab控制，不再通过dropdown筛选
                     
                     // 数值区间筛选
                     if (shouldShow && filters.actualLossRateMin !== null) {
@@ -1617,7 +1590,7 @@
                     
                     // 异常天数筛选
                     if (shouldShow && (filters.abnormalDaysMin !== null || filters.abnormalDaysMax !== null)) {
-                        const abnormalDays = parseInt(row.querySelector('td:nth-child(12)').textContent.replace('天', ''));
+                        const abnormalDays = parseInt(row.querySelector('td:nth-child(11)').textContent.replace('天', ''));
                         if (filters.abnormalDaysMin !== null && abnormalDays < filters.abnormalDaysMin) {
                             shouldShow = false;
                         }
@@ -1626,9 +1599,9 @@
                         }
                     }
                     
-                    // 治理状态筛选
-                    if (shouldShow && filters.governanceStatus && filters.governanceStatus !== '全部状态') {
-                        const governanceCell = row.querySelector('td:nth-child(13)');
+                    // 治理状态筛选（现在通过下拉框控制）
+                    if (shouldShow && filters.governanceStatus && filters.governanceStatus !== 'all') {
+                        const governanceCell = row.querySelector('td:nth-child(12)');
                         if (governanceCell && governanceCell.textContent.trim() !== filters.governanceStatus) {
                             shouldShow = false;
                         }
@@ -1636,7 +1609,7 @@
                     
                     // 可再生能源筛选
                     if (shouldShow && filters.renewableEnergy && filters.renewableEnergy !== '全部') {
-                        const renewableCell = row.querySelector('td:nth-child(14)');
+                        const renewableCell = row.querySelector('td:nth-child(13)');
                         if (renewableCell && renewableCell.textContent.trim() !== filters.renewableEnergy) {
                             shouldShow = false;
                         }
@@ -1652,7 +1625,7 @@
                 // 重置基础筛选
                 document.querySelector('input[placeholder="输入台区名称搜索..."]').value = '';
                 document.querySelector('select').selectedIndex = 0;
-                document.querySelectorAll('select')[1].selectedIndex = 0;
+                document.getElementById('governance-status-select').selectedIndex = 0;
                 document.querySelectorAll('input[type="date"]').forEach(input => input.value = '');
                 
                 // 重置高级筛选
@@ -1664,6 +1637,22 @@
                     row.style.display = '';
                 });
                 
+                // 重置tab筛选状态
+                // 重置异常类型tab
+                const anomalyTypeTabsReset = document.querySelectorAll('#anomaly-type-tabs button');
+                anomalyTypeTabsReset.forEach(tab => {
+                    tab.classList.remove('border-primary', 'border-red-300', 'border-orange-300', 'border-blue-300', 'border-sky-300', 'border-indigo-300');
+                    tab.classList.add('border-transparent');
+                    if (tab.getAttribute('data-type') === 'all') {
+                        tab.classList.add('border-primary', 'text-primary');
+                        tab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    } else {
+                        tab.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    }
+                });
+                
+
+
                 // 收起高级筛选
                 if (advancedFilterContent && !advancedFilterContent.classList.contains('hidden')) {
                     advancedFilterContent.classList.add('hidden');
@@ -1675,6 +1664,11 @@
 
             // 更新结果计数器
             function updateResultCounter(count) {
+                if (typeof count === 'undefined') {
+                    // 如果没有传入count参数，则计算当前可见的行数
+                    count = document.querySelectorAll('.min-w-full tbody tr:not([style*="display: none"])').length;
+                }
+                
                 const counterElement = document.querySelector('.text-sm.text-gray-700');
                 if (counterElement) {
                     counterElement.innerHTML = `共 <span class="font-medium">${count}</span> 个异常台区`;
@@ -1730,45 +1724,127 @@
                 }
             });
 
-            // 添加治理状态标签页事件监听
-            const governanceStatusTabs = document.querySelectorAll('.mb-4.border-b.border-gray-200 button');
-            if (governanceStatusTabs.length > 0) {
-                governanceStatusTabs.forEach(tab => {
+            // 添加异常类型标签页事件监听
+            const anomalyTypeTabs = document.querySelectorAll('#anomaly-type-tabs button');
+            if (anomalyTypeTabs.length > 0) {
+                anomalyTypeTabs.forEach(tab => {
                     tab.addEventListener('click', function() {
                         // 移除所有标签页的激活状态
-                        governanceStatusTabs.forEach(t => {
-                            t.classList.remove('border-primary', 'text-primary');
-                            t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        anomalyTypeTabs.forEach(t => {
+                            t.classList.remove('border-primary', 'border-red-300', 'border-orange-300', 'border-blue-300', 'border-sky-300', 'border-indigo-300');
+                            t.classList.add('border-transparent');
+                            
+                            // 重置文本颜色到hover状态
+                            if (t.getAttribute('data-type') === 'all') {
+                                t.classList.remove('text-primary');
+                                t.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                            }
                         });
                         
                         // 添加点击标签页的激活状态
-                        this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                        this.classList.add('border-primary', 'text-primary');
+                        this.classList.remove('border-transparent');
+                        const dataType = this.getAttribute('data-type');
+                        
+                        if (dataType === 'all') {
+                            this.classList.add('border-primary', 'text-primary');
+                            this.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        } else if (dataType === '长期高损') {
+                            this.classList.add('border-red-300');
+                        } else if (dataType === '突发高损') {
+                            this.classList.add('border-orange-300');
+                        } else if (dataType === '长期负损') {
+                            this.classList.add('border-blue-300');
+                        } else if (dataType === '小负损') {
+                            this.classList.add('border-sky-300');
+                        } else if (dataType === '突发负损') {
+                            this.classList.add('border-indigo-300');
+                        }
                         
                         // 根据选中的标签页筛选表格
-                        const status = this.textContent.trim();
-                        filterTableByGovernanceStatus(status);
+                        applyAllFilters();
                     });
                 });
             }
+
+            // 添加治理状态下拉框事件监听
+            const governanceStatusSelect = document.getElementById('governance-status-select');
+            if (governanceStatusSelect) {
+                governanceStatusSelect.addEventListener('change', function() {
+                    applyAllFilters();
+                });
+            }
             
+            // 根据异常类型筛选表格的函数
+            function filterTableByAnomalyType(type) {
+                const tableRows = document.querySelectorAll('.min-w-full tbody tr');
+                
+                tableRows.forEach(row => {
+                    const anomalyType = row.getAttribute('data-anomaly-type');
+                    
+                    if (type === 'all' || anomalyType === type) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                updateResultCounter();
+            }
+
             // 根据治理状态筛选表格的函数
             function filterTableByGovernanceStatus(status) {
                 const tableRows = document.querySelectorAll('.min-w-full tbody tr');
                 
                 tableRows.forEach(row => {
-                    const governanceStatusCell = row.querySelector('td:nth-child(13)'); // 调整索引如果需要
+                    const governanceStatusCell = row.querySelector('td:nth-child(12)'); // 调整索引：移除异常状态列后索引减1
                     
                     if (governanceStatusCell) {
                         const rowStatus = governanceStatusCell.textContent.trim();
                         
-                        if (status === '全部状态' || rowStatus === status) {
+                        if (status === 'all' || rowStatus === status) {
                             row.style.display = '';
                         } else {
                             row.style.display = 'none';
                         }
                     }
                 });
+                
+                updateResultCounter();
+            }
+
+            // 综合筛选函数（同时考虑异常类型和治理状态）
+            function applyAllFilters() {
+                const selectedAnomalyType = document.querySelector('#anomaly-type-tabs button:not(.border-transparent)')?.getAttribute('data-type') || 'all';
+                const selectedGovernanceStatus = document.getElementById('governance-status-select')?.value || 'all';
+                
+                const tableRows = document.querySelectorAll('.min-w-full tbody tr');
+                
+                tableRows.forEach(row => {
+                    let shouldShow = true;
+                    
+                    // 检查异常类型
+                    if (selectedAnomalyType !== 'all') {
+                        const anomalyType = row.getAttribute('data-anomaly-type');
+                        if (anomalyType !== selectedAnomalyType) {
+                            shouldShow = false;
+                        }
+                    }
+                    
+                    // 检查治理状态
+                    if (shouldShow && selectedGovernanceStatus !== 'all') {
+                        const governanceStatusCell = row.querySelector('td:nth-child(12)');
+                        if (governanceStatusCell) {
+                            const rowStatus = governanceStatusCell.textContent.trim();
+                            if (rowStatus !== selectedGovernanceStatus) {
+                                shouldShow = false;
+                            }
+                        }
+                    }
+                    
+                    row.style.display = shouldShow ? '' : 'none';
+                });
+                
+                updateResultCounter();
             }
 
             // 初始化Choices.js多选下拉菜单
