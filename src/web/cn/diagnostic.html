@@ -153,7 +153,7 @@
                                 <p class="text-lg font-bold text-red-500">12.76%</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">理论线损率</p>
+                                <p class="text-sm text-gray-500">相对线损率</p>
                                 <p class="text-lg font-bold text-primary">6.32%</p>
                             </div>
                             <div>
@@ -172,10 +172,7 @@
                                 <p class="text-sm text-gray-500">异常状态</p>
                                 <p class="text-sm font-medium text-red-500">长期高损</p>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-500">治理建议</p>
-                                <p class="text-sm font-medium" id="governanceStatus">未生成</p>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -241,7 +238,7 @@
                                     </div>
                                     <div class="ml-3">
                                         <h3 class="text-sm font-medium text-blue-800">三相不平衡</h3>
-                                        <p class="text-xs text-blue-700 mt-1">匹配概率：38%</p>
+                                        <p class="text-xs text-blue-700 mt-1">匹配概率：28%</p>
                                     </div>
                                 </div>
                                 
@@ -543,7 +540,7 @@
                         yAxisID: 'y'
                     },
                     {
-                        label: '理论线损率',
+                        label: '相对线损率',
                         data: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
                         borderColor: '#309C9F',
                         backgroundColor: 'rgba(48, 156, 159, 0.1)',
@@ -562,7 +559,7 @@
                         type: 'bar'
                     },
                     {
-                        label: '理论损失电量',
+                        label: '相对损失电量',
                         data: [0, 0, 0, 205, 212, 208, 215, 210],
                         backgroundColor: 'rgba(48, 156, 159, 0.2)',
                         borderColor: 'rgba(48, 156, 159, 0.8)',
@@ -870,14 +867,12 @@
                     renewableEnergy: '无',
                     commType: '4G',
                     actualLoss: '12.76%',
-                    theoryLoss: '6.32%',
+                    relativeLoss: '6.32%',
                     voltageDropValue: '5.8V',
                     difference: '+6.44%',
                     abnormalDays: '28天',
                     abnormalState: '长期高损',
-                    abnormalStateColor: 'text-red-500',
-                    governanceStatus: '未生成',
-                    governanceStatusColor: 'text-gray-600'
+                    abnormalStateColor: 'text-red-500'
                 },
                 'sudden-high': {
                     name: '城南532台区',
@@ -893,14 +888,12 @@
                     renewableEnergy: '光伏',
                     commType: '4G',
                     actualLoss: '11.95%',
-                    theoryLoss: '6.40%',
+                    relativeLoss: '6.40%',
                     voltageDropValue: '6.2V',
                     difference: '+5.55%',
                     abnormalDays: '5天',
                     abnormalState: '突发高损',
-                    abnormalStateColor: 'text-orange-500',
-                    governanceStatus: '已生成',
-                    governanceStatusColor: 'text-green-600'
+                    abnormalStateColor: 'text-orange-500'
                 },
                 'long-negative': {
                     name: '东湖785台区',
@@ -916,14 +909,12 @@
                     renewableEnergy: '风电',
                     commType: '光纤',
                     actualLoss: '-4.24%',
-                    theoryLoss: '6.8%',
+                    relativeLoss: '6.8%',
                     voltageDropValue: '4.9V',
                     difference: '-4.24%',
                     abnormalDays: '32天',
                     abnormalState: '长期负损',
-                    abnormalStateColor: 'text-blue-500',
-                    governanceStatus: '已生成',
-                    governanceStatusColor: 'text-green-600'
+                    abnormalStateColor: 'text-blue-500'
                 },
                 'small-negative': {
                     name: '北郊198台区',
@@ -939,14 +930,12 @@
                     renewableEnergy: '无',
                     commType: '4G',
                     actualLoss: '-0.85%',
-                    theoryLoss: '5.20%',
+                    relativeLoss: '5.20%',
                     voltageDropValue: '3.5V',
                     difference: '-6.05%',
                     abnormalDays: '25天',
                     abnormalState: '小负损',
-                    abnormalStateColor: 'text-indigo-500',
-                    governanceStatus: '未生成',
-                    governanceStatusColor: 'text-gray-600'
+                    abnormalStateColor: 'text-indigo-500'
                 },
                 'sudden-negative': {
                     name: '开发区672台区',
@@ -962,14 +951,12 @@
                     renewableEnergy: '无',
                     commType: '光纤',
                     actualLoss: '-3.76%',
-                    theoryLoss: '4.95%',
+                    relativeLoss: '4.95%',
                     voltageDropValue: '4.2V',
                     difference: '-8.71%',
                     abnormalDays: '4天',
                     abnormalState: '突发负损',
-                    abnormalStateColor: 'text-purple-500',
-                    governanceStatus: '未生成',
-                    governanceStatusColor: 'text-gray-600'
+                    abnormalStateColor: 'text-purple-500'
                 }
             };
             
@@ -1009,8 +996,8 @@
                         valueEl.textContent = config.actualLoss;
                         valueEl.className = 'text-lg font-bold ' + (parseFloat(config.actualLoss) > 0 ? 'text-red-500' : 'text-blue-500');
                         break;
-                    case '理论线损率': 
-                        valueEl.textContent = config.theoryLoss;
+                    case '相对线损率': 
+                        valueEl.textContent = config.relativeLoss;
                         break;
                     case '台区用户平均压降': 
                         valueEl.textContent = config.voltageDropValue;
@@ -1025,10 +1012,6 @@
                     case '异常状态':
                         valueEl.textContent = config.abnormalState;
                         valueEl.className = 'text-sm font-medium ' + config.abnormalStateColor;
-                        break;
-                    case '治理建议':
-                        valueEl.textContent = config.governanceStatus;
-                        valueEl.className = 'text-sm font-medium ' + config.governanceStatusColor;
                         break;
                 }
             });
@@ -1057,6 +1040,18 @@
             }
         }
         
+        // 获取概率分档颜色和文本
+        function getProbabilityLevel(probability) {
+            const prob = parseFloat(probability.replace('%', ''));
+            if (prob >= 66) {
+                return { color: 'red', level: '可能性高' };
+            } else if (prob >= 33) {
+                return { color: 'yellow', level: '可能性中' };
+            } else {
+                return { color: 'green', level: '可能性低' };
+            }
+        }
+
         // 诊断标签更新函数
         function updateDiagnosticTags(districtType) {
             // 清空当前诊断标签
@@ -1070,7 +1065,6 @@
                         title: 'CT互感器倍率错误',
                         probability: '92%',
                         icon: 'exclamation-triangle',
-                        color: 'red',
                         details: [
                             '事件代码：E-269, E-270',
                             '线损稳定性：0.85',
@@ -1081,7 +1075,6 @@
                         title: '档案户变关系异常',
                         probability: '68%',
                         icon: 'file-alt',
-                        color: 'orange',
                         details: [
                             '台户一致性：0.72',
                             '用户变更记录：3次',
@@ -1092,7 +1085,6 @@
                         title: '疑似低压窃电',
                         probability: '45%',
                         icon: 'bolt',
-                        color: 'yellow',
                         details: [
                             '夜间用电模式：异常',
                             '节假日用电：异常',
@@ -1103,7 +1095,6 @@
                         title: '三相不平衡',
                         probability: '38%',
                         icon: 'sync-alt',
-                        color: 'blue',
                         details: [
                             '不平衡度：17.3%',
                             '持续时间：15天',
@@ -1116,7 +1107,6 @@
                         title: '用电负荷突增',
                         probability: '87%',
                         icon: 'bolt',
-                        color: 'red',
                         details: [
                             '负荷增幅：32.6%',
                             '突变时间点：4月28日',
@@ -1127,7 +1117,6 @@
                         title: '低压设备故障',
                         probability: '65%',
                         icon: 'exclamation-triangle',
-                        color: 'orange',
                         details: [
                             '设备温度：异常',
                             '故障报警数：2次',
@@ -1138,7 +1127,6 @@
                         title: '短时漏电故障',
                         probability: '52%',
                         icon: 'tint',
-                        color: 'yellow',
                         details: [
                             '接地电流：异常',
                             '环境湿度：较高',
@@ -1149,7 +1137,6 @@
                         title: '恶劣天气引发问题',
                         probability: '48%',
                         icon: 'cloud-rain',
-                        color: 'blue',
                         details: [
                             '天气相关性：4月27日暴雨',
                             '设备状态：可能受潮',
@@ -1162,7 +1149,6 @@
                         title: '计量装置接线错误',
                         probability: '94%',
                         icon: 'plug',
-                        color: 'red',
                         details: [
                             '接线检查：异常',
                             '线损稳定性：0.88',
@@ -1173,7 +1159,6 @@
                         title: '电表正反向接错',
                         probability: '78%',
                         icon: 'exchange-alt',
-                        color: 'orange',
                         details: [
                             '事件代码：E-257, E-258',
                             '光伏容量：15kW',
@@ -1184,7 +1169,6 @@
                         title: '台户关系不一致',
                         probability: '63%',
                         icon: 'file-alt',
-                        color: 'yellow',
                         details: [
                             '户表比对：不一致',
                             '异常记录：5次',
@@ -1195,7 +1179,6 @@
                         title: '光伏发电档案错误',
                         probability: '42%',
                         icon: 'solar-panel',
-                        color: 'blue',
                         details: [
                             '光伏容量差异：+8kW',
                             '发电记录：异常',
@@ -1208,7 +1191,6 @@
                         title: '理论模型计算偏差',
                         probability: '89%',
                         icon: 'calculator',
-                        color: 'red',
                         details: [
                             '负荷率：低于15%',
                             '理论模型参数灵敏度：高',
@@ -1219,7 +1201,6 @@
                         title: '互感器配置不合理',
                         probability: '72%',
                         icon: 'cogs',
-                        color: 'orange',
                         details: [
                             '二次负载率：8.2%',
                             '互感器精度等级：0.5S',
@@ -1230,7 +1211,6 @@
                         title: '采集数据偏差',
                         probability: '58%',
                         icon: 'database',
-                        color: 'yellow',
                         details: [
                             '数据质量评分：83',
                             '时钟同步状态：轻微偏差',
@@ -1241,7 +1221,6 @@
                         title: '电表时钟超差',
                         probability: '45%',
                         icon: 'clock',
-                        color: 'blue',
                         details: [
                             '事件代码：E-1538',
                             '时钟偏差：2.3分钟',
@@ -1254,7 +1233,6 @@
                         title: '电表计量故障',
                         probability: '91%',
                         icon: 'tachometer-alt',
-                        color: 'red',
                         details: [
                             '故障代码：E-258',
                             '时间相关性：4月20日',
@@ -1265,7 +1243,6 @@
                         title: '倍率变更未同步',
                         probability: '79%',
                         icon: 'sync',
-                        color: 'orange',
                         details: [
                             '设备变更记录：4月19日',
                             '时间相关性：高',
@@ -1276,7 +1253,6 @@
                         title: '功率因数补偿设备异常',
                         probability: '64%',
                         icon: 'bolt',
-                        color: 'yellow',
                         details: [
                             '功率因数变化：0.95→0.82',
                             '时间相关性：高',
@@ -1287,7 +1263,6 @@
                         title: '台区总表某相异常',
                         probability: '58%',
                         icon: 'exclamation-triangle',
-                        color: 'blue',
                         details: [
                             '不平衡度变化：增大15%',
                             '事件代码：E-299',
@@ -1300,16 +1275,17 @@
             // 添加对应标签
             const tags = diagnosticTags[districtType];
             tags.forEach((tag, index) => {
+                const probLevel = getProbabilityLevel(tag.probability);
                 const tagWrapper = document.createElement('div');
-                tagWrapper.className = `flex items-center p-3 bg-${tag.color}-50 border border-${tag.color}-100 rounded-lg`;
+                tagWrapper.className = `flex items-center p-3 bg-${probLevel.color}-50 border border-${probLevel.color}-100 rounded-lg`;
                 
                 tagWrapper.innerHTML = `
                     <div class="flex-shrink-0 mr-3">
-                        <input type="checkbox" id="tag-${index}" class="diagnostic-tag-checkbox w-4 h-4 rounded border-gray-300 text-${tag.color}-600 focus:ring-${tag.color}-500" value="${tag.title}" checked>
+                        <input type="checkbox" id="tag-${index}" class="diagnostic-tag-checkbox w-4 h-4 rounded border-gray-300 text-${probLevel.color}-600 focus:ring-${probLevel.color}-500" value="${tag.title}" checked>
                     </div>
                     <div class="flex-1">
-                        <label for="tag-${index}" class="text-sm font-medium text-${tag.color}-800 cursor-pointer block">${tag.title}</label>
-                        <p class="text-xs text-${tag.color}-700 mt-1">匹配概率：${tag.probability}</p>
+                        <label for="tag-${index}" class="text-sm font-medium text-${probLevel.color}-800 cursor-pointer block">${tag.title}</label>
+                        <p class="text-xs text-${probLevel.color}-700 mt-1">${probLevel.level}</p>
                     </div>
                 `;
                 tagContainer.appendChild(tagWrapper);
@@ -1459,13 +1435,13 @@
                 'long-high': {
                     lossRates: {
                         actual: [6.8, 6.9, 6.7, 12.5, 12.8, 12.7, 12.9, 12.76],
-                        theory: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
+                        relative: [6.5, 6.4, 6.3, 6.2, 6.4, 6.3, 6.35, 6.32],
                         lossQuantity: [245, 252, 238, 450, 462, 458, 465, 460],
                         diffQuantity: [0, 0, 0, 205, 212, 208, 215, 210]
                     },
                     analysisText: [
-                        '理论线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右',
-                        '<span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与理论线损差值明显增大',
+                        '相对线损计算使用<span class="font-medium">积分电流法</span>，计算值稳定在6%左右',
+                        '<span class="text-red-500 font-medium">4月6日</span>开始实际线损突然上升，与相对线损差值明显增大',
                         '期间<span class="font-medium">用户用电量、负荷分布</span>无明显变化',
                         'CT二次侧电流检查发现<span class="text-red-500 font-medium">倍率设置</span>存在问题'
                     ]
@@ -1473,12 +1449,12 @@
                 'sudden-high': {
                     lossRates: {
                         actual: [6.2, 6.3, 6.1, 6.0, 11.8, 11.95, 11.9, 11.95],
-                        theory: [6.3, 6.4, 6.2, 6.3, 6.35, 6.4, 6.38, 6.4],
+                        relative: [6.3, 6.4, 6.2, 6.3, 6.35, 6.4, 6.38, 6.4],
                         lossQuantity: [220, 225, 218, 215, 425, 430, 428, 432],
                         diffQuantity: [0, 0, 0, 0, 190, 198, 195, 200]
                     },
                     analysisText: [
-                        '理论线损率保持在<span class="font-medium">6.2%-6.4%</span>的正常范围',
+                        '相对线损率保持在<span class="font-medium">6.2%-6.4%</span>的正常范围',
                         '<span class="text-red-500 font-medium">4月28日</span>发生突发负荷增长，线损率陡然升高',
                         '从用电负荷数据看，<span class="font-medium">负荷增幅超过30%</span>',
                         '结合现场检查，发现<span class="text-red-500 font-medium">季节性空调设备</span>大量启用'
@@ -1487,12 +1463,12 @@
                 'long-negative': {
                     lossRates: {
                         actual: [-4.1, -4.2, -4.3, -4.25, -4.2, -4.3, -4.24, -4.24],
-                        theory: [5.8, 5.9, 5.85, 5.8, 5.85, 5.9, 5.85, 5.85],
+                        relative: [5.8, 5.9, 5.85, 5.8, 5.85, 5.9, 5.85, 5.85],
                         lossQuantity: [-155, -160, -165, -162, -160, -164, -162, -162],
                         diffQuantity: [-380, -385, -390, -388, -385, -390, -388, -388]
                     },
                     analysisText: [
-                        '理论线损率在<span class="font-medium">5.8%-5.9%</span>范围内正常波动',
+                        '相对线损率在<span class="font-medium">5.8%-5.9%</span>范围内正常波动',
                         '实际线损率持续为<span class="text-blue-500 font-medium">负值</span>，表明电能计量存在系统性问题',
                         '负值线损率<span class="font-medium">稳定且持续时间长</span>，典型的长期负损特征',
                         '现场检查发现总表端<span class="text-red-500 font-medium">电表接线错误</span>，导致正反向电能记录异常'
@@ -1501,21 +1477,21 @@
                 'small-negative': {
                     lossRates: {
                         actual: [-0.8, -0.85, -0.82, -0.87, -0.83, -0.86, -0.85, -0.85],
-                        theory: [5.1, 5.2, 5.25, 5.2, 5.15, 5.2, 5.2, 5.2],
+                        relative: [5.1, 5.2, 5.25, 5.2, 5.15, 5.2, 5.2, 5.2],
                         lossQuantity: [-25, -26, -25, -27, -26, -27, -26, -26],
                         diffQuantity: [-180, -182, -181, -183, -182, -183, -182, -182]
                     },
                     analysisText: [
-                        '理论线损率在<span class="font-medium">5.1%-5.25%</span>范围内波动',
+                        '相对线损率在<span class="font-medium">5.1%-5.25%</span>范围内波动',
                         '实际线损率持续为<span class="text-blue-500 font-medium">小负值</span>，且波动很小',
                         '台区<span class="font-medium">负荷率较低</span>，仅15%左右',
-                        '综合评估认为<span class="text-red-500 font-medium">理论模型在低负荷工况下计算偏差</span>是主因'
+                        '综合评估认为<span class="text-red-500 font-medium">相对模型在低负荷工况下计算偏差</span>是主因'
                     ]
                 },
                 'sudden-negative': {
                     lossRates: {
                         actual: [4.8, 4.9, 5.0, 4.85, -3.6, -3.7, -3.76, -3.75],
-                        theory: [4.9, 5.0, 4.95, 4.9, 4.95, 5.0, 4.95, 4.95],
+                        relative: [4.9, 5.0, 4.95, 4.9, 4.95, 5.0, 4.95, 4.95],
                         lossQuantity: [320, 325, 330, 322, -240, -245, -248, -247],
                         diffQuantity: [0, 0, 0, 0, -565, -570, -573, -572]
                     },
@@ -1531,7 +1507,7 @@
             // 更新线损波动溯源图
             const config = chartConfig[districtType];
             lossAnalysisChart.data.datasets[0].data = config.lossRates.actual;
-            lossAnalysisChart.data.datasets[1].data = config.lossRates.theory;
+            lossAnalysisChart.data.datasets[1].data = config.lossRates.relative;
             lossAnalysisChart.data.datasets[2].data = config.lossRates.lossQuantity;
             lossAnalysisChart.data.datasets[3].data = config.lossRates.diffQuantity;
             
