@@ -168,12 +168,48 @@
                                 <p class="text-sm text-gray-500">线损异常天数</p>
                                 <p class="text-sm font-medium">28天 <span class="text-xs text-gray-500">(近30天)</span></p>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-500">异常状态</p>
-                                <p class="text-sm font-medium text-red-500">长期高损</p>
-                            </div>
-
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 异常状态对比卡片 -->
+            <div class="bg-white rounded-lg shadow-sm mb-6 p-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h2 class="text-lg font-medium text-gray-900 mb-3">本次报告异常状态</h2>
+                        <div class="flex items-center p-4 bg-red-50 border border-red-100 rounded-lg">
+                            <div class="flex-shrink-0 h-12 w-12 flex items-center justify-center bg-red-100 rounded-full">
+                                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-lg font-bold text-red-800">长期高损</p>
+                                <p class="text-sm text-red-600 mt-1">持续异常：28天</p>
+                                <p class="text-xs text-red-500 mt-1">线损差值：+6.44%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-medium text-gray-900 mb-3">上次报告异常状态</h2>
+                        <div class="flex items-center p-4 bg-red-50 border border-red-100 rounded-lg">
+                            <div class="flex-shrink-0 h-12 w-12 flex items-center justify-center bg-red-100 rounded-full">
+                                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-lg font-bold text-red-800">长期高损</p>
+                                <p class="text-sm text-red-600 mt-1">持续异常：24天</p>
+                                <p class="text-xs text-red-500 mt-1">线损差值：+6.12%</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <p class="text-xs text-gray-500">上次报告时间：2024-04-30</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex items-center justify-center text-sm text-gray-600">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span>状态对比：异常类型保持一致，异常天数增加4天，线损差值上升0.32%</span>
                     </div>
                 </div>
             </div>
@@ -872,7 +908,24 @@
                     difference: '+6.44%',
                     abnormalDays: '28天',
                     abnormalState: '长期高损',
-                    abnormalStateColor: 'text-red-500'
+                    abnormalStateColor: 'text-red-500',
+                    // 异常状态对比数据
+                    currentStatus: {
+                        state: '长期高损',
+                        days: '28天',
+                        difference: '+6.44%',
+                        icon: 'exclamation-triangle',
+                        color: 'red'
+                    },
+                    lastStatus: {
+                        state: '长期高损',
+                        days: '24天',
+                        difference: '+6.12%',
+                        reportDate: '2024-04-30',
+                        icon: 'exclamation-triangle',
+                        color: 'red'
+                    },
+                    statusComparison: '异常类型保持一致，异常天数增加4天，线损差值上升0.32%'
                 },
                 'sudden-high': {
                     name: '城南532台区',
@@ -893,7 +946,24 @@
                     difference: '+5.55%',
                     abnormalDays: '5天',
                     abnormalState: '突发高损',
-                    abnormalStateColor: 'text-orange-500'
+                    abnormalStateColor: 'text-orange-500',
+                    // 异常状态对比数据
+                    currentStatus: {
+                        state: '突发高损',
+                        days: '5天',
+                        difference: '+5.55%',
+                        icon: 'bolt',
+                        color: 'orange'
+                    },
+                    lastStatus: {
+                        state: '正常',
+                        days: '0天',
+                        difference: '+0.12%',
+                        reportDate: '2024-04-30',
+                        icon: 'check-circle',
+                        color: 'green'
+                    },
+                    statusComparison: '异常类型从正常转为突发高损，需要重点关注'
                 },
                 'long-negative': {
                     name: '东湖785台区',
@@ -914,7 +984,24 @@
                     difference: '-4.24%',
                     abnormalDays: '32天',
                     abnormalState: '长期负损',
-                    abnormalStateColor: 'text-blue-500'
+                    abnormalStateColor: 'text-blue-500',
+                    // 异常状态对比数据
+                    currentStatus: {
+                        state: '长期负损',
+                        days: '32天',
+                        difference: '-4.24%',
+                        icon: 'arrow-down',
+                        color: 'blue'
+                    },
+                    lastStatus: {
+                        state: '长期负损',
+                        days: '28天',
+                        difference: '-4.12%',
+                        reportDate: '2024-04-30',
+                        icon: 'arrow-down',
+                        color: 'blue'
+                    },
+                    statusComparison: '异常类型保持一致，异常天数增加4天，负损情况略有加重'
                 },
                 'small-negative': {
                     name: '北郊198台区',
@@ -935,7 +1022,24 @@
                     difference: '-6.05%',
                     abnormalDays: '25天',
                     abnormalState: '小负损',
-                    abnormalStateColor: 'text-indigo-500'
+                    abnormalStateColor: 'text-indigo-500',
+                    // 异常状态对比数据
+                    currentStatus: {
+                        state: '小负损',
+                        days: '25天',
+                        difference: '-1.27%',
+                        icon: 'minus-circle',
+                        color: 'sky'
+                    },
+                    lastStatus: {
+                        state: '小负损',
+                        days: '21天',
+                        difference: '-1.18%',
+                        reportDate: '2024-04-30',
+                        icon: 'minus-circle',
+                        color: 'sky'
+                    },
+                    statusComparison: '异常类型保持一致，异常天数增加4天，小负损情况基本稳定'
                 },
                 'sudden-negative': {
                     name: '开发区672台区',
@@ -956,7 +1060,24 @@
                     difference: '-8.71%',
                     abnormalDays: '4天',
                     abnormalState: '突发负损',
-                    abnormalStateColor: 'text-purple-500'
+                    abnormalStateColor: 'text-purple-500',
+                    // 异常状态对比数据
+                    currentStatus: {
+                        state: '突发负损',
+                        days: '4天',
+                        difference: '-3.24%',
+                        icon: 'exclamation-triangle',
+                        color: 'indigo'
+                    },
+                    lastStatus: {
+                        state: '正常',
+                        days: '0天',
+                        difference: '+0.08%',
+                        reportDate: '2024-04-30',
+                        icon: 'check-circle',
+                        color: 'green'
+                    },
+                    statusComparison: '异常类型从正常转为突发负损，疑似设备故障，需要立即检修'
                 }
             };
             
@@ -1024,6 +1145,9 @@
             
             // 更新治理建议按钮
             updateGovernanceButton(districtType);
+            
+            // 更新异常状态对比卡片
+            updateAbnormalStatusComparison(config);
         }
         
         // 更新治理建议按钮
@@ -1037,6 +1161,71 @@
             } else {
                 button.textContent = '生成治理建议';
                 button.className = 'bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md text-sm leading-4 transition-colors duration-200';
+            }
+        }
+        
+        // 更新异常状态对比卡片
+        function updateAbnormalStatusComparison(config) {
+            // 更新本次报告异常状态
+            const currentStatusCards = document.querySelectorAll('.bg-white.rounded-lg.shadow-sm.mb-6.p-5 .grid.grid-cols-1.md\\:grid-cols-2.gap-6 > div');
+            if (currentStatusCards.length >= 2) {
+                // 更新本次状态
+                const currentCard = currentStatusCards[0];
+                const currentStatusDiv = currentCard.querySelector('.flex.items-center.p-4');
+                
+                if (currentStatusDiv) {
+                    currentStatusDiv.className = `flex items-center p-4 bg-${config.currentStatus.color}-50 border border-${config.currentStatus.color}-100 rounded-lg`;
+                    
+                    const iconDiv = currentStatusDiv.querySelector('.flex-shrink-0');
+                    if (iconDiv) {
+                        iconDiv.className = `flex-shrink-0 h-12 w-12 flex items-center justify-center bg-${config.currentStatus.color}-100 rounded-full`;
+                        iconDiv.innerHTML = `<i class="fas fa-${config.currentStatus.icon} text-${config.currentStatus.color}-500 text-lg"></i>`;
+                    }
+                    
+                    const textDiv = currentStatusDiv.querySelector('.ml-4');
+                    if (textDiv) {
+                        textDiv.innerHTML = `
+                            <p class="text-lg font-bold text-${config.currentStatus.color}-800">${config.currentStatus.state}</p>
+                            <p class="text-sm text-${config.currentStatus.color}-600 mt-1">持续异常：${config.currentStatus.days}</p>
+                            <p class="text-xs text-${config.currentStatus.color}-500 mt-1">线损差值：${config.currentStatus.difference}</p>
+                        `;
+                    }
+                }
+                
+                // 更新上次状态
+                const lastCard = currentStatusCards[1];
+                const lastStatusDiv = lastCard.querySelector('.flex.items-center.p-4');
+                
+                if (lastStatusDiv) {
+                    lastStatusDiv.className = `flex items-center p-4 bg-${config.lastStatus.color}-50 border border-${config.lastStatus.color}-100 rounded-lg`;
+                    
+                    const iconDiv = lastStatusDiv.querySelector('.flex-shrink-0');
+                    if (iconDiv) {
+                        iconDiv.className = `flex-shrink-0 h-12 w-12 flex items-center justify-center bg-${config.lastStatus.color}-100 rounded-full`;
+                        iconDiv.innerHTML = `<i class="fas fa-${config.lastStatus.icon} text-${config.lastStatus.color}-500 text-lg"></i>`;
+                    }
+                    
+                    const textDiv = lastStatusDiv.querySelector('.ml-4');
+                    if (textDiv) {
+                        textDiv.innerHTML = `
+                            <p class="text-lg font-bold text-${config.lastStatus.color}-800">${config.lastStatus.state}</p>
+                            <p class="text-sm text-${config.lastStatus.color}-600 mt-1">持续异常：${config.lastStatus.days}</p>
+                            <p class="text-xs text-${config.lastStatus.color}-500 mt-1">线损差值：${config.lastStatus.difference}</p>
+                        `;
+                    }
+                }
+                
+                // 更新上次报告时间
+                const timeDiv = lastCard.querySelector('.mt-3.text-center p');
+                if (timeDiv) {
+                    timeDiv.textContent = `上次报告时间：${config.lastStatus.reportDate}`;
+                }
+            }
+            
+            // 更新状态对比信息
+            const comparisonDiv = document.querySelector('.mt-4.pt-4.border-t.border-gray-200 .flex.items-center.justify-center.text-sm.text-gray-600 span');
+            if (comparisonDiv) {
+                comparisonDiv.textContent = config.statusComparison;
             }
         }
         
